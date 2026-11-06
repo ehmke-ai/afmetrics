@@ -89,7 +89,7 @@ const WIDTH = 1200
 const PAD = 48
 const SCALE = 2
 const LEGEND_ITEM_WIDTH = 220
-const WATERMARK = "basedmetrics.com"
+const WATERMARK = "afmetrics.com"
 
 // Canvas and SVG-as-image can't see the page's CSS variables, so every color is resolved to a
 // concrete value first by letting the browser compute it on a probe element
