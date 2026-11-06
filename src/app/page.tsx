@@ -42,7 +42,7 @@ import {
 } from "@/lib/states"
 
 export const metadata: Metadata = {
-  title: { absolute: "basedmetrics.com — America by the numbers" },
+  title: { absolute: "afmetrics.com — America by the numbers" },
 }
 
 const LEADERBOARD_SIZE = 5

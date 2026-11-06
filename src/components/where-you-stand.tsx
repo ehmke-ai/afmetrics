@@ -565,7 +565,7 @@ function Results(props: {
             </li>
           ))}
         </ul>
-        <p className="mt-3">basedmetrics.com</p>
+        <p className="mt-3">afmetrics.com</p>
       </div>
     </div>
   )

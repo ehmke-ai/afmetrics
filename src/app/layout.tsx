@@ -35,13 +35,29 @@ const crimsonPro = Crimson_Pro({
   weight: ["400", "500", "600", "700"],
 })
 
+const siteDescription =
+  "US demographics by state and county: non-Hispanic White share over time, religion, 2024 election results, immigration enforcement, and family formation, with Europe for comparison."
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://afmetrics.com"),
   title: {
-    default: "basedmetrics.com — America by the numbers",
-    template: "%s — basedmetrics.com",
+    default: "afmetrics.com — America by the numbers",
+    template: "%s — afmetrics.com",
   },
-  description:
-    "US demographics by state and county: non-Hispanic White share over time, religion, 2024 election results, immigration enforcement, and family formation, with Europe for comparison.",
+  description: siteDescription,
+  applicationName: "AF Metrics",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "AF Metrics",
+    title: "afmetrics.com — America by the numbers",
+    description: siteDescription,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "afmetrics.com — America by the numbers",
+    description: siteDescription,
+  },
 }
 
 export default function RootLayout({
