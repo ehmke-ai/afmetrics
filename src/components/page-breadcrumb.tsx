@@ -25,6 +25,10 @@ function crumbsForPathname(pathname: string): Crumb[] {
 
   const [section, slug] = segments
 
+  if (section === "midterms" && slug === "2026-house-demographics") {
+    return [{ label: "2026 House vote demographics" }]
+  }
+
   if (section === "work-visas" && !slug) return [{ label: "Work visas" }]
 
   if (section === "you" && !slug) return [{ label: "Where you stand" }]

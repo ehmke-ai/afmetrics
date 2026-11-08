@@ -8,6 +8,7 @@ import {
   Globe2,
   Table2,
   UserRound,
+  Vote,
   type LucideIcon,
 } from "lucide-react"
 import Link from "next/link"
@@ -45,6 +46,7 @@ type NavLink = {
 
 const usLinks: NavLink[] = [
   { href: "/", label: "United States", icon: Flag },
+  { href: "/midterms/2026-house-demographics", label: "2026 House vote", icon: Vote },
   { href: "/states", label: "All states", icon: Table2 },
   { href: "/work-visas", label: "Work visas", icon: Briefcase },
   { href: "/you", label: "Where you stand", icon: UserRound },
