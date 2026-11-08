@@ -16,8 +16,8 @@ import { Separator } from "@/components/ui/separator"
 import {
   MIDTERMS_HOUSE_CHECKED_DATE,
   midterms2026HouseBundle,
-  NORC_SNAPSHOT_LABEL,
   recordById,
+  YOUTH_SHIFTS_NORC_SNAPSHOT,
 } from "@/lib/midterms-2026-house"
 
 export const metadata: Metadata = {
@@ -42,9 +42,9 @@ export default function Midterms2026HouseDemographicsPage() {
           <Badge variant="destructive" className="uppercase tracking-wide">
             Preliminary data
           </Badge>
-          <span className="text-sm text-muted-foreground">As of {NORC_SNAPSHOT_LABEL}</span>
           <span className="text-sm text-muted-foreground">
-            · Checked {MIDTERMS_HOUSE_CHECKED_DATE}
+            CIRCLE / NORC preliminary · checked {MIDTERMS_HOUSE_CHECKED_DATE} · hub publication date not
+            stated
           </span>
         </div>
       </PageHeader>
@@ -59,8 +59,11 @@ export default function Midterms2026HouseDemographicsPage() {
             {midterms2026HouseBundle.dependency}
           </span>{" "}
           CIRCLE&apos;s hub compares some groups to{" "}
-          <strong className="text-foreground">2024 presidential AP VoteCast</strong> — a different office
-          and electorate. That is context, not evidence that the same individuals switched parties.
+          <strong className="text-foreground">2024 presidential AP VoteCast</strong> (conducted by NORC for
+          the Associated Press) — a different office and electorate. That is context, not evidence that the
+          same individuals switched parties. Only the{" "}
+          <strong className="text-foreground">Youth Shifts</strong> passage states an explicit NORC file
+          timestamp ({YOUTH_SHIFTS_NORC_SNAPSHOT}); other rows use per-row checked dates in the table.
         </CardContent>
       </Card>
 
@@ -113,8 +116,9 @@ export default function Midterms2026HouseDemographicsPage() {
         <CardHeader className="pb-2">
           <CardTitle>Sourced table</CardTitle>
           <CardDescription>
-            Each row carries population, office, snapshot date, and provisional status. Download includes the
-            same metadata in the CSV footer.
+            Office, source timing, and status appear on every row. Expand <strong>Source</strong> for hub
+            section, geography, notes, and URL. CSV export carries the same fields per row (no blanket NORC
+            timestamp).
           </CardDescription>
         </CardHeader>
         <CardContent>

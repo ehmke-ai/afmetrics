@@ -102,7 +102,7 @@ export function MidtermsHouseVoteChart() {
           }}
         >
           <SelectTrigger id="midterms-demographics-view" className="min-w-[14rem]" aria-label="Demographic breakdown">
-            <SelectValue placeholder="Select breakdown" />
+            <SelectValue placeholder={view.label} />
           </SelectTrigger>
           <SelectContent>
             {demographicsViews.map((v) => (
@@ -116,13 +116,29 @@ export function MidtermsHouseVoteChart() {
       <p className="text-sm text-muted-foreground">{view.description}</p>
       <ChartContainer
         config={chartConfig}
-        className="aspect-auto h-[min(420px,70vh)] w-full"
+        className="aspect-auto h-[min(420px,70vh)] w-full min-h-[360px]"
+        initialDimension={{ width: 900, height: 380 }}
         aria-label={`2026 U.S. House vote choice by ${view.label}`}
       >
-        <BarChart data={rows} layout="vertical" margin={{ left: 8, right: 16, top: 8, bottom: 8 }}>
-          <CartesianGrid horizontal={false} strokeDasharray="3 3" />
-          <XAxis type="number" domain={[0, maxPct]} tickFormatter={(v) => `${v}%`} />
-          <YAxis type="category" dataKey="label" width={120} tickLine={false} />
+        <BarChart data={rows} layout="vertical" margin={{ left: 4, right: 16, top: 8, bottom: 8 }}>
+          <CartesianGrid horizontal={false} strokeDasharray="3 3" stroke="var(--border)" />
+          <XAxis
+            type="number"
+            domain={[0, maxPct]}
+            tickFormatter={(v) => `${v}%`}
+            tickLine={false}
+            axisLine={false}
+            tickMargin={8}
+            tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+          />
+          <YAxis
+            type="category"
+            dataKey="label"
+            width={132}
+            tickLine={false}
+            axisLine={false}
+            tick={{ fill: "var(--foreground)", fontSize: 12 }}
+          />
           <ChartTooltip
             content={
               <ChartTooltipContent

@@ -20,18 +20,21 @@ export type SourceRecord = {
   geography: string
   office: string
   dataPeriod: string
+  /** CIRCLE hub subsection where the figure appears */
+  hubSection: string
   /** When the upstream publisher released the analysis (if known) */
   releaseDate: string | null
-  /** NORC snapshot, CPI reference month, etc. */
+  /**
+   * Explicit upstream data snapshot when the primary source states one.
+   * Null when only a checked/retrieved date applies.
+   */
   dataSnapshotDate: string | null
   checkedDate: string
   primaryUrl: string
   upstreamNotes: string
   provisional: ProvisionalStatus
-  /** Percentages are only set when explicitly reported by the primary source */
   democraticPct: number | null
   republicanPct: number | null
-  /** Qualitative when the source gives a threshold, not an exact split */
   qualitativeNote?: string
   marginDemMinusRep?: number | null
 }
@@ -44,14 +47,22 @@ export type SourceBundle = {
   records: SourceRecord[]
 }
 
+export function sourceTimingSummary(record: SourceRecord): string {
+  if (record.dataSnapshotDate) return record.dataSnapshotDate
+  if (record.releaseDate) return `Release ${record.releaseDate}; checked ${record.checkedDate}`
+  return `Checked ${record.checkedDate} — hub does not state a NORC file timestamp for this passage`
+}
+
 export function formatSourceFooter(record: SourceRecord): string {
   const parts = [
     record.claim,
     `Measure: ${record.measure.replaceAll("_", " ")}`,
+    `Hub section: ${record.hubSection}`,
     `Population: ${record.population}`,
+    `Geography: ${record.geography}`,
     `Office: ${record.office}`,
     `Period: ${record.dataPeriod}`,
-    record.dataSnapshotDate ? `Data snapshot: ${record.dataSnapshotDate}` : null,
+    record.dataSnapshotDate ? `Data snapshot: ${record.dataSnapshotDate}` : `Retrieved: ${record.checkedDate}`,
     record.releaseDate ? `Release: ${record.releaseDate}` : null,
     `Checked: ${record.checkedDate}`,
     `Status: ${record.provisional}`,
