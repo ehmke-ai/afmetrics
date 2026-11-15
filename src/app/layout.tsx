@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Crimson_Pro, Crimson_Text, Geist_Mono, Open_Sans } from "next/font/google"
+import { Crimson_Pro, Open_Sans } from "next/font/google"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { InlineScript } from "@/components/inline-script"
@@ -16,19 +16,8 @@ const openSans = Open_Sans({
   weight: ["400", "500", "600", "700"],
 })
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-})
-
-// Serif headings + wordmark, matching the Ceptly design system.
-// Crimson Pro is a variable font: do not pass a weight list (breaks Vercel's Turbopack font bundler).
-const crimsonText = Crimson_Text({
-  variable: "--font-crimson-text",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-})
-
+// Serif for headings and the wordmark. Crimson Pro is a variable font: do not pass a weight
+// list (breaks Vercel's Turbopack font bundler).
 const crimsonPro = Crimson_Pro({
   variable: "--font-crimson-pro",
   subsets: ["latin"],
@@ -67,7 +56,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${openSans.variable} ${geistMono.variable} ${crimsonText.variable} ${crimsonPro.variable} h-full antialiased`}
+      className={`${openSans.variable} ${crimsonPro.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

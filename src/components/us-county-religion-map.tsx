@@ -13,6 +13,7 @@ import { GradientLegend } from "@/components/maps/legends"
 import { shade, SHADE_RANGE, shadeGradient, shadeStops } from "@/components/us-county-map-export"
 import { YearSlider } from "@/components/year-slider"
 import { useJson } from "@/lib/fetch-json"
+import { RELIGION } from "@/lib/palette"
 
 /** % of population in each tradition, in CATEGORIES order (less Unclaimed), from scripts/build-county-religion.py */
 type CountyShares = number[]
@@ -27,16 +28,16 @@ const SHARE_CAP = 60
 
 /** In the order of the data file's arrays, then Unclaimed, which is whatever share they leave */
 const CATEGORIES = [
-  { key: "evangelical", label: "Evangelical Protestant", color: "#1565c0" },
-  { key: "mainline", label: "Mainline Protestant", color: "#29b6f6" },
-  { key: "blackProtestant", label: "Black Protestant", color: "#1a237e" },
-  { key: "catholic", label: "Catholic", color: "#c62828" },
-  { key: "orthodox", label: "Orthodox", color: "#8d6e63" },
-  { key: "lds", label: "Latter-day Saints", color: "#ef6c00" },
-  { key: "jewish", label: "Jewish", color: "#7b1fa2" },
-  { key: "muslim", label: "Muslim", color: "#00897b" },
-  { key: "other", label: "Other religions", color: "#9e9d24" },
-  { key: "unclaimed", label: "Unclaimed", color: "#424242" },
+  { key: "evangelical", label: "Evangelical Protestant", color: RELIGION.evangelical.light },
+  { key: "mainline", label: "Mainline Protestant", color: RELIGION.mainline.light },
+  { key: "blackProtestant", label: "Black Protestant", color: RELIGION.blackProtestant.light },
+  { key: "catholic", label: "Catholic", color: RELIGION.catholic.light },
+  { key: "orthodox", label: "Orthodox", color: RELIGION.orthodox.light },
+  { key: "lds", label: "Latter-day Saints", color: RELIGION.lds.light },
+  { key: "jewish", label: "Jewish", color: RELIGION.jewish.light },
+  { key: "muslim", label: "Muslim", color: RELIGION.muslim.light },
+  { key: "other", label: "Other religions", color: RELIGION.other.light },
+  { key: "unclaimed", label: "Unclaimed", color: RELIGION.unclaimed.light },
 ] as const
 
 const UNCLAIMED = CATEGORIES.length - 1

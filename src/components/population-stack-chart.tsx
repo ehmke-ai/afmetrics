@@ -10,20 +10,21 @@ import {
 } from "@/components/ui/chart"
 import { Separator } from "@/components/ui/separator"
 import type { StackedPopulationRow } from "@/lib/states"
+import { CATEGORICAL, NEUTRAL, type ThemedColor } from "@/lib/palette"
 
 /**
  * Fixed color per group, in stacking order, so a group keeps its color on every state page.
  * Adjacent slots are validated for color-vision-deficiency separation in both themes.
  */
-export const POPULATION_COLORS: Record<string, { light: string; dark: string }> = {
-  european: { light: "#2a78d6", dark: "#3987e5" },
-  hispanic: { light: "#eb6834", dark: "#d95926" },
-  african: { light: "#1baf7a", dark: "#199e70" },
-  indian: { light: "#eda100", dark: "#c98500" },
-  eastAsian: { light: "#e87ba4", dark: "#d55181" },
-  arab: { light: "#008300", dark: "#008300" },
-  nativeAmerican: { light: "#3fa9d4", dark: "#4cb6e0" },
-  other: { light: "#4a3aa7", dark: "#9085e9" },
+export const POPULATION_COLORS: Record<string, ThemedColor> = {
+  european: CATEGORICAL[0],
+  hispanic: CATEGORICAL[1],
+  african: CATEGORICAL[2],
+  indian: CATEGORICAL[3],
+  eastAsian: CATEGORICAL[4],
+  arab: CATEGORICAL[5],
+  nativeAmerican: CATEGORICAL[6],
+  other: NEUTRAL,
 }
 
 export function PopulationStackChart({
@@ -83,7 +84,7 @@ export function PopulationStackChart({
                       />
                       {series.find((s) => s.key === name)?.label ?? String(name)}
                     </span>
-                    <span className="font-mono font-medium tabular-nums text-foreground">
+                    <span className="font-medium tabular-nums text-foreground">
                       {value}%
                     </span>
                   </div>

@@ -127,7 +127,7 @@ export function FollowerHistoryCharts() {
             content={
               <ChartTooltipContent
                 formatter={(value) => (
-                  <span className="font-mono font-medium tabular-nums">
+                  <span className="font-medium tabular-nums">
                     {typeof value === "number" ? value.toLocaleString("en-US") : value}
                   </span>
                 )}

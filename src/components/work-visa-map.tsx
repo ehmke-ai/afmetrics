@@ -26,6 +26,7 @@ import {
 } from "@/data/work-visa-states"
 import { formatCount, formatShare } from "@/lib/work-visas"
 import { rangeIntensity, stateNavByAbbr } from "@/lib/states"
+import { VISA } from "@/lib/palette"
 
 type Scale = "positions" | "rate"
 
@@ -61,21 +62,21 @@ const PROGRAMS: Record<
     label: "H-1B",
     title: "H-1B positions by state",
     name: "H-1B positions",
-    color: "#1d4ed8",
+    color: VISA.h1b.light,
     noun: "positions",
   },
   h2a: {
     label: "H-2A",
     title: "H-2A farm jobs by state",
     name: "H-2A workers",
-    color: "#15803d",
+    color: VISA.h2a.light,
     noun: "workers",
   },
   h2b: {
     label: "H-2B",
     title: "H-2B seasonal jobs by state",
     name: "H-2B workers",
-    color: "#b45309",
+    color: VISA.h2b.light,
     noun: "workers",
   },
 }

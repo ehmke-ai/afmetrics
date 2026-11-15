@@ -32,7 +32,7 @@ export function ColorChooser({
           onChange={onChange}
           prefixed
           aria-label="Hex color code"
-          className="h-8 w-full rounded-none border border-input bg-transparent px-2.5 font-mono text-sm uppercase outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+          className="h-8 w-full rounded-none border border-input bg-transparent px-2.5 text-sm tabular-nums uppercase outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
         />
       </PopoverContent>
     </Popover>

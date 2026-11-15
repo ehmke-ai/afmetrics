@@ -1,15 +1,10 @@
+import { SectionHeading } from "@/components/layout/section"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 
 import { POPULATION_COLORS } from "@/components/population-stack-chart"
 import { PageHeader, Stat } from "@/components/topic-page"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Table,
   TableBody,
@@ -43,7 +38,7 @@ import {
 
 export function generateStaticParams() {
   return statesData.flatMap((s) =>
-    getCounties(s).map((c) => ({ state: s.slug, county: countySlug(c.name) }))
+    getCounties(s).map((c) => ({ state: s.slug, county: countySlug(c.name) })),
   )
 }
 
@@ -152,13 +147,15 @@ export default async function CountyPage({
         </CardContent>
       </Card>
 
-      <header className="mt-12 mb-7">
-        <h2 className="section-title">Compared with {state.state} and the United States</h2>
-        <p className="section-sub">
-          {label} next to the state and national figures used elsewhere on this
-          site. A dash means the figure isn&rsquo;t published at that level of geography.
-        </p>
-      </header>
+      <SectionHeading
+        title="Compared with {state.state} and the United States"
+        description={
+          <>
+            {label} next to the state and national figures used elsewhere on this site. A dash means
+            the figure isn&rsquo;t published at that level of geography.
+          </>
+        }
+      />
 
       <Card className="border-border bg-card shadow-none">
         <CardContent className="p-0">
@@ -196,13 +193,15 @@ export default async function CountyPage({
 
       {costRows.length > 0 && (
         <>
-          <header className="mt-12 mb-7">
-            <h2 className="section-title">Cost of living</h2>
-            <p className="section-sub">
-              Incomes and housing costs in {label} next to {state.state} and the nation. Price
-              levels are published for states, not counties.
-            </p>
-          </header>
+          <SectionHeading
+            title="Cost of living"
+            description={
+              <>
+                Incomes and housing costs in {label} next to {state.state} and the nation. Price
+                levels are published for states, not counties.
+              </>
+            }
+          />
 
           <Card className="border-border bg-card shadow-none">
             <CardContent className="p-0">
@@ -258,13 +257,13 @@ export default async function CountyPage({
           ))}
         </ul>
         <p className="mt-6 max-w-3xl">
-          <strong className="font-semibold text-foreground">Notes:</strong> Figures are
-          rounded and come from county-level ACS tables, which don&rsquo;t publish religion,
-          median age, or the Arab-ancestry, Indian, and East Asian splits used at the state
-          level. Asian here is split into Indian and East Asian using the state&rsquo;s own
-          latest ratio between those two groups, since no county-level ancestry breakdown is
-          published; the state and national comparison columns use the same broad groups as
-          the rest of this site, so figures may not line up exactly with the raw ACS tables.
+          <strong className="font-semibold text-foreground">Notes:</strong> Figures are rounded and
+          come from county-level ACS tables, which don&rsquo;t publish religion, median age, or the
+          Arab-ancestry, Indian, and East Asian splits used at the state level. Asian here is split
+          into Indian and East Asian using the state&rsquo;s own latest ratio between those two
+          groups, since no county-level ancestry breakdown is published; the state and national
+          comparison columns use the same broad groups as the rest of this site, so figures may not
+          line up exactly with the raw ACS tables.
         </p>
       </footer>
     </main>

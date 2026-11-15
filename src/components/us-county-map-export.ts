@@ -1,3 +1,5 @@
+import { PARTY } from "@/lib/palette"
+
 /**
  * Renders a US map (counties or states) with its title, legend, and source to a PNG, laid out at
  * a fixed size so the image looks the same whatever the screen it was downloaded from.
@@ -25,11 +27,11 @@ export function shadeGradient(color: string) {
   return `linear-gradient(in oklch to right, ${shade(color, SHADE_RANGE[0])}, ${shade(color, SHADE_RANGE[1])})`
 }
 
-/** Pro-immigration end of the diverging immigration-sentiment scale */
-export const PRO_IMMIG_COLOR = "#2b7bb9"
+/** Low (blue, Democratic) end of the diverging scales; hex so the color pickers can edit it */
+export const PRO_IMMIG_COLOR = PARTY.dem.light
 
-/** Anti-immigration end of the diverging immigration-sentiment scale */
-export const ANTI_IMMIG_COLOR = "#d32f2f"
+/** High (red, Republican) end of the diverging scales */
+export const ANTI_IMMIG_COLOR = PARTY.rep.light
 
 /**
  * A two-sided shade for `t` in 0..1: `lowColor` deepest at 0, neutral at 0.5, `highColor`

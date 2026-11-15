@@ -79,12 +79,12 @@ export default function WorkVisasPage() {
       <Card className="border-border bg-card shadow-none">
         <CardContent>
           <dl className="grid grid-cols-2 gap-x-6 gap-y-4 lg:grid-cols-4">
-            <Stat label="H-1B visas issued, FY 2024" value={formatCount(h1bIssued)} color="#1d4ed8" />
-            <Stat label="H-2A visas issued, FY 2024" value={formatCount(h2aIssued)} color="#15803d" />
+            <Stat label="H-1B visas issued, FY 2024" value={formatCount(h1bIssued)} color="var(--visa-h1b)" />
+            <Stat label="H-2A visas issued, FY 2024" value={formatCount(h2aIssued)} color="var(--visa-h2a)" />
             <Stat
               label="H-1B petitions approved, FY 2025"
               value={formatCount(H1B_FY2025_APPROVALS)}
-              color="#1d4ed8"
+              color="var(--visa-h1b)"
             />
             <Stat
               label="Of those, born in India"
@@ -233,7 +233,7 @@ export default function WorkVisasPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="font-medium">{row.country}</TableCell>
-                  <TableCell className="text-right font-medium tabular-nums" style={{ color: "#1d4ed8" }}>
+                  <TableCell className="text-right font-medium tabular-nums" style={{ color: "var(--visa-h1b)" }}>
                     {formatCount(row.approvals)}
                   </TableCell>
                   <TableCell className="text-right tabular-nums text-muted-foreground">
@@ -375,7 +375,7 @@ export default function WorkVisasPage() {
             nameLabel="State of employment"
             valueLabel="Positions"
             intensityLabel="Relative"
-            color="#1d4ed8"
+            color="var(--visa-h1b)"
             badgeClassName="bg-foreground/15 text-foreground hover:bg-foreground/15"
           />
         </CardContent>
@@ -502,7 +502,7 @@ function CountRank({
                   <span className="block h-2 overflow-hidden rounded-full bg-muted" aria-hidden>
                     <span
                       className="block h-full rounded-full"
-                      style={{ width: `${(row.positions / max) * 100}%`, backgroundColor: "#1d4ed8" }}
+                      style={{ width: `${(row.positions / max) * 100}%`, backgroundColor: "var(--visa-h1b)" }}
                     />
                   </span>
                 </TableCell>

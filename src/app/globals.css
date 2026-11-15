@@ -8,9 +8,10 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-open-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-crimson-text), ui-serif, Georgia, serif;
-  --font-brand: var(--font-crimson-pro);
+  /* One sans for UI and figures (tabular numerals), one serif for headings and the wordmark */
+  --font-mono: var(--font-open-sans);
+  --font-heading: var(--font-crimson-pro), ui-serif, Georgia, serif;
+  --font-brand: var(--font-crimson-pro), ui-serif, Georgia, serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -19,6 +20,9 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+  --color-chart-8: var(--chart-8);
+  --color-chart-7: var(--chart-7);
+  --color-chart-6: var(--chart-6);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -40,6 +44,9 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-brand-accent: var(--brand-accent);
+  --color-party-dem: var(--party-dem);
+  --color-party-rep: var(--party-rep);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -51,74 +58,126 @@
 
 :root {
   color-scheme: light;
-  --background: #ffffff;
-  --foreground: #0a0a0a;
+  /* Editorial neutrals: warm off-white page, white cards, warm gray rules */
+  --background: #fbfaf7;
+  --foreground: #16181d;
   --card: #ffffff;
-  --card-foreground: #0a0a0a;
+  --card-foreground: #16181d;
   --popover: #ffffff;
-  --popover-foreground: #0a0a0a;
-  --primary: #0a0a0a;
+  --popover-foreground: #16181d;
+  /* Brand: deep navy primary, brick accent for highlights */
+  --primary: #1d3557;
   --primary-foreground: #ffffff;
-  --secondary: #f4f4f5;
-  --secondary-foreground: #0a0a0a;
-  --muted: #f4f4f5;
-  --muted-foreground: #6b7280;
-  --accent: #f4f4f5;
-  --accent-foreground: #0a0a0a;
-  --destructive: #dc2626;
-  --border: #e5e7eb;
-  --input: #e5e7eb;
-  --ring: #a3a3a3;
-  --chart-1: #1f2937;
-  --chart-2: #dc2626;
-  --chart-3: #2563eb;
-  --chart-4: #b45309;
-  --chart-5: #c2410c;
+  --brand-accent: #b5452c;
+  --secondary: #f1efea;
+  --secondary-foreground: #16181d;
+  --muted: #f1efea;
+  --muted-foreground: #5f5d57;
+  --accent: #ece9e2;
+  --accent-foreground: #16181d;
+  --destructive: #c62f2f;
+  --border: #e3e0d8;
+  --input: #dcd8ce;
+  --ring: #8a9bb4;
   --radius: 0.75rem;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #0a0a0a;
-  --sidebar-primary: #0a0a0a;
+  --sidebar: #f6f4ef;
+  --sidebar-foreground: #16181d;
+  --sidebar-primary: #1d3557;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f4f4f5;
-  --sidebar-accent-foreground: #0a0a0a;
-  --sidebar-border: #e5e7eb;
-  --sidebar-ring: #a3a3a3;
+  --sidebar-accent: #ece9e2;
+  --sidebar-accent-foreground: #16181d;
+  --sidebar-border: #e3e0d8;
+  --sidebar-ring: #8a9bb4;
+
+  /* Data colors. Values mirror src/lib/palette.ts (palette.test.ts checks they match). */
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  --chart-6: #008300;
+  --chart-7: #6250d6;
+  --chart-8: #e34948;
+  --chart-neutral: #898781;
+  --chart-neutral-deep: #52514e;
+  --seq-0: #cde2fb;
+  --seq-1: #9ec5f4;
+  --seq-2: #6da7ec;
+  --seq-3: #3987e5;
+  --seq-4: #256abf;
+  --seq-5: #184f95;
+  --seq-6: #0d366b;
+  --div-neg: var(--chart-1);
+  --div-mid: #f0efec;
+  --div-pos: var(--chart-8);
+  --party-dem: var(--chart-1);
+  --party-rep: var(--chart-8);
+  --cost-low: var(--chart-3);
+  --cost-high: var(--chart-2);
+  --visa-h1b: var(--chart-1);
+  --visa-h2a: var(--chart-3);
+  --visa-h2b: var(--chart-2);
+  --religion-evangelical: var(--chart-1);
+  --religion-mainline: var(--chart-3);
+  --religion-black-protestant: var(--chart-7);
+  --religion-catholic: var(--chart-8);
+  --religion-orthodox: var(--chart-4);
+  --religion-lds: var(--chart-2);
+  --religion-jewish: var(--chart-5);
+  --religion-muslim: var(--chart-6);
+  --religion-other: var(--chart-neutral);
+  --religion-unclaimed: var(--chart-neutral-deep);
+  /* Topic accents used for figures and swatches across pages */
+  --topic-native: var(--chart-1);
+  --topic-enforcement: var(--chart-8);
+  --topic-sentiment: var(--chart-2);
+  --topic-family: var(--chart-7);
+  --topic-wealth: var(--chart-6);
+  --topic-cost: var(--chart-2);
+  --topic-age: var(--chart-3);
 }
 
 .dark {
   color-scheme: dark;
-  --background: #000000;
-  --foreground: #e8edf5;
-  --card: #0a0a0a;
-  --card-foreground: #e8edf5;
-  --popover: #0a0a0a;
-  --popover-foreground: #e8edf5;
-  --primary: #e8edf5;
-  --primary-foreground: #000000;
-  --secondary: #141414;
-  --secondary-foreground: #e8edf5;
-  --muted: #141414;
-  --muted-foreground: #9aa6ba;
-  --accent: #141414;
-  --accent-foreground: #e8edf5;
-  --destructive: #e23d3d;
-  --border: #222222;
-  --input: #222222;
-  --ring: #555555;
-  --chart-1: #ffffff;
-  --chart-2: #e23d3d;
-  --chart-3: #3d7ee2;
-  --chart-4: #c9a227;
-  --chart-5: #d9782d;
-  --radius: 0.75rem;
-  --sidebar: #0a0a0a;
-  --sidebar-foreground: #e8edf5;
-  --sidebar-primary: #e8edf5;
-  --sidebar-primary-foreground: #000000;
-  --sidebar-accent: #141414;
-  --sidebar-accent-foreground: #e8edf5;
-  --sidebar-border: #222222;
-  --sidebar-ring: #555555;
+  --background: #0b0d10;
+  --foreground: #e7e9ee;
+  --card: #12151a;
+  --card-foreground: #e7e9ee;
+  --popover: #12151a;
+  --popover-foreground: #e7e9ee;
+  --primary: #9cbbe8;
+  --primary-foreground: #0b0d10;
+  --brand-accent: #e07a5f;
+  --secondary: #1a1e25;
+  --secondary-foreground: #e7e9ee;
+  --muted: #1a1e25;
+  --muted-foreground: #9aa1ad;
+  --accent: #1f242c;
+  --accent-foreground: #e7e9ee;
+  --destructive: #e66767;
+  --border: #262b33;
+  --input: #2e343d;
+  --ring: #5b6b82;
+  --sidebar: #0f1215;
+  --sidebar-foreground: #e7e9ee;
+  --sidebar-primary: #9cbbe8;
+  --sidebar-primary-foreground: #0b0d10;
+  --sidebar-accent: #1f242c;
+  --sidebar-accent-foreground: #e7e9ee;
+  --sidebar-border: #262b33;
+  --sidebar-ring: #5b6b82;
+
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+  --chart-6: #0ca30c;
+  --chart-7: #9085e9;
+  --chart-8: #e66767;
+  --chart-neutral: #898781;
+  --chart-neutral-deep: #c3c2b7;
+  --div-mid: #383835;
 }
 
 @layer base {
@@ -127,6 +186,11 @@
   }
   html {
     @apply font-sans;
+  }
+  /* Figures line up in tables, tooltips, and stat tiles */
+  .font-mono,
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
   body {
     @apply bg-background text-foreground;
@@ -142,11 +206,11 @@
   }
 }
 
-/* Type scale, matching the Ceptly design system. */
+/* Type scale: serif page titles, sans section titles, small caps-style eyebrows, fine print */
 @layer components {
   .page-title {
     font-family: var(--font-heading);
-    @apply mb-1.5 text-[27px] leading-tight font-normal tracking-[-0.01em];
+    @apply mb-1.5 text-[28px] leading-tight font-medium tracking-[-0.01em] text-balance sm:text-[34px];
   }
 
   .page-sub {

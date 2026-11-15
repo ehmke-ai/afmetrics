@@ -29,15 +29,16 @@ import {
   type CountyCost,
 } from "@/lib/cost-of-living"
 import { useJson } from "@/lib/fetch-json"
+import { COST } from "@/lib/palette"
 
 export type CountyCosts = Record<string, CountyCost>
 
 export type CostMetric = "priceToIncome" | "rentToIncome" | "homeValue" | "rent" | "income"
 
 /** Affordable / low end of the scale */
-export const COST_LOW_COLOR = "#1a8a5a"
+export const COST_LOW_COLOR = COST.low.light
 /** Expensive / high end of the scale */
-export const COST_HIGH_COLOR = "#c2410c"
+export const COST_HIGH_COLOR = COST.high.light
 
 type MetricConfig = {
   label: string

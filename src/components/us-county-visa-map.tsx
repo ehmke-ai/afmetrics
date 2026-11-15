@@ -23,6 +23,7 @@ import {
 import { useJson } from "@/lib/fetch-json"
 import { rangeIntensity } from "@/lib/states"
 import { formatCount } from "@/lib/work-visas"
+import { VISA } from "@/lib/palette"
 
 /** [H-1B positions, H-2A workers, H-2B workers, resident population] */
 type Program = VisaProgram
@@ -32,9 +33,9 @@ const PROGRAMS: Record<
   Program,
   { index: 0 | 1 | 2; label: string; name: string; noun: string; color: string }
 > = {
-  h1b: { index: 0, label: "H-1B", name: "H-1B positions", noun: "positions", color: "#1d4ed8" },
-  h2a: { index: 1, label: "H-2A", name: "H-2A workers", noun: "workers", color: "#15803d" },
-  h2b: { index: 2, label: "H-2B", name: "H-2B workers", noun: "workers", color: "#b45309" },
+  h1b: { index: 0, label: "H-1B", name: "H-1B positions", noun: "positions", color: VISA.h1b.light },
+  h2a: { index: 1, label: "H-2A", name: "H-2A workers", noun: "workers", color: VISA.h2a.light },
+  h2b: { index: 2, label: "H-2B", name: "H-2B workers", noun: "workers", color: VISA.h2b.light },
 }
 
 const SOURCE =

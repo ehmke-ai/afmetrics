@@ -51,6 +51,7 @@ import {
   stateMapData,
   type StateMapMetrics,
 } from "@/lib/states"
+import { CATEGORICAL, SEQUENTIAL } from "@/lib/palette"
 
 
 export type MapMetric =
@@ -210,8 +211,8 @@ const METRICS: Record<MapMetric, MetricConfig> = {
     low: `${minStateThirtyMarriedHomeowner}%`,
     high: `${maxStateThirtyMarriedHomeowner}%`,
     source: "Source: U.S. Census Bureau, ACS 2024 1-year estimates (DC excluded)",
-    defaultColor: "#004278",
-    defaultLowColor: "#E76224",
+    defaultColor: CATEGORICAL[0].light,
+    defaultLowColor: CATEGORICAL[1].light,
     shadeBase: LIGHT_BACKGROUND,
     colorLabels: ["Low color", "High color"],
     intensity: (d) =>
@@ -233,8 +234,8 @@ const METRICS: Record<MapMetric, MetricConfig> = {
     high: `${maxStateWealthShareUnder30}%`,
     source:
       "Sources: Fishback benchmark (ACS 2024); Federal Reserve Distributional Financial Accounts (DC excluded)",
-    defaultColor: "#004278",
-    defaultLowColor: "#E76224",
+    defaultColor: CATEGORICAL[0].light,
+    defaultLowColor: CATEGORICAL[1].light,
     shadeBase: LIGHT_BACKGROUND,
     colorLabels: ["Low color", "High color"],
     intensity: (d) =>
@@ -250,7 +251,7 @@ const METRICS: Record<MapMetric, MetricConfig> = {
     low: `${minStateNative}%`,
     high: `${maxStateNative}%`,
     source: "Source: U.S. Census Bureau (Vintage 2025 estimates, ACS 2024)",
-    defaultColor: "#000000",
+    defaultColor: SEQUENTIAL[6],
     intensity: (d) => rangeIntensity(d.native, minStateNative, maxStateNative),
     value: (d) => `${d.native}%`,
   },

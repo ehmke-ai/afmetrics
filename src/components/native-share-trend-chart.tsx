@@ -67,7 +67,7 @@ export function NativeShareTrendChart({
                 formatter={(value) => (
                   <div className="flex w-full items-center justify-between gap-4">
                     <span className="text-muted-foreground">Non-Hispanic White</span>
-                    <span className="font-mono font-medium tabular-nums text-foreground">
+                    <span className="font-medium tabular-nums text-foreground">
                       {value}%
                     </span>
                   </div>

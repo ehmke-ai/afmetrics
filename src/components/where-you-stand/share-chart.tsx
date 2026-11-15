@@ -13,18 +13,10 @@ import {
 import { COUNTY_HISTORY_YEARS, CT_FIPS, groupShare, type CountyHistory } from "@/lib/county-history"
 import { DEMOGRAPHIC_GROUPS } from "@/lib/where-you-stand"
 import { type CountyPlace, formatPct } from "@/components/where-you-stand/shared"
+import { CATEGORICAL, type ThemedColor } from "@/lib/palette"
 
 /** Distinct line colors when several counties share one chart. */
-export const COUNTY_LINE_COLORS: { light: string; dark: string }[] = [
-  { light: "#2a78d6", dark: "#3987e5" },
-  { light: "#eb6834", dark: "#d95926" },
-  { light: "#1baf7a", dark: "#199e70" },
-  { light: "#c98500", dark: "#eda100" },
-  { light: "#d55181", dark: "#e87ba4" },
-  { light: "#6d5bd0", dark: "#9085e9" },
-  { light: "#0e8a8a", dark: "#2eb8b8" },
-  { light: "#b45309", dark: "#d9782d" },
-]
+export const COUNTY_LINE_COLORS: ThemedColor[] = CATEGORICAL
 
 export function seriesKey(fips: string): string {
   return `f${fips}`
@@ -111,7 +103,7 @@ export function ShareChart({
                             ? (chartConfig[String(name)]?.label ?? String(name))
                             : `${groupLabel} share`}
                         </span>
-                        <span className="font-mono font-medium tabular-nums text-foreground">
+                        <span className="font-medium tabular-nums text-foreground">
                           {value}%
                         </span>
                       </div>

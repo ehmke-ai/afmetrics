@@ -32,6 +32,7 @@ import {
   type GroupKey,
 } from "@/lib/county-history"
 import { useJson } from "@/lib/fetch-json"
+import { CATEGORICAL } from "@/lib/palette"
 
 /** [fips, display label] — the figures themselves come from county-history.json */
 export type { UsCountyRow }
@@ -40,12 +41,12 @@ export type { UsCountyRow }
 type Side = { id: number; groups: GroupKey[]; color: string }
 
 const DEFAULT_SIDES: Side[] = [
-  { id: 0, groups: ["european"], color: "#F1C7A8" },
-  { id: 1, groups: ["hispanic", "african", "indian", "eastAsian", "arab", "nativeAmerican", "other"], color: "#593001" },
+  { id: 0, groups: ["european"], color: CATEGORICAL[0].light },
+  { id: 1, groups: ["hispanic", "african", "indian", "eastAsian", "arab", "nativeAmerican", "other"], color: CATEGORICAL[1].light },
 ]
 
-// Starting colors for newly added sides; each can then be changed with the custom picker
-export const NEW_SIDE_COLORS =["#ff0000", "#a52a2a", "#0000ff", "#ffa500", "#008000", "#800080", "#000000"]
+// Starting colors for added sides: the remaining categorical slots, in order
+export const NEW_SIDE_COLORS = CATEGORICAL.slice(2).map((c) => c.light)
 
 // Groups are exclusive and every side needs one, so there can be at most one side per group
 const MAX_SIDES = GROUPS.length
