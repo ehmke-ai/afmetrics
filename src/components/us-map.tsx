@@ -356,10 +356,12 @@ export function UsMap({
   )
   const [costLevel, setCostLevel] = useState<MapLevel>(view === "costOfLiving" ? "state" : "county")
 
-  useEffect(() => {
+  const [syncedView, setSyncedView] = useState({ view, level })
+  if (syncedView.view !== view || syncedView.level !== level) {
+    setSyncedView({ view, level })
     if (view === "election2024" || view === "election2024County") setElectionLevel(level)
     if (view === "costOfLiving" || view === "costCounty") setCostLevel(level)
-  }, [view, level])
+  }
   // County-only views hide the state map, so any state metric will do behind them
   const metric: MapMetric =
     view === "election2024County" || view === "religion" || view === "costCounty" || view === "visas"

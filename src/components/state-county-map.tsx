@@ -35,8 +35,6 @@ const VIEWS = [
   { key: "cost", label: "Cost of living" },
 ] as const
 
-type View = (typeof VIEWS)[number]["key"]
-
 function countyHref(state: StateDemographics, county: CountyDemographics) {
   return `/united-states/${state.slug}/${countySlug(county.name)}`
 }

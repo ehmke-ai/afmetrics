@@ -42,7 +42,7 @@ export function rentToIncome(rent: number | null, income: number | null): number
   return rent == null || !income ? null : ((rent * 12) / income) * 100
 }
 
-/** e.g. "$80.7K", "$1.2M" */
+/** e.g. "$81K", "$1.23M" */
 export function formatDollarsShort(value: number): string {
   if (value >= 1e6) return `$${(value / 1e6).toFixed(2)}M`
   if (value >= 1e3) return `$${Math.round(value / 1e3)}K`

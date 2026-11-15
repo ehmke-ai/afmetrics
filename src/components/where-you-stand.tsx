@@ -138,10 +138,12 @@ export function WhereYouStand() {
   const schoolId = searchParams.get("school")
   const remote = searchParams.get("remote") === "1"
   const [countyKey, setCountyKey] = useState(urlCountyKey)
-
-  useEffect(() => {
+  // Follow the URL when it changes (back/forward); local state keeps typing responsive.
+  const [syncedCountyKey, setSyncedCountyKey] = useState(urlCountyKey)
+  if (urlCountyKey !== syncedCountyKey) {
+    setSyncedCountyKey(urlCountyKey)
     setCountyKey(urlCountyKey)
-  }, [urlCountyKey])
+  }
 
   const state = stateSlug ? stateNavBySlug[stateSlug] : undefined
   const counties = state ? countiesIn(state.slug) : []

@@ -1,12 +1,22 @@
 import type { NextConfig } from "next";
 
-import { demographicsData, slugify } from "./src/lib/demographics";
-
-// Europe moved under /europe when the US became the home page.
-const EUROPE_TOPICS = ["map", "native-share", "anti-immigration", "market-cap", "median-age"];
-const europeanSlugs = demographicsData
-  .map((d) => slugify(d.country))
-  .filter((slug) => slug !== "united-states");
+// Legacy URLs from before Europe moved under /europe and the US became the home page.
+// These lists are frozen on purpose: they cover old links only, so new countries or topics
+// never need entries here.
+const LEGACY_EUROPE_TOPICS = ["map", "native-share", "anti-immigration", "market-cap", "median-age"];
+const LEGACY_COUNTRY_SLUGS = [
+  "germany",
+  "austria",
+  "switzerland",
+  "netherlands",
+  "norway",
+  "denmark",
+  "sweden",
+  "poland",
+  "italy",
+  "france",
+  "ireland",
+];
 
 const nextConfig: NextConfig = {
   async redirects() {
@@ -15,12 +25,12 @@ const nextConfig: NextConfig = {
       { source: "/topics/native-trend", destination: "/europe/topics/native-share", permanent: true },
       { source: "/state/:slug", destination: "/united-states/:slug", permanent: true },
       { source: "/united-states", destination: "/", permanent: true },
-      ...EUROPE_TOPICS.map((slug) => ({
+      ...LEGACY_EUROPE_TOPICS.map((slug) => ({
         source: `/topics/${slug}`,
         destination: `/europe/topics/${slug}`,
         permanent: true,
       })),
-      ...europeanSlugs.map((slug) => ({
+      ...LEGACY_COUNTRY_SLUGS.map((slug) => ({
         source: `/${slug}`,
         destination: `/europe/${slug}`,
         permanent: true,
