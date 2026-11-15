@@ -4,6 +4,7 @@ import {
   BarChart3,
   Briefcase,
   ChevronRight,
+  FileText,
   Flag,
   Globe2,
   Table2,
@@ -29,6 +30,7 @@ import {
 } from "@/components/ui/sidebar"
 import { countryHref, demographicsData } from "@/lib/demographics"
 import { stateNav } from "@/lib/states"
+import { researchArticleHref, researchArticles } from "@/lib/research"
 import { EUROPE_HOME_TOPIC, europeTopicHref, europeTopics } from "@/lib/topics"
 
 const sortedCountries = demographicsData
@@ -48,6 +50,14 @@ const usLinks: NavLink[] = [
   { href: "/states", label: "All states", icon: Table2 },
   { href: "/work-visas", label: "Work visas", icon: Briefcase },
   { href: "/you", label: "Where you stand", icon: UserRound },
+]
+
+const researchLinks: NavLink[] = [
+  { href: "/research", label: "Research overview", icon: FileText, nested: true },
+  ...researchArticles.map((a) => ({
+    href: researchArticleHref(a.slug),
+    label: a.title,
+  })),
 ]
 
 const europeLinks: NavLink[] = [
@@ -146,6 +156,12 @@ export function AppSidebar() {
           Globe2,
           europeLinks,
           pathname === "/europe" || pathname.startsWith("/europe/")
+        )}
+        {collapsibleGroup(
+          "Research",
+          FileText,
+          researchLinks,
+          pathname === "/research" || pathname.startsWith("/research/")
         )}
       </SidebarContent>
     </Sidebar>
