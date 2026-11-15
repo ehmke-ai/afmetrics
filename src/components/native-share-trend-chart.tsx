@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
 
 import {
@@ -9,36 +8,20 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  DEFAULT_NATIVE_SHARE_COUNTRY,
-  getNativeShareHistory,
-  nativeShareHistoryCountries,
-} from "@/lib/demographics"
+import { usNativeShareHistory, type NativeSharePoint } from "@/lib/demographics"
 
 const chartConfig = {
   native: {
-    label: "Native / European share",
+    label: "Non-Hispanic White share",
     color: "var(--chart-1)",
   },
 } satisfies ChartConfig
 
 export function NativeShareTrendChart({
-  country: fixedCountry,
-  hideSelector,
+  data: chartData = usNativeShareHistory,
 }: {
-  country?: string
-  hideSelector?: boolean
+  data?: NativeSharePoint[]
 } = {}) {
-  const [country, setCountry] = useState(fixedCountry ?? DEFAULT_NATIVE_SHARE_COUNTRY)
-  const activeCountry = fixedCountry ?? country
-  const chartData = getNativeShareHistory(activeCountry)
   const minNative = chartData.length
     ? Math.min(...chartData.map((d) => d.native))
     : 50
@@ -46,31 +29,6 @@ export function NativeShareTrendChart({
 
   return (
     <div className="flex flex-col gap-4">
-      {!hideSelector && (
-        <div className="flex flex-wrap items-center gap-3">
-          <label htmlFor="native-share-country" className="text-sm text-muted-foreground">
-            Country
-          </label>
-          <Select
-            value={country}
-            onValueChange={(value) => {
-              if (value) setCountry(value)
-            }}
-          >
-            <SelectTrigger id="native-share-country" className="min-w-[11rem]">
-              <SelectValue placeholder="Select a country" />
-            </SelectTrigger>
-            <SelectContent>
-              {nativeShareHistoryCountries.map((name) => (
-                <SelectItem key={name} value={name}>
-                  {name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
       <ChartContainer
         config={chartConfig}
         className="aspect-auto h-[min(360px,56vh)] w-full"
@@ -108,7 +66,7 @@ export function NativeShareTrendChart({
                 }}
                 formatter={(value) => (
                   <div className="flex w-full items-center justify-between gap-4">
-                    <span className="text-muted-foreground">Native / European</span>
+                    <span className="text-muted-foreground">Non-Hispanic White</span>
                     <span className="font-mono font-medium tabular-nums text-foreground">
                       {value}%
                     </span>

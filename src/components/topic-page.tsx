@@ -10,7 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { countryHref } from "@/lib/demographics"
 
 export function Swatch({ color, label }: { color: string; label: string }) {
   return (
@@ -79,15 +78,14 @@ export function TopicPage({
 
       <footer className="fine-print mt-6 max-w-3xl">
         <strong className="font-semibold text-foreground">Notes:</strong> {notes} Values are
-        rounded for comparison; years and definitions differ by country.
+        rounded.
       </footer>
     </main>
   )
 }
 
 export type RankingRow = {
-  country: string
-  /** Defaults to the country's profile page */
+  name: string
   href?: string
   value: string
   // Bar fill, 0–1.
@@ -99,7 +97,7 @@ export type RankingRow = {
 export function RankingTable({
   rows,
   valueLabel,
-  nameLabel = "Country",
+  nameLabel = "Name",
   intensityLabel = "Intensity",
   color,
   badgeClassName,
@@ -118,7 +116,7 @@ export function RankingTable({
       <CardContent className="p-0">
         <ul className="md:hidden">
           {rows.map((row, i) => (
-            <li key={row.country} className="border-b px-3 py-2.5 last:border-b-0">
+            <li key={row.name} className="border-b px-3 py-2.5 last:border-b-0">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-2">
                   <Badge
@@ -127,12 +125,13 @@ export function RankingTable({
                   >
                     {row.rank ?? i + 1}
                   </Badge>
-                  <Link
-                    href={row.href ?? countryHref(row.country)}
-                    className="min-w-0 font-medium hover:underline"
-                  >
-                    {row.country}
-                  </Link>
+                  {row.href ? (
+                    <Link href={row.href} className="min-w-0 font-medium hover:underline">
+                      {row.name}
+                    </Link>
+                  ) : (
+                    <span className="min-w-0 font-medium">{row.name}</span>
+                  )}
                 </div>
                 <span
                   className="max-w-[55%] min-w-0 text-right text-[13px] leading-snug font-medium"
@@ -165,7 +164,7 @@ export function RankingTable({
             </TableHeader>
             <TableBody>
               {rows.map((row, i) => (
-                <TableRow key={row.country}>
+                <TableRow key={row.name}>
                   <TableCell>
                     <Badge
                       variant="secondary"
@@ -175,9 +174,13 @@ export function RankingTable({
                     </Badge>
                   </TableCell>
                   <TableCell className="font-medium">
-                    <Link href={row.href ?? countryHref(row.country)} className="hover:underline">
-                      {row.country}
-                    </Link>
+                    {row.href ? (
+                      <Link href={row.href} className="hover:underline">
+                        {row.name}
+                      </Link>
+                    ) : (
+                      row.name
+                    )}
                   </TableCell>
                   <TableCell className="text-right font-medium tabular-nums" style={{ color }}>
                     {row.value}

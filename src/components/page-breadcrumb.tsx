@@ -11,11 +11,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { getCountryBySlug } from "@/lib/demographics"
 import countyLabels from "@/data/county-labels.json"
 import { stateNavBySlug } from "@/lib/states"
 import { researchArticles } from "@/lib/research"
-import { EUROPE_HOME_TOPIC, europeTopics } from "@/lib/topics"
 
 type Crumb = { label: string; href?: string }
 
@@ -50,19 +48,6 @@ function crumbsForPathname(pathname: string): Crumb[] {
     if (!slug) return [research]
     const article = researchArticles.find((a) => a.slug === slug)
     return [research, { label: article ? article.title : slug }]
-  }
-
-  if (section === "europe") {
-    const europe: Crumb = { label: "Europe", href: "/europe" }
-    if (!slug) return [europe]
-    if (slug === "topics" && segments[2]) {
-      const topic = europeTopics.find(
-        (t) => t.slug === segments[2] && t.slug !== EUROPE_HOME_TOPIC
-      )
-      return [europe, { label: topic ? topic.label : segments[2] }]
-    }
-    const country = getCountryBySlug(slug)
-    return [europe, { label: country ? country.country : slug }]
   }
 
   return [{ label: pathname }]

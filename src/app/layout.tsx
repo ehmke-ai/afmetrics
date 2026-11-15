@@ -35,7 +35,7 @@ const crimsonPro = Crimson_Pro({
 })
 
 const siteDescription =
-  "US demographics by state and county: non-Hispanic White share over time, religion, 2024 election results, immigration enforcement, and family formation, with Europe for comparison."
+  "US demographics by state and county: non-Hispanic White share over time, religion, 2024 election results, immigration enforcement, and family formation."
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://afmetrics.com"),

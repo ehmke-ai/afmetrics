@@ -25,7 +25,7 @@ import {
   stateCost,
   usCost,
 } from "@/lib/cost-of-living"
-import { COLORS, getCountryBySlug } from "@/lib/demographics"
+import { COLORS, US as us } from "@/lib/demographics"
 import {
   countyEthnicBreakdown,
   countyLabel,
@@ -73,7 +73,6 @@ export default async function CountyPage({
   const data = getCountyBySlug(state, county)
   if (!data) notFound()
 
-  const us = getCountryBySlug("united-states")
   const label = countyLabel(data)
   const statePopulation = latestPopulation(state)
   const breakdown = foldedCountyBreakdown(state, data)
@@ -88,7 +87,7 @@ export default async function CountyPage({
       label: "Non-Hispanic White",
       countyValue: data.nonHispanicWhitePct,
       state: `${Math.round((statePopulation.european + (statePopulation.arab ?? 0)) * 10) / 10}%`,
-      us: us ? `${us.native}%` : "—",
+      us: `${us.native}%`,
       color: COLORS.native,
     },
     {

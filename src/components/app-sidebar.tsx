@@ -6,7 +6,6 @@ import {
   ChevronRight,
   FileText,
   Flag,
-  Globe2,
   Table2,
   UserRound,
   type LucideIcon,
@@ -28,14 +27,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { countryHref, demographicsData } from "@/lib/demographics"
 import { stateNav } from "@/lib/states"
 import { researchArticleHref, researchArticles } from "@/lib/research"
-import { EUROPE_HOME_TOPIC, europeTopicHref, europeTopics } from "@/lib/topics"
-
-const sortedCountries = demographicsData
-  .filter((d) => d.country !== "United States")
-  .sort((a, b) => a.country.localeCompare(b.country))
 
 type NavLink = {
   href: string
@@ -58,14 +51,6 @@ const researchLinks: NavLink[] = [
     href: researchArticleHref(a.slug),
     label: a.title,
   })),
-]
-
-const europeLinks: NavLink[] = [
-  { href: "/europe", label: "Europe overview", icon: Globe2 },
-  ...europeTopics
-    .filter((t) => t.slug !== EUROPE_HOME_TOPIC)
-    .map((t) => ({ href: europeTopicHref(t.slug), label: t.label, icon: t.icon })),
-  ...sortedCountries.map((d) => ({ href: countryHref(d.country), label: d.country })),
 ]
 
 const stateLinks: NavLink[] = stateNav.map((s) => ({
@@ -150,12 +135,6 @@ export function AppSidebar() {
           BarChart3,
           stateLinks,
           pathname.startsWith("/united-states/")
-        )}
-        {collapsibleGroup(
-          "Compare: Europe",
-          Globe2,
-          europeLinks,
-          pathname === "/europe" || pathname.startsWith("/europe/")
         )}
         {collapsibleGroup(
           "Research",

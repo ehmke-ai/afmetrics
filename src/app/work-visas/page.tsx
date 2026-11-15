@@ -367,7 +367,7 @@ export default function WorkVisasPage() {
           <RankingTable
             className=""
             rows={lcaTopStates.map((row) => ({
-              country: row.name,
+              name: row.name,
               href: stateHref(row.name),
               value: formatCount(row.positions),
               intensity: row.positions / maxStatePositions,

@@ -33,7 +33,7 @@ import {
 } from "@/lib/cost-of-living"
 import { COUNTY_HISTORY_YEARS } from "@/lib/county-history"
 import { queryValue } from "@/lib/map-view"
-import { COLORS, formatMedianAge, getCountryBySlug } from "@/lib/demographics"
+import { COLORS, formatMedianAge, US as us } from "@/lib/demographics"
 import {
   POPULATION_GROUP_LABELS,
   POPULATION_LABEL_THRESHOLD,
@@ -81,7 +81,6 @@ export default async function StatePage({
   const state = getStateBySlug(slug)
   if (!state) notFound()
 
-  const us = getCountryBySlug("united-states")
   const counties = getCounties(state)
   const neighbors = (STATE_NEIGHBORS[state.abbr] ?? [])
     .map((abbr) => stateNavByAbbr[abbr])
@@ -342,7 +341,7 @@ export default async function StatePage({
 
       <Card className="border-border bg-card shadow-none">
         <CardContent>
-          <PoliticalLeanTrendChart data={state.politicalLeanHistory} hideSelector hideWings />
+          <PoliticalLeanTrendChart data={state.politicalLeanHistory} />
           <Separator className="my-4" />
           <div className="flex flex-wrap gap-x-6 gap-y-3">
             <Swatch color={COLORS.leftOfCenter} label="Democratic (left of center)" />

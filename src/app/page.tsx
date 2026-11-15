@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
 
 import { NativeShareTrendChart } from "@/components/native-share-trend-chart"
 import { PlaceSearch } from "@/components/place-search"
@@ -8,7 +7,6 @@ import { PoliticalLeanTrendChart } from "@/components/political-lean-trend-chart
 import { PageHeader, RankingTable, Swatch } from "@/components/topic-page"
 import { UsCountyMap } from "@/components/us-county-map"
 import { UsMap } from "@/components/us-map"
-import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardContent,
@@ -19,12 +17,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { formatRatio } from "@/lib/cost-of-living"
 import { COUNTY_HISTORY_YEARS } from "@/lib/county-history"
-import {
-  COLORS,
-  demographicsData,
-  getCountryBySlug,
-  getCountryRankings,
-} from "@/lib/demographics"
+import { COLORS } from "@/lib/demographics"
 import { queryValue } from "@/lib/map-view"
 import { usCountyMapData } from "@/lib/state-data"
 import {
@@ -66,7 +59,7 @@ const leaderboards = [
     valueLabel: "Share",
     color: COLORS.native,
     rows: top((a, b) => b.native - a.native).map((s) => ({
-      country: s.state,
+      name: s.state,
       href: stateHref(s),
       value: `${s.native}%`,
       intensity: s.native / maxStateNative,
@@ -77,7 +70,7 @@ const leaderboards = [
     valueLabel: "Tier",
     color: COLORS.enforcement,
     rows: top((a, b) => a.enforcementScore - b.enforcementScore).map((s) => ({
-      country: s.state,
+      name: s.state,
       href: stateHref(s),
       value: ENFORCEMENT_TIER_LABELS[s.enforcementTier],
       intensity:
@@ -89,7 +82,7 @@ const leaderboards = [
     valueLabel: "Margin",
     color: COLORS.rightWing,
     rows: top((a, b) => election2024Margin(b) - election2024Margin(a)).map((s) => ({
-      country: s.state,
+      name: s.state,
       href: stateHref(s),
       value: `R+${election2024Margin(s).toFixed(1)}`,
       intensity: election2024Margin(s) / maxTrumpMargin,
@@ -100,7 +93,7 @@ const leaderboards = [
     valueLabel: "Share",
     color: COLORS.thirtyMarriedHomeowner,
     rows: top((a, b) => b.thirtyMarriedHomeowner - a.thirtyMarriedHomeowner).map((s) => ({
-      country: s.state,
+      name: s.state,
       href: stateHref(s),
       value: `${s.thirtyMarriedHomeowner}%`,
       intensity: s.thirtyMarriedHomeowner / maxStateThirtyMarriedHomeowner,
@@ -111,7 +104,7 @@ const leaderboards = [
     valueLabel: "Price ÷ income",
     color: COLORS.costOfLiving,
     rows: top((a, b) => statePriceToIncome(a) - statePriceToIncome(b)).map((s) => ({
-      country: s.state,
+      name: s.state,
       href: stateHref(s),
       value: formatRatio(statePriceToIncome(s)),
       intensity: statePriceToIncome(s) / maxPriceToIncome,
@@ -122,7 +115,7 @@ const leaderboards = [
     valueLabel: "Price ÷ income",
     color: COLORS.costOfLiving,
     rows: top((a, b) => statePriceToIncome(b) - statePriceToIncome(a)).map((s) => ({
-      country: s.state,
+      name: s.state,
       href: stateHref(s),
       value: formatRatio(statePriceToIncome(s)),
       intensity: statePriceToIncome(s) / maxPriceToIncome,
@@ -153,11 +146,7 @@ export default async function HomePage({
   searchParams: Promise<{ view?: string | string[]; level?: string | string[] }>
 }) {
   const query = await searchParams
-  const us = getCountryBySlug("united-states")
-  if (!us) throw new Error("Missing United States data")
-
   const countyMapData = usCountyMapData()
-  const rankings = getCountryRankings(us.country)
 
   return (
     <main className="mx-auto w-full max-w-[1100px] px-4 py-10 sm:px-6">
@@ -208,7 +197,7 @@ export default async function HomePage({
             <CardDescription>Census, 1960 to 2025</CardDescription>
           </CardHeader>
           <CardContent>
-            <NativeShareTrendChart country={us.country} hideSelector />
+            <NativeShareTrendChart />
             <Separator className="my-4" />
             <Swatch color={COLORS.native} label="Non-Hispanic White share" />
           </CardContent>
@@ -219,7 +208,7 @@ export default async function HomePage({
             <CardDescription>Democratic vs. Republican, 1960 to 2024</CardDescription>
           </CardHeader>
           <CardContent>
-            <PoliticalLeanTrendChart country={us.country} hideSelector hideWings />
+            <PoliticalLeanTrendChart />
             <Separator className="my-4" />
             <div className="flex flex-wrap gap-x-6 gap-y-3">
               <Swatch color={COLORS.leftOfCenter} label="Democratic" />
@@ -228,45 +217,6 @@ export default async function HomePage({
           </CardContent>
         </Card>
       </div>
-
-      <SectionHeader id="compare" title="How the US compares">
-        Where the United States lands among all {demographicsData.length} countries in the data
-        set.
-      </SectionHeader>
-      <div className="grid gap-4 sm:grid-cols-2">
-        {rankings.map((r) => (
-          <Card key={r.label} className="border-border bg-card shadow-none">
-            <CardContent className="flex items-center justify-between gap-4 pt-6">
-              <div>
-                <div className="eyebrow">{r.label}</div>
-                <div className="tabular-nums font-medium" style={{ color: r.color }}>
-                  {r.value}
-                </div>
-              </div>
-              <Badge
-                variant="secondary"
-                className="min-w-10 justify-center rounded-full bg-foreground/15 text-foreground hover:bg-foreground/15"
-              >
-                {r.rank} / {r.total}
-              </Badge>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-      <Link href="/europe" className="group mt-4 block">
-        <Card className="border-border bg-card shadow-none transition-colors group-hover:bg-muted/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              Compare with Europe
-              <ArrowRight className="size-4 text-muted-foreground" />
-            </CardTitle>
-            <CardDescription>
-              Native share, Christian affiliation, and anti-immigration sentiment across{" "}
-              {demographicsData.length - 1} European countries, down to the regional level.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      </Link>
 
       <footer className="fine-print mt-6 max-w-3xl">
         <strong className="font-semibold text-foreground">Notes:</strong> Non-Hispanic White uses

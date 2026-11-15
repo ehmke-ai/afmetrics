@@ -1,6 +1,6 @@
 # afmetrics.com
 
-US demographics, religion, elections, cost of living, immigration enforcement, and work-visa data by state and county, with European countries and regions for comparison.
+US demographics, religion, elections, cost of living, immigration enforcement, and work-visa data by state and county.
 
 Built with Next.js 16 (App Router), React 19, Tailwind CSS v4, shadcn/ui, Recharts, and d3-geo + TopoJSON.
 
@@ -20,12 +20,12 @@ npm run build
 
 | Path | What lives there |
 | --- | --- |
-| `src/app/` | Routes: `/` (US), `/states`, `/united-states/[state]/[county]`, `/europe/...`, `/work-visas`, `/you`, `/research/...` |
+| `src/app/` | Routes: `/` (US), `/states`, `/united-states/[state]/[county]`, `/work-visas`, `/you`, `/research/...` |
 | `src/components/` | Maps, charts, and tables. `ui/` holds the shadcn primitives |
 | `src/lib/` | Domain logic: data access, formatting, map view/query parsing |
 | `src/data/` | Generated JSON imported at build time (server and client bundles) |
 | `public/data/` | Generated JSON fetched by the client maps at runtime |
-| `public/geo/` | TopoJSON shapes for the US, states, counties, and Europe |
+| `public/geo/` | TopoJSON shapes for the US, states, and counties |
 | `scripts/` | Generators for everything in `src/data/`, `public/data/`, and `public/geo/` |
 
 ## Data pipeline
@@ -42,15 +42,12 @@ python3 scripts/build-county-visas.py         # DOL LCA/PERM filings -> public/d
 python3 scripts/build-school-visas.py         # filings by university -> public/data/school-visas.json
 python3 scripts/build-field-citizenship.py    # ACS citizenship by field -> src/data/field-citizenship.json
 python3 scripts/build-state-generation-pop.py # ACS population by generation -> src/data/state-generation-pop.json
-python3 scripts/build-europe-origin.py        # Europe NUTS-3 origin -> public/data/europe-region-origin.json
-python3 scripts/build-europe-religion.py      # Europe NUTS-3 religion -> public/data/europe-region-religion.json
 node scripts/build-county-topos.js            # per-state county shapes -> public/geo/<abbr>-counties-10m.json
 node scripts/build-ct-regions-topo.js         # Connecticut planning regions -> public/geo/ct-planning-regions-*.json
-node scripts/build-europe-nuts-topo.js        # Europe NUTS-3 shapes -> public/geo/europe-nuts3-20m.json
 ```
 
 When you change a dataset, also update the matching source/vintage note shown on the page that uses it.
 
 ## Deploy
 
-The site deploys on Vercel from `main`. `next.config.ts` holds permanent redirects for legacy URLs. Those lists are frozen and don't need updating when you add countries or topics.
+The site deploys on Vercel from `main`. `next.config.ts` holds permanent redirects for legacy URLs, including the removed `/europe` section (sent to `/`). Those lists are frozen.

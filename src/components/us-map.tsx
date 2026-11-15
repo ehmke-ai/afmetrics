@@ -257,9 +257,9 @@ const METRICS: Record<MapMetric, MetricConfig> = {
     value: (d) => (d.abbr === "DC" ? "excluded" : `${d.wealthShareUnder30}%`),
   },
   native: {
-    title: "Native / European share by state",
+    title: "Non-Hispanic White share by state",
     subtitle: "Non-Hispanic White minus Arab ancestry, as a share of population; deeper means higher.",
-    name: "Native / European",
+    name: "Non-Hispanic White",
     low: `${minStateNative}%`,
     high: `${maxStateNative}%`,
     source: "Source: U.S. Census Bureau (Vintage 2025 estimates, ACS 2024)",
@@ -834,7 +834,7 @@ export function UsMap({
                   value={enforcementLabel(detail)}
                   color={COLORS.enforcement}
                 />
-                <Stat label="Native / European" value={`${detail.native}%`} color={COLORS.native} />
+                <Stat label="Non-Hispanic White" value={`${detail.native}%`} color={COLORS.native} />
                 <Stat
                   label="30, married & homeowner"
                   value={detail.abbr === "DC" ? "—" : `${detail.thirtyMarriedHomeowner}%`}
