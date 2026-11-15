@@ -1,5 +1,8 @@
 import type { ReactNode } from "react"
 
+import type { CsvRow } from "@/lib/csv"
+
+import { DownloadCsvButton } from "@/components/download-csv-button"
 import { Swatch } from "@/components/topic-page"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -13,6 +16,7 @@ export function ChartCard({
   description,
   legend,
   action,
+  csv,
   children,
   className = "",
 }: {
@@ -21,6 +25,8 @@ export function ChartCard({
   /** Swatches under the chart */
   legend?: { color: string; label: string }[]
   action?: ReactNode
+  /** The chart's data; adds a Download CSV button named after the title */
+  csv?: { rows: CsvRow[]; columns?: string[] }
   children: ReactNode
   className?: string
 }) {
@@ -31,7 +37,12 @@ export function ChartCard({
           <CardTitle>{title}</CardTitle>
           {description && <CardDescription>{description}</CardDescription>}
         </div>
-        {action}
+        <div className="flex shrink-0 items-center gap-2">
+          {action}
+          {csv && typeof title === "string" && (
+            <DownloadCsvButton title={title} rows={csv.rows} columns={csv.columns} />
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         {children}

@@ -25,6 +25,7 @@ import {
 import { formatDollarsShort, formatRatio, formatRent } from "@/lib/cost-of-living"
 import { COLORS, formatMedianAge } from "@/lib/demographics"
 import { cn } from "@/lib/utils"
+import { DownloadCsvButton } from "@/components/download-csv-button"
 
 export type StateTableRow = {
   state: string
@@ -222,46 +223,69 @@ export function StatesDataTable({ rows }: { rows: StateTableRow[] }) {
   })
 
   return (
-    <Table>
-      <TableHeader>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id} className="hover:bg-transparent">
-            {headerGroup.headers.map((header) => (
-              <TableHead
-                key={header.id}
-                className={
-                  header.column.id === "state"
-                    ? "sticky left-0 z-[1] bg-card shadow-[1px_0_0_var(--border)]"
-                    : "text-right whitespace-nowrap"
-                }
-              >
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(header.column.columnDef.header, header.getContext())}
-              </TableHead>
-            ))}
-          </TableRow>
-        ))}
-      </TableHeader>
-      <TableBody>
-        {table.getRowModel().rows.map((row) => (
-          <TableRow key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <TableCell
-                key={cell.id}
-                // The state column stays put while the figures scroll sideways on narrow screens
-                className={
-                  cell.column.id === "state"
-                    ? "sticky left-0 z-[1] bg-card shadow-[1px_0_0_var(--border)] whitespace-nowrap"
-                    : undefined
-                }
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <div className="flex justify-end border-b px-3 py-2">
+        <DownloadCsvButton
+          title="All states"
+          rows={table.getRowModel().rows.map(({ original: r }) => ({
+            state: r.state,
+            population_millions: r.population,
+            non_hispanic_white_pct: r.native,
+            foreign_born_pct: r.foreignBorn,
+            margin_2024_trump_minus_harris: r.margin2024,
+            ilrc_enforcement_score: r.enforcementScore,
+            ilrc_enforcement_tier: r.enforcementTier,
+            immigration_threatens_values_pct: r.antiImmig,
+            married_homeowner_at_30_pct: r.thirtyMarriedHomeowner,
+            median_age: r.medianAge,
+            regional_price_parity: r.rpp,
+            median_household_income: r.medianIncome,
+            home_price_to_income: r.priceToIncome,
+            median_gross_rent: r.medianRent,
+          }))}
+        />
+      </div>
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id} className="hover:bg-transparent">
+              {headerGroup.headers.map((header) => (
+                <TableHead
+                  key={header.id}
+                  className={
+                    header.column.id === "state"
+                      ? "sticky left-0 z-[1] bg-card shadow-[1px_0_0_var(--border)]"
+                      : "text-right whitespace-nowrap"
+                  }
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())}
+                </TableHead>
+              ))}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows.map((row) => (
+            <TableRow key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <TableCell
+                  key={cell.id}
+                  // The state column stays put while the figures scroll sideways on narrow screens
+                  className={
+                    cell.column.id === "state"
+                      ? "sticky left-0 z-[1] bg-card shadow-[1px_0_0_var(--border)] whitespace-nowrap"
+                      : undefined
+                  }
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
   )
 }

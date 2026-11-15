@@ -205,6 +205,12 @@ export default async function HomePage({
           title="Non-Hispanic White share"
           description="Census, 1960 to 2025"
           legend={[{ color: COLORS.native, label: "Non-Hispanic White share" }]}
+          csv={{
+            rows: usNativeShareHistory.map((p) => ({
+              year: p.year,
+              non_hispanic_white_pct: p.native,
+            })),
+          }}
         >
           <NativeShareTrendChart />
         </ChartCard>
@@ -215,18 +221,30 @@ export default async function HomePage({
             { color: COLORS.leftOfCenter, label: "Democratic" },
             { color: COLORS.rightOfCenter, label: "Republican" },
           ]}
+          csv={{
+            rows: usPoliticalLeanHistory.map((p) => ({
+              year: p.year,
+              democratic_pct: p.leftOfCenter,
+              republican_pct: p.rightOfCenter,
+            })),
+          }}
         >
           <PoliticalLeanTrendChart />
         </ChartCard>
       </div>
 
-      <SourceNote>
-        Non-Hispanic White uses Census Bureau estimates (2023 nationally; Vintage 2025 less Arab
-        ancestry by state). Christian affiliation is from the Pew Religious Landscape Study 2023–24.
-        Immigration enforcement tiers are from the ILRC State Map on Immigration Enforcement.
-        Married homeowner at 30 is estimated from ACS 2024 1-year tables. Home affordability is
-        median home value over median household income (ACS 2020–2024 5-year). Election results are
-        certified 2024 popular vote. Values are rounded.{" "}
+      <SourceNote
+        datasets={[
+          "state-demographics",
+          "state-religion",
+          "enforcement",
+          "family-formation",
+          "cost-of-living",
+          "state-election",
+        ]}
+      >
+        Non-Hispanic White is 2023 nationally and Vintage 2025 less Arab ancestry by state. Home
+        affordability is median home value over median household income. Values are rounded.{" "}
         <Link href="/methodology" className="underline underline-offset-2">
           Methodology and downloads
         </Link>

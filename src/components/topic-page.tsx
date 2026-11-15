@@ -1,5 +1,6 @@
 import Link from "next/link"
 
+import { DownloadCsvButton } from "@/components/download-csv-button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -102,7 +103,10 @@ export function RankingTable({
   color,
   badgeClassName,
   className = "mt-7",
+  csvTitle,
 }: {
+  /** Adds a Download CSV button; the file is named after this */
+  csvTitle?: string
   rows: RankingRow[]
   valueLabel: string
   nameLabel?: string
@@ -113,6 +117,18 @@ export function RankingTable({
 }) {
   return (
     <Card className={`${className} min-w-0 border-border bg-card shadow-none`}>
+      {csvTitle && (
+        <div className="flex justify-end border-b px-3 py-2">
+          <DownloadCsvButton
+            title={csvTitle}
+            rows={rows.map((row, i) => ({
+              rank: row.rank ?? i + 1,
+              [nameLabel]: row.name,
+              [valueLabel]: row.value,
+            }))}
+          />
+        </div>
+      )}
       <CardContent className="p-0">
         <ul className="md:hidden">
           {rows.map((row, i) => (
@@ -140,10 +156,7 @@ export function RankingTable({
                   {row.value}
                 </span>
               </div>
-              <span
-                className="mt-2 block h-2 overflow-hidden rounded-full bg-muted"
-                aria-hidden
-              >
+              <span className="mt-2 block h-2 overflow-hidden rounded-full bg-muted" aria-hidden>
                 <span
                   className="block h-full rounded-full"
                   style={{ width: `${row.intensity * 100}%`, backgroundColor: color }}

@@ -373,6 +373,13 @@ export default async function StatePage({
           { color: COLORS.leftOfCenter, label: "Democratic" },
           { color: COLORS.rightOfCenter, label: "Republican" },
         ]}
+        csv={{
+          rows: state.politicalLeanHistory.map((p) => ({
+            year: p.year,
+            democratic_pct: p.leftOfCenter,
+            republican_pct: p.rightOfCenter,
+          })),
+        }}
       >
         <PoliticalLeanTrendChart data={state.politicalLeanHistory} />
       </ChartCard>

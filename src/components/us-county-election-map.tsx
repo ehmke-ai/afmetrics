@@ -21,6 +21,7 @@ import {
   PRO_IMMIG_COLOR,
 } from "@/components/us-county-map-export"
 import { useJson } from "@/lib/fetch-json"
+import { dataset } from "@/lib/datasets"
 
 /** [trump %, harris %, total votes], from scripts/build-county-election-2024.py */
 type CountyResult = [number, number, number]
@@ -33,7 +34,7 @@ const MARGIN_CAP = 60
 
 const SUBTITLE =
   "Popular-vote margin between Donald Trump and Kamala Harris; deeper means a wider win."
-const SOURCE = "Source: county results compiled from state and county election offices (tonmcg)"
+const SOURCE = dataset("county-election-2024").caption
 
 /** Trump-minus-Harris margin in points: positive is a Trump win */
 function marginOf([trump, harris]: CountyResult): number {

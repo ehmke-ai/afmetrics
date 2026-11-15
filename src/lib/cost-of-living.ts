@@ -1,4 +1,5 @@
 import stateCostData from "@/data/state-cost.json"
+import { dataset } from "@/lib/datasets"
 
 /** Per-state (and national) cost-of-living figures, from scripts/build-cost-of-living.py */
 export type CostOfLiving = {
@@ -27,8 +28,7 @@ export type CountyCost = [number | null, number | null, number | null]
 
 export const COUNTY_COST_URL = "/data/county-cost.json"
 
-export const COUNTY_COST_SOURCE =
-  "Source: U.S. Census Bureau, ACS 2020–2024 5-year estimates (B19013, B25077, B25064)"
+export const COUNTY_COST_SOURCE = dataset("cost-of-living").caption
 
 export const RPP_SOURCE = "Source: BEA Regional Price Parities, 2024"
 

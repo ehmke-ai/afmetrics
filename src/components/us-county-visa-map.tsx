@@ -21,6 +21,7 @@ import {
   type VisaScale,
 } from "@/lib/county-visas"
 import { useJson } from "@/lib/fetch-json"
+import { dataset } from "@/lib/datasets"
 import { rangeIntensity } from "@/lib/states"
 import { formatCount } from "@/lib/work-visas"
 import { VISA } from "@/lib/palette"
@@ -38,8 +39,7 @@ const PROGRAMS: Record<
   h2b: { index: 2, label: "H-2B", name: "H-2B workers", noun: "workers", color: VISA.h2b.light },
 }
 
-const SOURCE =
-  "Source: DOL OFLC case disclosure, FY 2025 (worksite). Population: Census Bureau, July 1, 2024 (Connecticut counties, July 1, 2021)."
+const SOURCE = dataset("county-visas").caption
 
 function formatRate(value: number): string {
   return value >= 100 ? value.toFixed(0) : value.toFixed(1)

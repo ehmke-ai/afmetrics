@@ -34,6 +34,7 @@ export function LeaderboardCard({ boards }: { boards: Leaderboard[] }) {
         <RankingTable
           className=""
           rows={board.rows}
+          csvTitle={board.title}
           nameLabel="State"
           valueLabel={board.valueLabel}
           intensityLabel="Relative"

@@ -30,6 +30,8 @@ function crumbsForPathname(pathname: string): Crumb[] {
 
   if (section === "states" && !slug) return [{ label: "All states" }]
 
+  if (section === "methodology" && !slug) return [{ label: "Methodology" }]
+
   if (section === "united-states" && slug) {
     const state = stateNavBySlug[slug]
     const countySegment = segments[2]
