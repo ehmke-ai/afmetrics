@@ -241,6 +241,7 @@ export default async function HomePage({
           "family-formation",
           "cost-of-living",
           "state-election",
+          "midterms-2026",
         ]}
       >
         Non-Hispanic White is 2023 nationally and Vintage 2025 less Arab ancestry by state. Home

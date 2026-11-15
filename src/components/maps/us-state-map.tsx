@@ -1,33 +1,45 @@
 "use client"
 
 import { geoPath, type GeoPermissibleObjects } from "d3-geo"
-import { Download } from "lucide-react"
 import Link from "next/link"
 import { useMemo, useState, type MouseEvent, type ReactNode } from "react"
 import type { Feature, Geometry, Polygon } from "geojson"
 
-import { ColorChooser } from "@/components/color-chooser"
 import { useStateFeatures } from "@/components/county-map-geometry"
-import { slugifyFileName } from "@/components/maps/county-choropleth"
 import { LegendSwatch } from "@/components/maps/legends"
 import { MapStatus } from "@/components/maps/map-status"
-import { Button } from "@/components/ui/button"
 import { COST_HIGH_COLOR, COST_LOW_COLOR } from "@/components/us-county-cost-map"
 import {
   ANTI_IMMIG_COLOR,
+  DEM_BLUE,
   divergingGradient,
   divergingShade,
-  divergingStops,
-  downloadMapPng,
-  LIGHT_BACKGROUND,
+  MAP_FOCUS,
+  ECON_BAD_COLOR,
+  ECON_GOOD_COLOR,
+  MAP_HOVER,
+  MAP_LABEL_HALO,
+  MAP_GRAY,
+  MAP_LABEL_INK,
+  MID_PURPLE,
+  MAP_RED,
+  NO_DATA_FILL,
   PRO_IMMIG_COLOR,
+  REP_RED,
   shade,
   SHADE_RANGE,
   shadeGradient,
-  shadeStops,
-} from "@/components/us-county-map-export"
+} from "@/components/maps/map-colors"
 import { formatDollars, formatRatio, formatRent, formatRpp, RPP_SOURCE } from "@/lib/cost-of-living"
 import { COLORS } from "@/lib/demographics"
+import {
+  formatHouseDelegation,
+  formatSenateRace,
+  houseRepShare,
+  midterms2026,
+  MIDTERMS_AS_OF,
+  senateMargin,
+} from "@/lib/midterms-2026"
 import {
   ELECTION_MARGIN_CAP,
   election2024Intensity,
@@ -51,11 +63,11 @@ import {
   stateMapData,
   type StateMapMetrics,
 } from "@/lib/states"
-import { CATEGORICAL, SEQUENTIAL } from "@/lib/palette"
-
 
 export type MapMetric =
   | "election2024"
+  | "senate2026"
+  | "house2026"
   | "costOfLiving"
   | "antiImmig"
   | "enforcement"
@@ -124,8 +136,7 @@ function labelCentroid(
   return Number.isFinite(c[0]) && Number.isFinite(c[1]) ? c : null
 }
 
-const NO_DATA_FILL = "var(--border)"
-const NO_DATA_HOVER_FILL = "color-mix(in oklch, var(--foreground) 10%, var(--border))"
+const NO_DATA_HOVER_FILL = `color-mix(in oklch, var(--foreground) 10%, ${NO_DATA_FILL})`
 
 type MetricConfig = {
   title: string
@@ -135,19 +146,72 @@ type MetricConfig = {
   low: string
   high: string
   source: string
-  defaultColor: string
-  /** When set, the scale diverges: this default low-end color, neutral mid-range, the chosen color at the high end */
-  defaultLowColor?: string
-  /** Color the pale end mixes toward. Defaults to the muted surface. */
-  shadeBase?: string
-  /** Color-picker labels for the low and high ends of a diverging scale */
-  colorLabels?: [string, string]
+  /** The fixed map color (the high end, on a diverging scale) */
+  color: string
+  /** When set, the scale diverges: this low-end color, the dark base mid-range, `color` at the high end */
+  lowColor?: string
+  /** The middle of a diverging scale, when it isn't the white map base */
+  midColor?: string
   /** Position in the color scale, 0 (palest) to 1 (deepest); null when the state has no figure */
   intensity: (d: StateMapMetrics) => number | null
+  /** States with a result still being counted, drawn in UNCALLED_FILL instead of the scale */
+  uncalled?: (d: StateMapMetrics) => boolean
   value: (d: StateMapMetrics) => string
 }
 
+/** States whose 2026 race is still being counted */
+const UNCALLED_FILL = MAP_GRAY
+
+const MIDTERMS_SOURCE = `Source: AP calls and state counts as compiled by Wikipedia, as of ${MIDTERMS_AS_OF} (provisional)`
+
 const METRICS: Record<MapMetric, MetricConfig> = {
+  senate2026: {
+    title: "2026 Senate elections by state",
+    subtitle:
+      "Margin between the Republican and the leading opponent (a Democrat, or an independent where one led the challenge); deeper means a wider win. Results are provisional.",
+    name: "2026 Senate margin",
+    low: `D/I +${ELECTION_MARGIN_CAP}`,
+    high: `R +${ELECTION_MARGIN_CAP}`,
+    source: MIDTERMS_SOURCE,
+    color: REP_RED,
+    lowColor: DEM_BLUE,
+    midColor: MID_PURPLE,
+    intensity: (d) => {
+      const race = midterms2026.senate[d.abbr]
+      const margin = race ? senateMargin(race) : null
+      return margin == null ? null : rangeIntensity(margin, -ELECTION_MARGIN_CAP, ELECTION_MARGIN_CAP)
+    },
+    uncalled: (d) => midterms2026.senate[d.abbr]?.status === "uncalled",
+    value: (d) => {
+      const race = midterms2026.senate[d.abbr]
+      if (!race) return "no race in 2026"
+      return `${formatSenateRace(race)}${race.special ? " (special)" : ""}`
+    },
+  },
+  house2026: {
+    title: "2026 House elections by state",
+    subtitle:
+      "Party split of each state's House delegation after the 2026 midterms; deeper means more one-sided. Results are provisional.",
+    name: "2026 House seats won",
+    low: "All Democratic",
+    high: "All Republican",
+    source: MIDTERMS_SOURCE,
+    color: REP_RED,
+    lowColor: DEM_BLUE,
+    midColor: MID_PURPLE,
+    intensity: (d) => {
+      const delegation = midterms2026.house[d.abbr]
+      return delegation ? houseRepShare(delegation) : null
+    },
+    uncalled: (d) => {
+      const delegation = midterms2026.house[d.abbr]
+      return !!delegation && delegation.uncalled === delegation.seats
+    },
+    value: (d) => {
+      const delegation = midterms2026.house[d.abbr]
+      return delegation ? formatHouseDelegation(delegation) : "no voting member"
+    },
+  },
   election2024: {
     title: "2024 presidential election by state",
     subtitle:
@@ -156,9 +220,9 @@ const METRICS: Record<MapMetric, MetricConfig> = {
     low: `Harris +${ELECTION_MARGIN_CAP}`,
     high: `Trump +${ELECTION_MARGIN_CAP}`,
     source: "Source: certified 2024 general election results (state election offices)",
-    defaultColor: ANTI_IMMIG_COLOR,
-    defaultLowColor: PRO_IMMIG_COLOR,
-    colorLabels: ["Harris color", "Trump color"],
+    color: REP_RED,
+    lowColor: DEM_BLUE,
+    midColor: MID_PURPLE,
     intensity: election2024Intensity,
     value: formatElection2024,
   },
@@ -170,9 +234,8 @@ const METRICS: Record<MapMetric, MetricConfig> = {
     low: `${minStateRpp.toFixed(1)}`,
     high: `${maxStateRpp.toFixed(1)}`,
     source: RPP_SOURCE,
-    defaultColor: COST_HIGH_COLOR,
-    defaultLowColor: COST_LOW_COLOR,
-    colorLabels: ["Low color", "High color"],
+    color: COST_HIGH_COLOR,
+    lowColor: COST_LOW_COLOR,
     intensity: (d) => rangeIntensity(d.cost.rpp, minStateRpp, maxStateRpp),
     value: (d) => formatRpp(d.cost.rpp),
   },
@@ -184,8 +247,9 @@ const METRICS: Record<MapMetric, MetricConfig> = {
     low: `Pro (${minStateAntiImmig}%)`,
     high: `Anti (${maxStateAntiImmig}%)`,
     source: "Source: PRRI 2015 American Values Atlas (DC not surveyed)",
-    defaultColor: ANTI_IMMIG_COLOR,
-    defaultLowColor: PRO_IMMIG_COLOR,
+    color: ANTI_IMMIG_COLOR,
+    lowColor: PRO_IMMIG_COLOR,
+    midColor: MID_PURPLE,
     intensity: (d) =>
       d.antiImmig == null ? null : rangeIntensity(d.antiImmig, minStateAntiImmig, maxStateAntiImmig),
     value: (d) => (d.antiImmig == null ? "no data" : `${d.antiImmig}% opposed`),
@@ -198,8 +262,9 @@ const METRICS: Record<MapMetric, MetricConfig> = {
     low: "Sanctuary protections",
     high: "Heavy ICE cooperation",
     source: "Source: ILRC State Map on Immigration Enforcement, July 2026",
-    defaultColor: ANTI_IMMIG_COLOR,
-    defaultLowColor: PRO_IMMIG_COLOR,
+    color: ANTI_IMMIG_COLOR,
+    lowColor: PRO_IMMIG_COLOR,
+    midColor: MID_PURPLE,
     intensity: (d) => enforcementIntensity(d.enforcementScore),
     value: enforcementLabel,
   },
@@ -211,10 +276,8 @@ const METRICS: Record<MapMetric, MetricConfig> = {
     low: `${minStateThirtyMarriedHomeowner}%`,
     high: `${maxStateThirtyMarriedHomeowner}%`,
     source: "Source: U.S. Census Bureau, ACS 2024 1-year estimates (DC excluded)",
-    defaultColor: CATEGORICAL[0].light,
-    defaultLowColor: CATEGORICAL[1].light,
-    shadeBase: LIGHT_BACKGROUND,
-    colorLabels: ["Low color", "High color"],
+    color: ECON_GOOD_COLOR,
+    lowColor: ECON_BAD_COLOR,
     intensity: (d) =>
       d.abbr === "DC"
         ? null
@@ -234,10 +297,8 @@ const METRICS: Record<MapMetric, MetricConfig> = {
     high: `${maxStateWealthShareUnder30}%`,
     source:
       "Sources: Fishback benchmark (ACS 2024); Federal Reserve Distributional Financial Accounts (DC excluded)",
-    defaultColor: CATEGORICAL[0].light,
-    defaultLowColor: CATEGORICAL[1].light,
-    shadeBase: LIGHT_BACKGROUND,
-    colorLabels: ["Low color", "High color"],
+    color: ECON_GOOD_COLOR,
+    lowColor: ECON_BAD_COLOR,
     intensity: (d) =>
       d.abbr === "DC"
         ? null
@@ -251,49 +312,30 @@ const METRICS: Record<MapMetric, MetricConfig> = {
     low: `${minStateNative}%`,
     high: `${maxStateNative}%`,
     source: "Source: U.S. Census Bureau (Vintage 2025 estimates, ACS 2024)",
-    defaultColor: SEQUENTIAL[6],
+    color: MAP_RED,
     intensity: (d) => rangeIntensity(d.native, minStateNative, maxStateNative),
     value: (d) => `${d.native}%`,
   },
 }
 
-const DEFAULT_COLORS = Object.fromEntries(
-  Object.entries(METRICS).map(([metric, config]) => [metric, config.defaultColor])
-) as Record<MapMetric, string>
-
-/** Metrics drawn on the same pro/anti-immigration scale, which share their chosen colors */
-const IMMIGRATION_METRICS: MapMetric[] = ["antiImmig", "enforcement"]
-
-/** Sets `next` for `metric`, and for every metric sharing its colors */
-function withColor<T extends Partial<Record<MapMetric, string>>>(
-  prev: T,
-  metric: MapMetric,
-  next: string
-): T {
-  const linked = IMMIGRATION_METRICS.includes(metric) ? IMMIGRATION_METRICS : [metric]
-  return { ...prev, ...Object.fromEntries(linked.map((m) => [m, next])) }
-}
-
-const DEFAULT_LOW_COLORS = Object.fromEntries(
-  Object.entries(METRICS).flatMap(([metric, config]) =>
-    config.defaultLowColor ? [[metric, config.defaultLowColor]] : []
-  )
-) as Partial<Record<MapMetric, string>>
-
-// Scaled like the county map: 15% of the chosen color at the low end, full color at the high.
-// Diverging metrics (given a `lowColor`) run from full low color through neutral to full chosen color.
+// Scaled like the county map: 15% of the metric's color at the low end, full color at the high.
+// Diverging metrics (given a `lowColor`) run from full low color through the map base (or
+// `midColor`) to full color.
 function fillFor(
   data: StateMapMetrics | undefined,
   metric: MapMetric,
-  color: string,
-  lowColor: string | undefined,
   hovered = false,
   selected = false
 ) {
-  const t = data ? METRICS[metric].intensity(data) : null
+  const { color, lowColor, midColor, intensity, uncalled } = METRICS[metric]
+  if (data && uncalled?.(data)) {
+    const boost = selected ? 15 : hovered ? 8 : 0
+    return boost ? `color-mix(in oklch, var(--foreground) ${boost}%, ${UNCALLED_FILL})` : UNCALLED_FILL
+  }
+  const t = data ? intensity(data) : null
   if (t == null) return hovered ? NO_DATA_HOVER_FILL : NO_DATA_FILL
   const boost = selected ? 15 : hovered ? 8 : 0
-  if (lowColor) return divergingShade(lowColor, color, t, boost, METRICS[metric].shadeBase)
+  if (lowColor) return divergingShade(lowColor, color, t, boost, midColor)
   const pct = Math.round(SHADE_RANGE[0] + t * (SHADE_RANGE[1] - SHADE_RANGE[0]))
   return shade(color, Math.min(100, pct + boost))
 }
@@ -306,9 +348,10 @@ function enforcementLabel(data: StateMapMetrics): string {
   return `${ENFORCEMENT_TIER_LABELS[data.enforcementTier]} (${data.enforcementScore.toFixed(1)})`
 }
 
+// Light states on the black page: borders are the page color, and focus is flag red
 function strokeFor(selected: boolean, hovered: boolean): string {
-  if (selected) return "var(--foreground)"
-  if (hovered) return "color-mix(in oklch, var(--foreground) 55%, var(--background))"
+  if (selected) return MAP_FOCUS
+  if (hovered) return MAP_HOVER
   return "var(--background)"
 }
 
@@ -327,13 +370,8 @@ export function UsStateMap({
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null)
-  const [colors, setColors] = useState<Record<MapMetric, string>>(DEFAULT_COLORS)
-  const [lowColors, setLowColors] = useState(DEFAULT_LOW_COLORS)
-  const [exporting, setExporting] = useState(false)
-  const color = colors[metric]
   const config = METRICS[metric]
-  const lowColor = lowColors[metric]
-  const [lowColorLabel, highColorLabel] = config.colorLabels ?? ["Pro color", "Anti color"]
+  const { color, lowColor, midColor } = config
 
   function updatePointer(e: MouseEvent<SVGPathElement>) {
     const svg = e.currentTarget.ownerSVGElement
@@ -376,44 +414,6 @@ export function UsStateMap({
     [features, path]
   )
 
-  async function handleDownload() {
-    setExporting(true)
-    try {
-      await downloadMapPng({
-        title: config.title,
-        subtitle: config.subtitle,
-        legend: [
-          {
-            name: config.name,
-            stops: lowColor
-              ? divergingStops(lowColor, color, config.shadeBase)
-              : shadeStops(color),
-            low: config.low,
-            high: config.high,
-          },
-        ],
-        noData:
-          metric === "antiImmig" ||
-          metric === "thirtyMarriedHomeowner" ||
-          metric === "wealthShareUnder30",
-        source: config.source,
-        mapWidth: WIDTH,
-        mapHeight: HEIGHT,
-        shapes: features.flatMap((f) => {
-          const d = path(f as GeoPermissibleObjects)
-          const abbr = FIPS_TO_ABBR[isoKey(f.id)]
-          const data = abbr ? stateMapByAbbr[abbr] : undefined
-          return d ? [{ d, fill: fillFor(data, metric, color, lowColor) }] : []
-        }),
-        shapeStroke: 1,
-        labels: labels.map(({ abbr, x, y }) => ({ x, y, text: abbr })),
-        fileName: slugifyFileName(config.title),
-      })
-    } finally {
-      setExporting(false)
-    }
-  }
-
   return (
     <div className="space-y-4">
       {/* Title, map, legend, and source sit together so a screenshot of this block stands alone */}
@@ -425,16 +425,6 @@ export function UsStateMap({
             </h3>
             <p className="text-xs text-muted-foreground">{config.subtitle}</p>
           </div>
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={handleDownload}
-            disabled={loading || exporting}
-          >
-            <Download aria-hidden />
-            {exporting ? "Saving…" : "PNG"}
-          </Button>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-start">
@@ -459,7 +449,7 @@ export function UsStateMap({
                   <path
                     key={id || f.properties.name}
                     d={d}
-                    fill={fillFor(data, metric, color, lowColor, isHovered, isSelected)}
+                    fill={fillFor(data, metric, isHovered, isSelected)}
                     stroke={strokeFor(isSelected, isHovered)}
                     strokeWidth={isSelected ? 1.75 : isHovered ? 1.5 : 1}
                     strokeLinejoin="round"
@@ -498,11 +488,11 @@ export function UsStateMap({
                   textAnchor="middle"
                   dominantBaseline="middle"
                   paintOrder="stroke"
-                  stroke="var(--background)"
+                  stroke={MAP_LABEL_HALO}
                   strokeWidth={3}
                   strokeLinejoin="round"
-                  className="pointer-events-none select-none font-bold uppercase tracking-wide"
-                  style={{ fontSize: 13, fill: "var(--foreground)" }}
+                  className="pointer-events-none select-none font-mono font-bold uppercase"
+                  style={{ fontSize: 12, fill: MAP_LABEL_INK }}
                 >
                   {abbr}
                 </text>
@@ -511,7 +501,7 @@ export function UsStateMap({
 
             {hoveredId && pointer && (
               <div
-                className="pointer-events-none absolute z-10 rounded-md border border-border bg-popover px-3 py-2 text-sm shadow-md"
+                className="pointer-events-none absolute z-10 border border-border bg-popover px-3 py-2 text-sm shadow-md"
                 style={{
                   left: `min(${pointer.x}%, calc(100% - 10rem))`,
                   top: `max(${pointer.y - 2}%, 0.5rem)`,
@@ -533,7 +523,7 @@ export function UsStateMap({
             )}
           </div>
 
-          <div className="overflow-hidden rounded-lg border border-border sm:w-32">
+          <div className="overflow-hidden border border-border sm:w-32">
             {SIDEBAR_ABBRS.map((abbr) => {
               const id = ABBR_TO_FIPS[abbr]
               const data = stateMapByAbbr[abbr]
@@ -545,13 +535,13 @@ export function UsStateMap({
                   type="button"
                   title={data ? `${data.state}: ${metricLabel(data, metric)}` : abbr}
                   className="block w-full cursor-pointer border-b border-border/60 px-3 py-1.5 text-left text-xs font-bold uppercase tracking-wide text-foreground transition-colors last:border-b-0"
-                  style={{ background: fillFor(data, metric, color, lowColor, isHovered, isSelected) }}
+                  style={{ background: fillFor(data, metric, isHovered, isSelected) }}
                   onMouseEnter={() => setHoveredId(id)}
                   onMouseLeave={() => setHoveredId(null)}
                   onClick={() => setSelectedId((prev) => (prev === id ? null : id))}
                 >
                   <span
-                    className="rounded-[3px] px-1"
+                    className="px-1"
                     style={{ background: "color-mix(in oklch, var(--background) 70%, transparent)" }}
                   >
                     {abbr}
@@ -569,7 +559,7 @@ export function UsStateMap({
               className="h-2.5 border border-border"
               style={{
                 background: lowColor
-                  ? divergingGradient(lowColor, color, config.shadeBase)
+                  ? divergingGradient(lowColor, color, midColor)
                   : shadeGradient(color),
               }}
             />
@@ -583,13 +573,21 @@ export function UsStateMap({
             metric === "wealthShareUnder30") && (
             <LegendSwatch color={NO_DATA_FILL}>{metric === "antiImmig" ? "No data" : "DC excluded"}</LegendSwatch>
           )}
+          {(metric === "senate2026" || metric === "house2026") && (
+            <>
+              <LegendSwatch color={UNCALLED_FILL}>Uncalled</LegendSwatch>
+              <LegendSwatch color={NO_DATA_FILL}>
+                {metric === "senate2026" ? "No race" : "No voting member"}
+              </LegendSwatch>
+            </>
+          )}
           {legendExtra}
           <span className="ml-auto text-muted-foreground">{config.source}</span>
         </figcaption>
       </figure>
 
-      <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-start">
-        <div className="rounded-lg border border-border bg-card/40 px-4 py-3 text-sm">
+      <div>
+        <div className="border border-border bg-card/40 px-4 py-3 text-sm">
           {detail ? (
             <div className="space-y-2">
               <div className="flex items-baseline justify-between gap-3">
@@ -626,7 +624,17 @@ export function UsStateMap({
                 <Stat
                   label="2024 presidential vote"
                   value={formatElection2024(detail)}
-                  color={detail.trump2024 >= detail.harris2024 ? ANTI_IMMIG_COLOR : PRO_IMMIG_COLOR}
+                  color={detail.trump2024 >= detail.harris2024 ? REP_RED : DEM_BLUE}
+                />
+                <Stat
+                  label="2026 Senate"
+                  value={METRICS.senate2026.value(detail)}
+                  color={midtermColor(METRICS.senate2026, detail)}
+                />
+                <Stat
+                  label="2026 House seats"
+                  value={METRICS.house2026.value(detail)}
+                  color={midtermColor(METRICS.house2026, detail)}
                 />
                 <Stat
                   label="Anti-immigration sentiment"
@@ -678,24 +686,16 @@ export function UsStateMap({
             </p>
           )}
         </div>
-
-        <div className="space-y-3 rounded-lg border border-border bg-card/40 px-4 py-3 text-sm">
-          {lowColor && (
-            <MapColorControl
-              label={lowColorLabel}
-              color={lowColor}
-              onChange={(next) => setLowColors((prev) => withColor(prev, metric, next))}
-            />
-          )}
-          <MapColorControl
-            label={lowColor ? highColorLabel : "Map color"}
-            color={color}
-            onChange={(next) => setColors((prev) => withColor(prev, metric, next))}
-          />
-        </div>
       </div>
     </div>
   )
+}
+
+/** Party color of a 2026 result's winning side, or muted text when there isn't one yet */
+function midtermColor(config: MetricConfig, d: StateMapMetrics): string {
+  const t = config.uncalled?.(d) ? null : config.intensity(d)
+  if (t == null || t === 0.5) return "var(--muted-foreground)"
+  return t > 0.5 ? REP_RED : DEM_BLUE
 }
 
 function Stat({ label, value, color }: { label: string; value: string; color: string }) {
@@ -705,30 +705,6 @@ function Stat({ label, value, color }: { label: string; value: string; color: st
       <dd className="font-medium" style={{ color }}>
         {value}
       </dd>
-    </div>
-  )
-}
-
-function MapColorControl({
-  label,
-  color,
-  onChange,
-}: {
-  label: string
-  color: string
-  onChange: (color: string) => void
-}) {
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-2">
-        <i
-          className="inline-block size-3 shrink-0 rounded-[3px] border border-border"
-          style={{ background: color }}
-          aria-hidden
-        />
-        <span className="font-medium text-foreground">{label}</span>
-      </div>
-      <ColorChooser color={color} onChange={onChange} label={label} />
     </div>
   )
 }

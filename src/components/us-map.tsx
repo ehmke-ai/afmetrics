@@ -3,16 +3,22 @@
 import Link from "next/link"
 import { useState, type ReactNode } from "react"
 
-import { LevelToggle } from "@/components/maps/legends"
+import { LevelToggle, OptionToggle } from "@/components/maps/legends"
 import { UsStateMap, type MapMetric } from "@/components/maps/us-state-map"
 import { Button } from "@/components/ui/button"
 import { UsCountyCostMap } from "@/components/us-county-cost-map"
 import { UsCountyElectionMap } from "@/components/us-county-election-map"
+import { UsHouseDistrictMap } from "@/components/us-house-district-map"
 import type { UsCountyRow } from "@/components/us-county-map"
 import { UsCountyReligionMap } from "@/components/us-county-religion-map"
 import { UsCountyVisaMap } from "@/components/us-county-visa-map"
 import { mapLevel, nationalMapHref, nationalMapView, type MapLevel } from "@/lib/map-view"
-import { ELECTION_MARGIN_CAP } from "@/lib/states"
+import { MIDTERMS_AS_OF, SENATE_INDEPENDENT_CHALLENGE } from "@/lib/midterms-2026"
+import { ELECTION_MARGIN_CAP, stateNavByAbbr } from "@/lib/states"
+
+type MidtermView = "senate2026" | "house2026" | "house2026District"
+
+const listFormat = new Intl.ListFormat("en-US", { style: "long", type: "conjunction" })
 
 /**
  * `countyMap` replaces the state map while Demographics is selected (the county-level
@@ -41,27 +47,49 @@ export function UsMap({
     view === "election2024" ? "state" : "county"
   )
   const [costLevel, setCostLevel] = useState<MapLevel>(view === "costOfLiving" ? "state" : "county")
+  // Which 2026 race the midterms tab shows; remembered when switching away and back
+  const [midtermRace, setMidtermRace] = useState<MidtermView>(
+    view === "house2026" || view === "house2026District" ? view : "senate2026"
+  )
+  // Which level the House race shows; remembered when switching to the Senate and back
+  const [houseLevel, setHouseLevel] = useState<"house2026" | "house2026District">(
+    view === "house2026" ? "house2026" : "house2026District"
+  )
 
   const [syncedView, setSyncedView] = useState({ view, level })
   if (syncedView.view !== view || syncedView.level !== level) {
     setSyncedView({ view, level })
     if (view === "election2024" || view === "election2024County") setElectionLevel(level)
     if (view === "costOfLiving" || view === "costCounty") setCostLevel(level)
+    if (view === "senate2026" || view === "house2026" || view === "house2026District") {
+      setMidtermRace(view)
+    }
+    if (view === "house2026" || view === "house2026District") setHouseLevel(view)
   }
   // County-only views hide the state map, so any state metric will do behind them
   const metric: MapMetric =
-    view === "election2024County" || view === "religion" || view === "costCounty" || view === "visas"
+    view === "election2024County" ||
+    view === "religion" ||
+    view === "costCounty" ||
+    view === "visas" ||
+    view === "house2026District"
       ? "native"
       : view
   const electionActive = view === "election2024" || view === "election2024County"
   const costActive = view === "costOfLiving" || view === "costCounty"
+  const midtermsActive = view === "senate2026" || view === "house2026" || view === "house2026District"
 
   const showCounties = view === "native"
   const showElection = view === "election2024County"
   const showReligion = view === "religion"
   const showCost = view === "costCounty"
   const showVisas = view === "visas"
-  const showStates = !showCounties && !showElection && !showReligion && !showCost && !showVisas
+  const showDistricts = view === "house2026District"
+  // The district shapes are a large download, so mount that map the first time it's shown
+  const [districtsMounted, setDistrictsMounted] = useState(showDistricts)
+  if (showDistricts && !districtsMounted) setDistrictsMounted(true)
+  const showStates =
+    !showCounties && !showElection && !showReligion && !showCost && !showVisas && !showDistricts
 
   const electionLevelToggle = (
     <LevelToggle
@@ -78,6 +106,29 @@ export function UsMap({
     />
   )
 
+  const midtermRaceToggle = (
+    <OptionToggle
+      prefix="Race"
+      label="2026 midterm race"
+      current={view === "senate2026" ? "senate2026" : "house"}
+      options={[
+        { key: "senate2026", label: "Senate", href: nationalMapHref("senate2026") },
+        { key: "house", label: "House", href: nationalMapHref(houseLevel) },
+      ]}
+    />
+  )
+  const houseLevelToggle = (
+    <OptionToggle
+      prefix="Show by"
+      label="2026 House level"
+      current={view === "house2026" ? "house2026" : "house2026District"}
+      options={[
+        { key: "house2026District", label: "District", href: nationalMapHref("house2026District") },
+        { key: "house2026", label: "State", href: nationalMapHref("house2026") },
+      ]}
+    />
+  )
+
   return (
     <div className="space-y-4">
       {/* One scrolling row on phones, wrapping on wider screens */}
@@ -91,6 +142,7 @@ export function UsMap({
               electionLevel === "county" ? "election2024County" : "election2024",
               "2024 election",
             ],
+            [midtermRace, "2026 midterms"],
             ["religion", "Religion"],
             ["antiImmig", "Immigration sentiment"],
             ["enforcement", "Enforcement laws & ICE"],
@@ -105,7 +157,9 @@ export function UsMap({
                 ? costActive
                 : next === "election2024County" || next === "election2024"
                   ? electionActive
-                  : view === next
+                  : next === "senate2026" || next === "house2026" || next === "house2026District"
+                    ? midtermsActive
+                    : view === next
           return (
             <Button key={label} asChild size="sm" className="shrink-0" variant={active ? "default" : "secondary"}>
               <Link href={nationalMapHref(next)} scroll={false} aria-pressed={active}>
@@ -153,6 +207,23 @@ export function UsMap({
         </div>
       </div>
 
+      <div className={showDistricts ? undefined : "hidden"}>
+        <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-start">
+          {districtsMounted && (
+            <UsHouseDistrictMap
+              states={electionCounties.states}
+              legendExtra={
+                <>
+                  {midtermRaceToggle}
+                  {houseLevelToggle}
+                </>
+              }
+            />
+          )}
+          <div className="hidden sm:block sm:w-32" aria-hidden />
+        </div>
+      </div>
+
       <div className={showStates ? undefined : "hidden"}>
         <UsStateMap
           metric={metric}
@@ -161,7 +232,16 @@ export function UsMap({
               ? electionLevelToggle
               : metric === "costOfLiving"
                 ? costLevelToggle
-                : undefined
+                : metric === "senate2026"
+                  ? midtermRaceToggle
+                  : metric === "house2026"
+                    ? (
+                        <>
+                          {midtermRaceToggle}
+                          {houseLevelToggle}
+                        </>
+                      )
+                  : undefined
           }
         />
       </div>
@@ -197,6 +277,17 @@ export function UsMap({
         make up the remainder). Margins of {ELECTION_MARGIN_CAP} points or more take the deepest
         shade. Maine and Nebraska split electoral votes by district; the map shows the statewide
         vote. State-level colors are scaled to the range across states.
+        2026 midterms: provisional results of the November 3, 2026 general election as of{" "}
+        {MIDTERMS_AS_OF} (AP race calls and state counts as compiled by Wikipedia); states certify
+        through mid-December, and the counts will change until then. Senate: margin between the
+        Republican and the leading opponent, a Democrat or, in{" "}
+        {listFormat.format(SENATE_INDEPENDENT_CHALLENGE.map((a) => stateNavByAbbr[a].state))}, an
+        independent; Florida and Ohio held special elections; margins of{" "}
+        {ELECTION_MARGIN_CAP} points or more take the deepest shade. House: by district, the
+        winner of each seat on the district lines used in 2026 (Census TIGER 2026, with
+        Missouri&apos;s 2022 lines; see the note under the map); by state, the share of each
+        state&apos;s called seats won by each party; Louisiana&apos;s runoffs and other undecided
+        seats are listed as uncalled. A state whose races are all undecided is shaded gray.
       </p>
     </div>
   )

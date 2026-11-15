@@ -52,7 +52,7 @@ When you change a dataset, update its entry in `src/lib/datasets.ts` (source, vi
 
 ## Colors
 
-Data colors live in `src/lib/palette.ts` (hex, for the color pickers and exports) and are mirrored as CSS tokens in `src/app/globals.css` (`--chart-1..8`, `--party-*`, `--cost-*`, `--visa-*`, `--religion-*`). `src/lib/palette.test.ts` fails if the two drift. Client code loads JSON from `public/` through `useJson` / `loadJson` in `src/lib/fetch-json.ts`, which fetches each file once per page load.
+The site is always dark (`dark` is fixed on `<html>`); the light tokens serve the PDF export and the maps, which render light-on-black. Map colors are fixed, with no picker. Data colors live in `src/lib/palette.ts` (hex, for the maps and exports) and are mirrored as CSS tokens in `src/app/globals.css` (`--chart-1..8`, `--party-*`, `--cost-*`, `--visa-*`, `--religion-*`). `src/lib/palette.test.ts` fails if the two drift. Client code loads JSON from `public/` through `useJson` / `loadJson` in `src/lib/fetch-json.ts`, which fetches each file once per page load.
 
 ## Deploy
 

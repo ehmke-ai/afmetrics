@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react"
 
-import { ColorChooser } from "@/components/color-chooser"
 import { useCountyGeometry, type CountyMapState } from "@/components/county-map-geometry"
 import {
   CountyChoropleth,
@@ -10,7 +9,7 @@ import {
   type UsCountyRow,
 } from "@/components/maps/county-choropleth"
 import { GradientLegend } from "@/components/maps/legends"
-import { shade, SHADE_RANGE, shadeGradient, shadeStops } from "@/components/us-county-map-export"
+import { shade, SHADE_RANGE, shadeGradient } from "@/components/maps/map-colors"
 import { YearSlider } from "@/components/year-slider"
 import { useJson } from "@/lib/fetch-json"
 import { RELIGION } from "@/lib/palette"
@@ -40,6 +39,9 @@ const CATEGORIES = [
   { key: "unclaimed", label: "Unclaimed", color: RELIGION.unclaimed.light },
 ] as const
 
+/** Fixed map colors, by category index */
+const CATEGORY_COLORS: string[] = CATEGORIES.map((c) => c.color)
+
 const UNCLAIMED = CATEGORIES.length - 1
 
 /** Source line under the map, so a screenshot carries its citation */
@@ -66,7 +68,7 @@ function leaderOf(shares: CountyShares, showUnclaimed: boolean): { index: number
 }
 
 function fillFor(shares: CountyShares | undefined, colors: string[], showUnclaimed: boolean) {
-  if (!shares) return "var(--border)"
+  if (!shares) return "var(--map-nodata)"
   const { index, value } = leaderOf(shares, showUnclaimed)
   const t = Math.min(1, Math.max(0, (value - SHARE_FLOOR) / (SHARE_CAP - SHARE_FLOOR)))
   return shade(colors[index], Math.round(SHADE_RANGE[0] + t * (SHADE_RANGE[1] - SHADE_RANGE[0])))
@@ -92,7 +94,7 @@ export function UsCountyReligionMap({
   const geometry = useCountyGeometry(state)
   const religionFile = useJson<CountyReligion>(data ? null : DATA_URL)
   const religion = data ?? religionFile.data
-  const [colors, setColors] = useState<string[]>(() => CATEGORIES.map((c) => c.color))
+  const colors = CATEGORY_COLORS
   const [showUnclaimed, setShowUnclaimed] = useState(false)
   const [year, setYear] = useState<number | null>(null)
 
@@ -179,12 +181,6 @@ export function UsCountyReligionMap({
             high={high}
           />
         ))}
-        exportLegend={leading.map((i) => ({
-          name: `Most ${CATEGORIES[i].label}`,
-          stops: shadeStops(colors[i]),
-          low,
-          high,
-        }))}
         dataLoading={!religion && !religionFile.error}
         dataError={religionFile.error}
         onRetryData={religionFile.retry}
@@ -198,18 +194,16 @@ export function UsCountyReligionMap({
         disabled={!religion}
       />
 
-      <div className="rounded-lg border border-border bg-card/40 px-4 py-3 text-sm">
+      <div className="border border-border bg-card/40 px-4 py-3 text-sm">
         <div className="grid gap-x-6 gap-y-2 sm:grid-cols-3">
           {CATEGORIES.map(({ key, label }, i) => {
             const hidden = key === "unclaimed" && !showUnclaimed
             return (
               <div key={key} className="flex items-center gap-2">
-                <ColorChooser
-                  color={colors[i]}
-                  onChange={(next) =>
-                    setColors((prev) => prev.map((c, j) => (j === i ? next : c)))
-                  }
-                  label={`${label} color`}
+                <i
+                  className="inline-block size-3 shrink-0 border border-border"
+                  style={{ background: colors[i] }}
+                  aria-hidden
                 />
                 <span className={hidden ? "text-muted-foreground line-through" : "text-foreground"}>
                   {label}

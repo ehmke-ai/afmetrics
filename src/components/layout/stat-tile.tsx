@@ -14,18 +14,18 @@ export function StatTile({
   color?: string
 }) {
   return (
-    <div className="rounded-lg border border-border bg-card px-4 py-3">
+    <div className="border border-border border-t-2 border-t-primary bg-card px-4 py-3.5">
       <div className="eyebrow flex items-center gap-1.5">
         {color && (
           <i
-            className="inline-block size-2 rounded-full"
+            className="inline-block size-2"
             style={{ background: color }}
             aria-hidden
           />
         )}
         {label}
       </div>
-      <div className="mt-1 font-heading text-[28px] leading-none font-medium tabular-nums text-foreground">
+      <div className="mt-2 font-heading text-[30px] leading-none font-extrabold tracking-[-0.02em] tabular-nums text-foreground">
         {value}
       </div>
       {note && <div className="mt-1.5 text-xs text-muted-foreground">{note}</div>}

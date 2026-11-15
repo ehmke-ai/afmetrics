@@ -367,8 +367,8 @@ export function enforcementIntensity(score: number): number {
   return 1 - rangeIntensity(score, minStateEnforcementScore, maxStateEnforcementScore)
 }
 
-/** Margins at or beyond this many points take the deepest shade (DC's ~84 would wash out the rest) */
-export const ELECTION_MARGIN_CAP = 40
+/** Margins at or beyond this many points are full red or blue; closer races fade toward purple */
+export const ELECTION_MARGIN_CAP = 20
 
 /** 2024 Trump-minus-Harris margin in points: positive is a Trump win */
 export function election2024Margin(d: Pick<StateMapMetrics, "trump2024" | "harris2024">): number {

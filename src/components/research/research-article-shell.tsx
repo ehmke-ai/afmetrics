@@ -98,7 +98,7 @@ export function ResearchLinkList({
   links: { title: string; site: string; href: string; date?: string }[]
 }) {
   return (
-    <ol className="mt-2 divide-y divide-border rounded-lg border border-border bg-card">
+    <ol className="mt-2 divide-y divide-border border border-border bg-card">
       {links.map((link, i) => (
         <li key={link.href} className="px-3 py-2.5 sm:px-4">
           <div className="flex gap-2 text-sm">

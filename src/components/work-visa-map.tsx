@@ -4,19 +4,20 @@ import { geoPath, type GeoPermissibleObjects } from "d3-geo"
 import Link from "next/link"
 import { useMemo, useState, type MouseEvent } from "react"
 import type { Feature, Geometry, Polygon } from "geojson"
-import { Download } from "lucide-react"
 
-import { ColorChooser } from "@/components/color-chooser"
 import { useStateFeatures } from "@/components/county-map-geometry"
 import { MapStatus } from "@/components/maps/map-status"
 import { Button } from "@/components/ui/button"
 import {
-  downloadMapPng,
+  MAP_FOCUS,
+  MAP_HOVER,
+  MAP_LABEL_HALO,
+  MAP_LABEL_INK,
+  MAP_RED,
   shade,
   shadeGradient,
-  shadeStops,
   SHADE_RANGE,
-} from "@/components/us-county-map-export"
+} from "@/components/maps/map-colors"
 import {
   workVisaByAbbr,
   workVisaStates,
@@ -26,7 +27,6 @@ import {
 } from "@/data/work-visa-states"
 import { formatCount, formatShare } from "@/lib/work-visas"
 import { rangeIntensity, stateNavByAbbr } from "@/lib/states"
-import { VISA } from "@/lib/palette"
 
 type Scale = "positions" | "rate"
 
@@ -62,21 +62,21 @@ const PROGRAMS: Record<
     label: "H-1B",
     title: "H-1B positions by state",
     name: "H-1B positions",
-    color: VISA.h1b.light,
+    color: MAP_RED,
     noun: "positions",
   },
   h2a: {
     label: "H-2A",
     title: "H-2A farm jobs by state",
     name: "H-2A workers",
-    color: VISA.h2a.light,
+    color: MAP_RED,
     noun: "workers",
   },
   h2b: {
     label: "H-2B",
     title: "H-2B seasonal jobs by state",
     name: "H-2B workers",
-    color: VISA.h2b.light,
+    color: MAP_RED,
     noun: "workers",
   },
 }
@@ -160,13 +160,12 @@ export function WorkVisaMap() {
   const { features, loading, error: shapesError, retry: retryShapes } = useStateFeatures()
   const [program, setProgram] = useState<WorkVisaProgram>("h1b")
   const [scale, setScale] = useState<Scale>("positions")
-  const [color, setColor] = useState(PROGRAMS.h1b.color)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null)
-  const [exporting, setExporting] = useState(false)
 
   const config = PROGRAMS[program]
+  const color = config.color
   const total = workVisaTotal(program)
   const values = workVisaStates.map((row) => measure(row, program, scale))
   const min = Math.min(...values)
@@ -230,40 +229,6 @@ export function WorkVisaMap() {
       ? `${config.name} per 100,000 residents. The color runs in a straight line from the lowest state to the highest.`
       : `${config.name} certified in FY 2025. The color follows the log of the count, so states across the range stay visible.`
 
-  async function handleDownload() {
-    setExporting(true)
-    try {
-      await downloadMapPng({
-        title: config.title,
-        subtitle,
-        legend: [
-          {
-            name: scale === "rate" ? `${config.name} per 100,000` : config.name,
-            stops: shadeStops(color),
-            low: legendCaption(min),
-            high: legendCaption(max),
-          },
-        ],
-        noData: false,
-        source: SOURCE,
-        mapWidth: WIDTH,
-        mapHeight: HEIGHT,
-        shapes: features.flatMap((f) => {
-          const d = path(f as GeoPermissibleObjects)
-          const row = workVisaByAbbr[FIPS_TO_ABBR[isoKey(f.id)]]
-          return d
-            ? [{ d, fill: fillFor(row ? intensity(row, program, scale, min, max) : 0, color) }]
-            : []
-        }),
-        shapeStroke: 1,
-        labels: labels.map(({ abbr, x, y }) => ({ x, y, text: abbr })),
-        fileName: `${config.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`,
-      })
-    } finally {
-      setExporting(false)
-    }
-  }
-
   const ranked = [...workVisaStates].sort((a, b) => b[program] - a[program])
 
   return (
@@ -276,10 +241,7 @@ export function WorkVisaMap() {
             size="sm"
             variant={program === key ? "default" : "secondary"}
             aria-pressed={program === key}
-            onClick={() => {
-              setProgram(key)
-              setColor(PROGRAMS[key].color)
-            }}
+            onClick={() => setProgram(key)}
           >
             {PROGRAMS[key].label}
           </Button>
@@ -313,16 +275,6 @@ export function WorkVisaMap() {
             </h3>
             <p className="text-xs text-muted-foreground">{subtitle}</p>
           </div>
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={handleDownload}
-            disabled={loading || exporting}
-          >
-            <Download aria-hidden />
-            {exporting ? "Saving…" : "PNG"}
-          </Button>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-start">
@@ -347,11 +299,7 @@ export function WorkVisaMap() {
                     d={d}
                     fill={fillFor(intensity(row, program, scale, min, max), color, isHovered, isSelected)}
                     stroke={
-                      isSelected
-                        ? "var(--foreground)"
-                        : isHovered
-                          ? "color-mix(in oklch, var(--foreground) 55%, var(--background))"
-                          : "var(--background)"
+                      isSelected ? MAP_FOCUS : isHovered ? MAP_HOVER : "var(--background)"
                     }
                     strokeWidth={isSelected ? 1.75 : isHovered ? 1.5 : 1}
                     strokeLinejoin="round"
@@ -383,11 +331,11 @@ export function WorkVisaMap() {
                   textAnchor="middle"
                   dominantBaseline="middle"
                   paintOrder="stroke"
-                  stroke="var(--background)"
+                  stroke={MAP_LABEL_HALO}
                   strokeWidth={3}
                   strokeLinejoin="round"
-                  className="pointer-events-none select-none font-bold uppercase tracking-wide"
-                  style={{ fontSize: 13, fill: "var(--foreground)" }}
+                  className="pointer-events-none select-none font-mono font-bold uppercase"
+                  style={{ fontSize: 12, fill: MAP_LABEL_INK }}
                 >
                   {abbr}
                 </text>
@@ -396,7 +344,7 @@ export function WorkVisaMap() {
 
             {hovered && pointer && (
               <div
-                className="pointer-events-none absolute z-10 rounded-md border border-border bg-popover px-3 py-2 text-sm shadow-md"
+                className="pointer-events-none absolute z-10 border border-border bg-popover px-3 py-2 text-sm shadow-md"
                 style={{
                   left: `min(${pointer.x}%, calc(100% - 12rem))`,
                   top: `max(${pointer.y - 2}%, 0.5rem)`,
@@ -412,7 +360,7 @@ export function WorkVisaMap() {
             )}
           </div>
 
-          <div className="overflow-hidden rounded-lg border border-border sm:w-32">
+          <div className="overflow-hidden border border-border sm:w-32">
             {SIDEBAR_ABBRS.map((abbr) => {
               const id = ABBR_TO_FIPS[abbr]
               const row = workVisaByAbbr[abbr]
@@ -437,7 +385,7 @@ export function WorkVisaMap() {
                   onClick={() => setSelectedId((prev) => (prev === id ? null : id))}
                 >
                   <span
-                    className="rounded-[3px] px-1"
+                    className="px-1"
                     style={{ background: "color-mix(in oklch, var(--background) 70%, transparent)" }}
                   >
                     {abbr}
@@ -463,8 +411,8 @@ export function WorkVisaMap() {
         </figcaption>
       </figure>
 
-      <div className="grid gap-4 lg:grid-cols-[1fr_16rem] lg:items-start">
-        <div className="rounded-lg border border-border bg-card/40 px-4 py-3 text-sm">
+      <div>
+        <div className="border border-border bg-card/40 px-4 py-3 text-sm">
           {detail ? (
             <StateDetail
               row={detail}
@@ -480,15 +428,9 @@ export function WorkVisaMap() {
             </p>
           )}
         </div>
-        <div className="rounded-lg border border-border bg-card/40 px-4 py-3 text-sm">
-          <div className="flex items-center gap-2">
-            <span className="font-medium text-foreground">Map color</span>
-            <ColorChooser color={color} onChange={setColor} label="Map color" />
-          </div>
-        </div>
       </div>
 
-      <div className="max-h-80 overflow-auto rounded-lg border border-border">
+      <div className="max-h-80 overflow-auto border border-border">
         <table className="w-full text-sm">
           <thead className="sticky top-0 bg-card text-xs text-muted-foreground">
             <tr className="border-b border-border">

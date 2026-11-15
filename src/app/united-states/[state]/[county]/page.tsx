@@ -90,35 +90,35 @@ export default async function CountyPage({
       countyValue: data.hispanicPct,
       state: `${statePopulation.hispanic}%`,
       us: "—",
-      color: POPULATION_COLORS.hispanic?.light,
+      color: POPULATION_COLORS.hispanic?.dark,
     },
     {
       label: "Black or African American",
       countyValue: data.blackPct,
       state: `${statePopulation.african}%`,
       us: "—",
-      color: POPULATION_COLORS.african?.light,
+      color: POPULATION_COLORS.african?.dark,
     },
     {
       label: "American Indian and Alaska Native",
       countyValue: data.aianPct,
       state: `${statePopulation.nativeAmerican}%`,
       us: "—",
-      color: POPULATION_COLORS.nativeAmerican?.light,
+      color: POPULATION_COLORS.nativeAmerican?.dark,
     },
     {
       label: "Indian",
       countyValue: countyEthnic.indian,
       state: `${statePopulation.indian ?? "—"}${statePopulation.indian == null ? "" : "%"}`,
       us: "—",
-      color: POPULATION_COLORS.indian?.light,
+      color: POPULATION_COLORS.indian?.dark,
     },
     {
       label: "East Asian",
       countyValue: countyEthnic.eastAsian,
       state: `${statePopulation.eastAsian ?? "—"}${statePopulation.eastAsian == null ? "" : "%"}`,
       us: "—",
-      color: POPULATION_COLORS.eastAsian?.light,
+      color: POPULATION_COLORS.eastAsian?.dark,
     },
   ].sort((a, b) => b.countyValue - a.countyValue)
 
@@ -140,7 +140,7 @@ export default async function CountyPage({
                 key={g.key}
                 label={g.label}
                 value={`${g.value}%`}
-                color={POPULATION_COLORS[g.key]?.light}
+                color={POPULATION_COLORS[g.key]?.dark}
               />
             ))}
           </dl>

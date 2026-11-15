@@ -78,7 +78,7 @@ export function PopulationStackChart({
                   <div className="flex w-full items-center justify-between gap-4">
                     <span className="inline-flex items-center gap-1.5 text-muted-foreground">
                       <i
-                        className="inline-block size-2.5 rounded-[2px]"
+                        className="inline-block size-2.5"
                         style={{ background: `var(--color-${name})` }}
                         aria-hidden
                       />
@@ -113,7 +113,7 @@ export function PopulationStackChart({
         {series.map(({ key, label }) => (
           <span key={key} className="inline-flex items-center gap-2 text-sm text-muted-foreground">
             <i
-              className="inline-block size-3.5 rounded-[3px] bg-(--swatch-light) dark:bg-(--swatch-dark)"
+              className="inline-block size-3.5 bg-(--swatch-light) dark:bg-(--swatch-dark)"
               style={
                 {
                   "--swatch-light": POPULATION_COLORS[key]?.light,

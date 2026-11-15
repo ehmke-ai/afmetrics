@@ -148,11 +148,11 @@ export default function WorkVisasPage() {
                     </TableCell>
                     <TableCell>
                       <span
-                        className="block h-2 min-w-16 overflow-hidden rounded-full bg-muted"
+                        className="block h-2 min-w-16 overflow-hidden bg-muted"
                         aria-hidden
                       >
                         <span
-                          className="block h-full rounded-full bg-foreground/70"
+                          className="block h-full bg-foreground/70"
                           style={{ width: `${(issued / maxIssued) * 100}%` }}
                         />
                       </span>
@@ -227,7 +227,7 @@ export default function WorkVisasPage() {
                   <TableCell>
                     <Badge
                       variant="secondary"
-                      className="min-w-7 justify-center rounded-full bg-foreground/15 text-foreground hover:bg-foreground/15"
+                      className="min-w-7 justify-center bg-foreground/15 text-foreground hover:bg-foreground/15"
                     >
                       {index + 1}
                     </Badge>
@@ -499,9 +499,9 @@ function CountRank({
                   {formatShare(row.positions, whole)}
                 </TableCell>
                 <TableCell>
-                  <span className="block h-2 overflow-hidden rounded-full bg-muted" aria-hidden>
+                  <span className="block h-2 overflow-hidden bg-muted" aria-hidden>
                     <span
-                      className="block h-full rounded-full"
+                      className="block h-full"
                       style={{ width: `${(row.positions / max) * 100}%`, backgroundColor: "var(--visa-h1b)" }}
                     />
                   </span>

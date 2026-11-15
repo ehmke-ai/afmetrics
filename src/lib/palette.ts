@@ -3,36 +3,42 @@
  *
  * `src/app/globals.css` mirrors these as CSS tokens (`--chart-1..8`, `--party-*`, `--cost-*`,
  * `--visa-*`, `--religion-*`) so components and Tailwind use `var(--token)`; `palette.test.ts`
- * fails if the two drift. Hex stays here for what can't take a CSS variable: the color pickers'
- * starting values (react-colorful works in hex) and the PNG/PDF exports' fallbacks.
+ * fails if the two drift. Hex stays here for what can't take a CSS variable: the maps' fixed
+ * colors (mixed with `color-mix`) and the PDF exports.
  *
- * The categorical set is the dataviz reference palette, validated with its
- * `validate_palette.js` against this site's surfaces (light #fbfaf7, dark #12151a): every
- * adjacent pair clears the colorblind (ΔE ≥ 8) and normal-vision (ΔE ≥ 15) floors in both
- * modes. In light mode aqua, yellow, and magenta sit under 3:1 against the page, so those
- * series always ship with a legend, tooltip, or table. Choropleths compare every pair, which
- * only the first three slots survive; maps with more categories lean on their legend and tooltip.
+ * The site is always dark, so `dark` is the color people see; `light` is only the PDF print
+ * palette. The dark set is tuned to the brand (black, bone, flag red) and validated with the
+ * dataviz `validate_palette.js` against the card surface #111111: every slot sits in the dark
+ * lightness band with 3:1 contrast, and adjacent pairs clear the colorblind (ΔE ≥ 8) and
+ * normal-vision (ΔE ≥ 15) floors. Choropleths compare every pair, which the first three slots
+ * survive (worst CVD ΔE 12.6); maps with more categories lean on their legend and tooltip.
+ *
+ * Maps always shade on a light base (`--map-base`, even in dark mode), so they use the `light`
+ * set. Maps use fixed colors. There is no color picker.
  */
 
 export type ThemedColor = { light: string; dark: string }
 
-/** Categorical slots, in fixed order: blue, orange, aqua, yellow, magenta, green, violet, red */
+/** Categorical slots, in fixed order: blue, orange, aqua, gold, rose, green, violet, red */
 export const CATEGORICAL: ThemedColor[] = [
-  { light: "#2a78d6", dark: "#3987e5" },
-  { light: "#eb6834", dark: "#d95926" },
-  { light: "#1baf7a", dark: "#199e70" },
-  { light: "#eda100", dark: "#c98500" },
-  { light: "#e87ba4", dark: "#d55181" },
-  { light: "#008300", dark: "#0ca30c" },
-  { light: "#6250d6", dark: "#9085e9" },
-  { light: "#e34948", dark: "#e66767" },
+  { light: "#2a78d6", dark: "#4a7fd4" },
+  { light: "#eb6834", dark: "#d96a2b" },
+  { light: "#1baf7a", dark: "#1fa088" },
+  { light: "#eda100", dark: "#b98613" },
+  { light: "#e87ba4", dark: "#d4669a" },
+  { light: "#008300", dark: "#4f9d4a" },
+  { light: "#6250d6", dark: "#8f80e0" },
+  { light: "#e34948", dark: "#e3342f" },
 ]
 
 const [blue, orange, aqua, yellow, magenta, green, violet, red] = CATEGORICAL
 
 /** Muted neutrals for "other" and "none" categories */
-export const NEUTRAL: ThemedColor = { light: "#898781", dark: "#898781" }
-export const NEUTRAL_DEEP: ThemedColor = { light: "#52514e", dark: "#c3c2b7" }
+export const NEUTRAL: ThemedColor = { light: "#898781", dark: "#7d7770" }
+export const NEUTRAL_DEEP: ThemedColor = { light: "#52514e", dark: "#bdb5a8" }
+
+/** Bone white, the brand's type color: the single hue for magnitude maps on the dark base */
+export const BONE: ThemedColor = { light: "#8a7f6e", dark: "#e8dfcf" }
 
 /** Diverging poles: blue ↔ red, the US party convention */
 export const PARTY = { dem: blue, rep: red }
@@ -56,14 +62,3 @@ export const RELIGION = {
   other: NEUTRAL,
   unclaimed: NEUTRAL_DEEP,
 } satisfies Record<string, ThemedColor>
-
-/** Single-hue sequential ramp (blue), lightest to darkest; for magnitude */
-export const SEQUENTIAL = [
-  "#cde2fb",
-  "#9ec5f4",
-  "#6da7ec",
-  "#3987e5",
-  "#256abf",
-  "#184f95",
-  "#0d366b",
-]

@@ -1,6 +1,5 @@
 "use client"
 
-import { Download } from "lucide-react"
 import { useMemo, useState, type MouseEvent, type ReactNode } from "react"
 
 import {
@@ -12,18 +11,13 @@ import {
 } from "@/components/county-map-geometry"
 import { NoDataSwatch } from "@/components/maps/legends"
 import { MapStatus } from "@/components/maps/map-status"
-import { Button } from "@/components/ui/button"
-import { downloadMapPng, type MapExport } from "@/components/us-county-map-export"
+import { MAP_FOCUS } from "@/components/maps/map-colors"
 
 /** [county FIPS, display label], the server-rendered county list the maps label hovers with */
 export type UsCountyRow = [fips: string, label: string]
 
-export function slugifyFileName(title: string) {
-  return `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}.png`
-}
-
 /**
- * The shared body of every county choropleth: title and PNG export, a loading/error overlay,
+ * The shared body of every county choropleth: title, a loading/error overlay,
  * the county paths (memoized), state borders, a hover outline and tooltip, and a caption with
  * the legend and source. Each map supplies its fills, tooltip rows, and legend.
  */
@@ -43,8 +37,6 @@ export function CountyChoropleth({
   legend,
   noData = true,
   legendExtra,
-  exportLegend,
-  exportOptions,
   dataLoading,
   dataError,
   onRetryData,
@@ -76,8 +68,6 @@ export function CountyChoropleth({
   noData?: boolean
   /** Drawn beside the legend (UsMap's county/state toggle) */
   legendExtra?: ReactNode
-  exportLegend: MapExport["legend"]
-  exportOptions?: Partial<Omit<MapExport, "title" | "subtitle" | "legend" | "source" | "shapes">>
   dataLoading: boolean
   dataError: Error | null
   onRetryData: () => void
@@ -87,7 +77,6 @@ export function CountyChoropleth({
 }) {
   const [hoveredFips, setHoveredFips] = useState<string | null>(null)
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null)
-  const [exporting, setExporting] = useState(false)
   const { width, height, stateBorders, regionLabels } = geometry
   const loading = geometry.loading || dataLoading
 
@@ -117,26 +106,6 @@ export function CountyChoropleth({
     return state || !abbr ? name : `${name}, ${abbr}`
   }
 
-  async function handleDownload() {
-    setExporting(true)
-    try {
-      await downloadMapPng({
-        title,
-        subtitle,
-        legend: exportLegend,
-        source,
-        mapWidth: width,
-        mapHeight: height,
-        shapes,
-        stateBorders,
-        fileName: slugifyFileName(title),
-        ...exportOptions,
-      })
-    } finally {
-      setExporting(false)
-    }
-  }
-
   const showTooltip = hoveredFips && pointer && hasData(hoveredFips)
 
   return (
@@ -149,16 +118,6 @@ export function CountyChoropleth({
           </h3>
           <p className="text-xs text-muted-foreground">{subtitle}</p>
         </div>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          onClick={handleDownload}
-          disabled={loading || !!dataError || !!geometry.error || exporting}
-        >
-          <Download aria-hidden />
-          {exporting ? "Saving…" : "PNG"}
-        </Button>
       </div>
 
       <div className="relative">
@@ -196,8 +155,8 @@ export function CountyChoropleth({
             <path
               d={pathByFips[hoveredFips]}
               fill="none"
-              stroke="color-mix(in oklch, var(--foreground) 55%, var(--background))"
-              strokeWidth={1.25}
+              stroke={MAP_FOCUS}
+              strokeWidth={1.5}
               strokeLinejoin="round"
               vectorEffect="non-scaling-stroke"
               pointerEvents="none"
@@ -248,7 +207,7 @@ export function TooltipRows({
           >
             {row.color && (
               <i
-                className="inline-block size-2 rounded-full"
+                className="inline-block size-2"
                 style={{ background: row.color }}
                 aria-hidden
               />

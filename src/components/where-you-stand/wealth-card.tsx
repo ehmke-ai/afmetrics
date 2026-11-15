@@ -47,9 +47,9 @@ export function WealthCard({
               <span className={selected ? "font-semibold" : "text-muted-foreground"}>
                 {row.label}
               </span>
-              <span className="block h-2 overflow-hidden rounded-full bg-muted" aria-hidden>
+              <span className="block h-2 overflow-hidden bg-muted" aria-hidden>
                 <span
-                  className="block h-full rounded-full"
+                  className="block h-full"
                   style={{
                     width: `${(row.share / maxShare) * 100}%`,
                     background: selected ? "var(--chart-1)" : "var(--muted-foreground)",

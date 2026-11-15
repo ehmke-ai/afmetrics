@@ -45,29 +45,40 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
+// Mono uppercase links that turn red on hover; the current section sits on a red underline
 const linkClass = (active: boolean) =>
-  `rounded-md px-2.5 py-1.5 text-sm transition-colors hover:bg-accent hover:text-foreground ${
-    active ? "font-medium text-foreground" : "text-muted-foreground"
+  `border-b-2 px-2.5 py-1.5 font-mono text-[12.5px] tracking-[0.08em] uppercase transition-colors hover:text-primary ${
+    active ? "border-primary text-foreground" : "border-transparent text-muted-foreground"
   }`
 
 function Wordmark({ onClick }: { onClick?: () => void }) {
   return (
-    <Link href="/" onClick={onClick} className="flex shrink-0 items-center gap-2 text-foreground">
-      <Flag className="size-4 text-brand-accent" aria-hidden />
-      <span className="font-brand text-xl leading-none">afmetrics.com</span>
+    <Link
+      href="/"
+      onClick={onClick}
+      aria-label="afmetrics.com home"
+      className="group flex shrink-0 items-center gap-2 text-foreground"
+    >
+      <span className="flex size-7 items-center justify-center bg-primary text-primary-foreground transition-colors group-hover:bg-primary/85">
+        <Flag className="size-3.5" fill="currentColor" aria-hidden />
+      </span>
+      <span className="font-brand text-[19px] leading-none font-extrabold tracking-[-0.02em] uppercase">
+        AF Metrics
+        <span className="text-primary">.</span>
+      </span>
     </Link>
   )
 }
 
 /** Top navigation: sections and a Tools menu on wide screens, a sheet menu on narrow ones */
-export function SiteNav({ actions }: { actions?: React.ReactNode }) {
+export function SiteNav() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [toolsOpen, setToolsOpen] = useState(false)
   const toolsActive = TOOLS.some((t) => isActive(pathname, t.href))
 
   return (
-    <div className="mx-auto flex h-14 w-full max-w-[1100px] items-center gap-4 px-4 sm:px-6">
+    <div className="mx-auto flex h-16 w-full max-w-[1100px] items-center gap-4 px-4 sm:px-6">
       <Wordmark />
 
       <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
@@ -92,10 +103,12 @@ export function SiteNav({ actions }: { actions?: React.ReactNode }) {
                 key={tool.href}
                 href={tool.href}
                 onClick={() => setToolsOpen(false)}
-                className="block rounded-md px-3 py-2 hover:bg-accent"
+                className="block border-l-2 border-transparent px-3 py-2 transition-colors hover:border-primary hover:bg-accent"
               >
-                <div className="text-sm font-medium text-foreground">{tool.label}</div>
-                <div className="text-xs text-muted-foreground">{tool.description}</div>
+                <div className="font-mono text-xs tracking-[0.08em] text-foreground uppercase">
+                  {tool.label}
+                </div>
+                <div className="mt-0.5 text-xs text-muted-foreground">{tool.description}</div>
               </Link>
             ))}
           </PopoverContent>
@@ -104,10 +117,9 @@ export function SiteNav({ actions }: { actions?: React.ReactNode }) {
 
       <div className="ml-auto flex items-center gap-2">
         <PlaceSearch className="hidden w-60 lg:block" />
-        {actions}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger
-            className="inline-flex size-9 items-center justify-center rounded-md hover:bg-accent md:hidden"
+            className="inline-flex size-9 items-center justify-center text-foreground transition-colors hover:text-primary md:hidden"
             aria-label="Open menu"
           >
             <Menu className="size-5" aria-hidden />

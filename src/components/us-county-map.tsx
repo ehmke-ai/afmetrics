@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react"
 
-import { ColorChooser } from "@/components/color-chooser"
 import {
   useCountyGeometry,
   withCtRegions,
@@ -17,10 +16,11 @@ import { GradientLegend } from "@/components/maps/legends"
 import { POPULATION_COLORS } from "@/components/population-stack-chart"
 import { Button } from "@/components/ui/button"
 import {
+  MAP_RED,
+  MAP_WHITE,
   shade,
   shadeGradient,
-  shadeStops,
-} from "@/components/us-county-map-export"
+} from "@/components/maps/map-colors"
 import { YearSlider } from "@/components/year-slider"
 import {
   COUNTY_HISTORY_URL,
@@ -45,7 +45,7 @@ const DEFAULT_SIDES: Side[] = [
   { id: 1, groups: ["hispanic", "african", "indian", "eastAsian", "arab", "nativeAmerican", "other"], color: CATEGORICAL[1].light },
 ]
 
-// Starting colors for added sides: the remaining categorical slots, in order
+// Colors for added sides: the remaining categorical slots, in order. Colors are fixed.
 export const NEW_SIDE_COLORS = CATEGORICAL.slice(2).map((c) => c.light)
 
 // Groups are exclusive and every side needs one, so there can be at most one side per group
@@ -80,22 +80,24 @@ function fillFor(
   maxLead: number,
   sides: Side[]
 ) {
-  if (!leader) return "var(--border)"
+  if (!leader) return "var(--map-nodata)"
   const t = maxLead > 0 ? Math.min(1, leader.lead / maxLead) : 0
   if (sides.length === 2) {
     const signed = leader.index === 0 ? -t : t
-    return blend(sides[0].color, sides[1].color, 0.5 + signed / 2)
+    return blend(sideColor(sides, 0), sideColor(sides, 1), 0.5 + signed / 2)
   }
   return shade(sides[leader.index].color, Math.round(15 + t * 85))
+}
+
+/** Two sides are white and red, the map colors; more each keep their own color */
+function sideColor(sides: Side[], index: number) {
+  if (sides.length === 2) return index === 0 ? MAP_WHITE : MAP_RED
+  return sides[index].color
 }
 
 /** `t` of the way from `from` (0) to `to` (1) */
 export function blend(from: string, to: string, t: number) {
   return `color-mix(in oklch, ${from}, ${to} ${Math.round(t * 100)}%)`
-}
-
-export function blendStops(from: string, to: string) {
-  return [0, 0.25, 0.5, 0.75, 1].map((t) => blend(from, to, t))
 }
 
 function sideLabel(side: Side): string {
@@ -186,10 +188,6 @@ export function UsCountyMap({
     })
   }
 
-  function setSideColor(sideIndex: number, color: string) {
-    setSides((prev) => prev.map((side, i) => (i === sideIndex ? { ...side, color } : side)))
-  }
-
   // A new side starts with an unassigned group if there is one, otherwise the last group of
   // the side holding the most, and the first starting color no side is using yet.
   function addSide() {
@@ -251,31 +249,11 @@ export function UsCountyMap({
   const subtitle = `Each county is colored by its ${sides.length > 2 ? "largest" : "larger"} side, as a share of population; deeper means a wider lead.`
   const source = `Source: U.S. Census Bureau${YEAR_SOURCES[year] ? ` (${YEAR_SOURCES[year]})` : ""}`
 
-  const exportLegend = diverging
-    ? [
-        {
-          name: "Lead",
-          stops: blendStops(sides[0].color, sides[1].color),
-          low: `${sideTitle(sides[0], sides)} ${leadLabel}`,
-          high: `${sideTitle(sides[1], sides)} ${leadLabel}`,
-        },
-      ]
-    : sides.map((side) => {
-        const name = sideTitle(side, sides)
-        return {
-          name: `Most ${name}`,
-          groups: name !== sideLabel(side) ? sideLabel(side) : undefined,
-          stops: shadeStops(side.color),
-          low: "Close",
-          high: leadLabel,
-        }
-      })
-
   const legend = diverging ? (
     <GradientLegend
         className="w-64"
         name="Lead"
-        background={`linear-gradient(in oklch to right, ${sides[0].color}, ${sides[1].color})`}
+        background={`linear-gradient(in oklch to right, ${sideColor(sides, 0)}, ${sideColor(sides, 1)})`}
         low={`${sideTitle(sides[0], sides)} ${leadLabel}`}
         high={`${sideTitle(sides[1], sides)} ${leadLabel}`}
       />
@@ -326,7 +304,6 @@ export function UsCountyMap({
           />
         )}
         legend={legend}
-        exportLegend={exportLegend}
         dataLoading={!history && !historyFile.error}
         dataError={historyFile.error}
         onRetryData={historyFile.retry}
@@ -339,12 +316,12 @@ export function UsCountyMap({
         {sides.map((side, sideIndex) => (
           <div
             key={side.id}
-            className="space-y-3 rounded-lg border border-border bg-card/40 px-4 py-3 text-sm"
+            className="space-y-3 border border-border bg-card/40 px-4 py-3 text-sm"
           >
             <div className="flex items-center gap-2">
               <i
-                className="inline-block size-3 shrink-0 rounded-[3px] border border-border"
-                style={{ background: side.color }}
+                className="inline-block size-3 shrink-0 border border-border"
+                style={{ background: sideColor(sides, sideIndex) }}
                 aria-hidden
               />
               <span className="font-medium text-foreground">
@@ -385,11 +362,6 @@ export function UsCountyMap({
               })}
             </div>
 
-            <ColorChooser
-              color={side.color}
-              onChange={(color) => setSideColor(sideIndex, color)}
-              label={`Side ${sideIndex + 1} color`}
-            />
           </div>
         ))}
 
@@ -397,7 +369,7 @@ export function UsCountyMap({
           <button
             type="button"
             onClick={addSide}
-            className="flex min-h-24 items-center justify-center rounded-lg border border-dashed border-border text-sm text-muted-foreground transition-colors hover:border-ring hover:text-foreground"
+            className="flex min-h-24 items-center justify-center border border-dashed border-border text-sm text-muted-foreground transition-colors hover:border-ring hover:text-foreground"
           >
             + Add side
           </button>

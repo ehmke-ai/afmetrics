@@ -1,7 +1,6 @@
 import Link from "next/link"
 import type { ReactNode } from "react"
 
-import { ColorChooser } from "@/components/color-chooser"
 import { Button } from "@/components/ui/button"
 
 /** A labeled color bar: sequential or diverging, depending on `background` */
@@ -35,7 +34,7 @@ export function LegendSwatch({ color, children }: { color: string; children: Rea
   return (
     <span className="inline-flex items-center gap-2 text-muted-foreground">
       <i
-        className="inline-block size-3 rounded-[3px] border border-border"
+        className="inline-block size-3 border border-border"
         style={{ background: color }}
         aria-hidden
       />
@@ -45,7 +44,7 @@ export function LegendSwatch({ color, children }: { color: string; children: Rea
 }
 
 export function NoDataSwatch() {
-  return <LegendSwatch color="var(--border)">No data</LegendSwatch>
+  return <LegendSwatch color="var(--map-nodata)">No data</LegendSwatch>
 }
 
 /** One swatch per category */
@@ -57,31 +56,6 @@ export function CategoricalLegend({ items }: { items: { label: string; color: st
           {item.label}
         </LegendSwatch>
       ))}
-    </div>
-  )
-}
-
-/** A card with a color swatch, its name, and a ColorChooser, for a map's adjustable colors */
-export function ColorCard({
-  label,
-  color,
-  onChange,
-}: {
-  label: string
-  color: string
-  onChange: (color: string) => void
-}) {
-  return (
-    <div className="space-y-3 rounded-lg border border-border bg-card/40 px-4 py-3 text-sm">
-      <div className="flex items-center gap-2">
-        <i
-          className="inline-block size-3 shrink-0 rounded-[3px] border border-border"
-          style={{ background: color }}
-          aria-hidden
-        />
-        <span className="font-medium text-foreground">{label}</span>
-      </div>
-      <ColorChooser color={color} onChange={onChange} label={label} />
     </div>
   )
 }
@@ -129,13 +103,39 @@ export function LevelToggle({
   hrefs: Record<"county" | "state", string>
 }) {
   return (
+    <OptionToggle
+      prefix="Show by"
+      label={label}
+      current={current}
+      options={[
+        { key: "county", label: "County", href: hrefs.county },
+        { key: "state", label: "State", href: hrefs.state },
+      ]}
+    />
+  )
+}
+
+/** A row of linked buttons, one pressed: the map level toggle, the Senate/House toggle */
+export function OptionToggle<K extends string>({
+  prefix,
+  label,
+  current,
+  options,
+}: {
+  prefix: string
+  /** Accessible name for the group */
+  label: string
+  current: K
+  options: { key: K; label: string; href: string }[]
+}) {
+  return (
     <div className="flex items-center gap-2">
-      <span className="text-muted-foreground">Show by</span>
+      <span className="text-muted-foreground">{prefix}</span>
       <div className="inline-flex gap-1" role="group" aria-label={label}>
-        {(["county", "state"] as const).map((level) => (
-          <Button key={level} asChild size="xs" variant={current === level ? "default" : "secondary"}>
-            <Link href={hrefs[level]} scroll={false} aria-pressed={current === level}>
-              {level === "county" ? "County" : "State"}
+        {options.map((o) => (
+          <Button key={o.key} asChild size="xs" variant={current === o.key ? "default" : "secondary"}>
+            <Link href={o.href} scroll={false} aria-pressed={current === o.key}>
+              {o.label}
             </Link>
           </Button>
         ))}

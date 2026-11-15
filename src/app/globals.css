@@ -7,11 +7,11 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-open-sans);
-  /* One sans for UI and figures (tabular numerals), one serif for headings and the wordmark */
-  --font-mono: var(--font-open-sans);
-  --font-heading: var(--font-crimson-pro), ui-serif, Georgia, serif;
-  --font-brand: var(--font-crimson-pro), ui-serif, Georgia, serif;
+  /* Archivo for reading and headings, Roboto Mono for labels, nav, buttons, and figures */
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
+  --font-heading: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-brand: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -45,49 +45,59 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   --color-brand-accent: var(--brand-accent);
+  --color-map-base: var(--map-base);
+  --color-map-nodata: var(--map-nodata);
   --color-party-dem: var(--party-dem);
   --color-party-rep: var(--party-rep);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --radius-4xl: 0;
 }
 
+/*
+ * The site is always dark: layout.tsx puts `.dark` on <html>. The :root values are the light
+ * print palette, used only by the PDF export frame (export-results.ts strips `.dark`).
+ * Brand: near-black surfaces, bone-white type, flag red.
+ */
 :root {
   color-scheme: light;
-  /* Editorial neutrals: warm off-white page, white cards, warm gray rules */
-  --background: #fbfaf7;
-  --foreground: #16181d;
+  --background: #ffffff;
+  --foreground: #101010;
   --card: #ffffff;
-  --card-foreground: #16181d;
+  --card-foreground: #101010;
   --popover: #ffffff;
-  --popover-foreground: #16181d;
-  /* Brand: deep navy primary, brick accent for highlights */
-  --primary: #1d3557;
+  --popover-foreground: #101010;
+  --primary: #cb1414;
   --primary-foreground: #ffffff;
-  --brand-accent: #b5452c;
-  --secondary: #f1efea;
-  --secondary-foreground: #16181d;
-  --muted: #f1efea;
-  --muted-foreground: #5f5d57;
-  --accent: #ece9e2;
-  --accent-foreground: #16181d;
-  --destructive: #c62f2f;
-  --border: #e3e0d8;
-  --input: #dcd8ce;
-  --ring: #8a9bb4;
-  --radius: 0.75rem;
-  --sidebar: #f6f4ef;
-  --sidebar-foreground: #16181d;
-  --sidebar-primary: #1d3557;
+  --brand-accent: #cb1414;
+  --secondary: #f2ede4;
+  --secondary-foreground: #101010;
+  --muted: #f2ede4;
+  --muted-foreground: #5c5750;
+  --accent: #ebe4d8;
+  --accent-foreground: #101010;
+  --destructive: #cb1414;
+  --border: #ddd5c8;
+  --input: #d3cabb;
+  --ring: #cb1414;
+  --radius: 0;
+  --sidebar: #f5eee5;
+  --sidebar-foreground: #101010;
+  --sidebar-primary: #cb1414;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #ece9e2;
-  --sidebar-accent-foreground: #16181d;
-  --sidebar-border: #e3e0d8;
-  --sidebar-ring: #8a9bb4;
+  --sidebar-accent: #ebe4d8;
+  --sidebar-accent-foreground: #101010;
+  --sidebar-border: #ddd5c8;
+  --sidebar-ring: #cb1414;
+  /* Choropleths shade up from this base; counties without a figure take the no-data fill.
+     Maps stay light in dark mode too, so `.dark` doesn't override these. */
+  --map-base: #ffffff;
+  --map-nodata: #e3ddd2;
 
   /* Data colors. Values mirror src/lib/palette.ts (palette.test.ts checks they match). */
   --chart-1: #2a78d6;
@@ -100,13 +110,7 @@
   --chart-8: #e34948;
   --chart-neutral: #898781;
   --chart-neutral-deep: #52514e;
-  --seq-0: #cde2fb;
-  --seq-1: #9ec5f4;
-  --seq-2: #6da7ec;
-  --seq-3: #3987e5;
-  --seq-4: #256abf;
-  --seq-5: #184f95;
-  --seq-6: #0d366b;
+  --chart-bone: #8a7f6e;
   --div-neg: var(--chart-1);
   --div-mid: #f0efec;
   --div-pos: var(--chart-8);
@@ -128,7 +132,7 @@
   --religion-other: var(--chart-neutral);
   --religion-unclaimed: var(--chart-neutral-deep);
   /* Topic accents used for figures and swatches across pages */
-  --topic-native: var(--chart-1);
+  --topic-native: var(--chart-bone);
   --topic-enforcement: var(--chart-8);
   --topic-sentiment: var(--chart-2);
   --topic-family: var(--chart-7);
@@ -139,45 +143,46 @@
 
 .dark {
   color-scheme: dark;
-  --background: #0b0d10;
-  --foreground: #e7e9ee;
-  --card: #12151a;
-  --card-foreground: #e7e9ee;
-  --popover: #12151a;
-  --popover-foreground: #e7e9ee;
-  --primary: #9cbbe8;
-  --primary-foreground: #0b0d10;
-  --brand-accent: #e07a5f;
-  --secondary: #1a1e25;
-  --secondary-foreground: #e7e9ee;
-  --muted: #1a1e25;
-  --muted-foreground: #9aa1ad;
-  --accent: #1f242c;
-  --accent-foreground: #e7e9ee;
-  --destructive: #e66767;
-  --border: #262b33;
-  --input: #2e343d;
-  --ring: #5b6b82;
-  --sidebar: #0f1215;
-  --sidebar-foreground: #e7e9ee;
-  --sidebar-primary: #9cbbe8;
-  --sidebar-primary-foreground: #0b0d10;
-  --sidebar-accent: #1f242c;
-  --sidebar-accent-foreground: #e7e9ee;
-  --sidebar-border: #262b33;
-  --sidebar-ring: #5b6b82;
+  --background: #0a0a0a;
+  --foreground: #f5eee5;
+  --card: #111111;
+  --card-foreground: #f5eee5;
+  --popover: #141414;
+  --popover-foreground: #f5eee5;
+  --primary: #cb1414;
+  --primary-foreground: #ffffff;
+  --brand-accent: #e3342f;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #f5eee5;
+  --muted: #1a1a1a;
+  --muted-foreground: #a39d94;
+  --accent: #201f1e;
+  --accent-foreground: #f5eee5;
+  --destructive: #e3342f;
+  --border: #2a2827;
+  --input: #34312f;
+  --ring: #cb1414;
+  --sidebar: #0d0d0d;
+  --sidebar-foreground: #f5eee5;
+  --sidebar-primary: #cb1414;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #201f1e;
+  --sidebar-accent-foreground: #f5eee5;
+  --sidebar-border: #2a2827;
+  --sidebar-ring: #cb1414;
 
-  --chart-1: #3987e5;
-  --chart-2: #d95926;
-  --chart-3: #199e70;
-  --chart-4: #c98500;
-  --chart-5: #d55181;
-  --chart-6: #0ca30c;
-  --chart-7: #9085e9;
-  --chart-8: #e66767;
-  --chart-neutral: #898781;
-  --chart-neutral-deep: #c3c2b7;
-  --div-mid: #383835;
+  --chart-1: #4a7fd4;
+  --chart-2: #d96a2b;
+  --chart-3: #1fa088;
+  --chart-4: #b98613;
+  --chart-5: #d4669a;
+  --chart-6: #4f9d4a;
+  --chart-7: #8f80e0;
+  --chart-8: #e3342f;
+  --chart-neutral: #7d7770;
+  --chart-neutral-deep: #bdb5a8;
+  --chart-bone: #e8dfcf;
+  --div-mid: #2a2827;
 }
 
 @layer base {
@@ -195,6 +200,10 @@
   body {
     @apply bg-background text-foreground;
   }
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
   h1,
   h2,
   h3,
@@ -202,35 +211,48 @@
   h5,
   h6 {
     font-family: var(--font-heading);
-    font-weight: 400;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  a {
+    text-underline-offset: 3px;
   }
 }
 
-/* Type scale: serif page titles, sans section titles, small caps-style eyebrows, fine print */
+/*
+ * Type scale: heavy uppercase page titles, uppercase section titles over a red rule, mono
+ * eyebrows and fine print.
+ */
 @layer components {
   .page-title {
     font-family: var(--font-heading);
-    @apply mb-1.5 text-[28px] leading-tight font-medium tracking-[-0.01em] text-balance sm:text-[34px];
+    @apply mb-3 text-[32px] leading-[0.95] font-extrabold tracking-[-0.02em] text-balance uppercase sm:text-[46px];
   }
 
   .page-sub {
-    @apply max-w-xl text-sm leading-normal text-muted-foreground;
+    @apply max-w-xl text-[15px] leading-relaxed text-muted-foreground;
   }
 
   .section-title {
-    @apply mb-1.5 flex items-center gap-[9px] font-sans text-base font-semibold tracking-[0.01em] text-foreground;
+    @apply relative mb-3 flex items-center gap-[10px] border-b border-primary/45 pb-2.5 font-heading text-[19px] leading-none font-bold tracking-[-0.005em] text-foreground uppercase sm:text-[22px];
+
+    /* The thick red tab under the start of the rule */
+    &::after {
+      content: "";
+      @apply absolute -bottom-px left-0 h-[3px] w-14 bg-primary;
+    }
 
     & > svg {
-      @apply size-4 shrink-0 text-muted-foreground;
+      @apply size-[18px] shrink-0 text-primary;
     }
   }
 
   .section-sub {
-    @apply max-w-xl text-[13px] leading-[1.55] text-muted-foreground;
+    @apply max-w-2xl text-sm leading-[1.6] text-muted-foreground;
   }
 
   .eyebrow {
-    @apply text-[11.5px] font-semibold tracking-[0.04em] text-muted-foreground uppercase;
+    @apply font-mono text-[11px] font-medium tracking-[0.14em] text-muted-foreground uppercase;
   }
 
   .fine-print {

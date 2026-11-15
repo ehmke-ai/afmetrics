@@ -16,7 +16,7 @@ export function Swatch({ color, label }: { color: string; label: string }) {
   return (
     <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
       <i
-        className="inline-block size-3.5 rounded-[3px]"
+        className="inline-block size-3.5"
         style={{ background: color }}
         aria-hidden
       />
@@ -137,7 +137,7 @@ export function RankingTable({
                 <div className="flex min-w-0 items-center gap-2">
                   <Badge
                     variant="secondary"
-                    className={`min-w-7 shrink-0 justify-center rounded-full ${badgeClassName}`}
+                    className={`min-w-7 shrink-0 justify-center ${badgeClassName}`}
                   >
                     {row.rank ?? i + 1}
                   </Badge>
@@ -156,9 +156,9 @@ export function RankingTable({
                   {row.value}
                 </span>
               </div>
-              <span className="mt-2 block h-2 overflow-hidden rounded-full bg-muted" aria-hidden>
+              <span className="mt-2 block h-2 overflow-hidden bg-muted" aria-hidden>
                 <span
-                  className="block h-full rounded-full"
+                  className="block h-full"
                   style={{ width: `${row.intensity * 100}%`, backgroundColor: color }}
                 />
               </span>
@@ -181,7 +181,7 @@ export function RankingTable({
                   <TableCell>
                     <Badge
                       variant="secondary"
-                      className={`min-w-7 justify-center rounded-full ${badgeClassName}`}
+                      className={`min-w-7 justify-center ${badgeClassName}`}
                     >
                       {row.rank ?? i + 1}
                     </Badge>
@@ -200,11 +200,11 @@ export function RankingTable({
                   </TableCell>
                   <TableCell>
                     <span
-                      className="block h-2 min-w-24 overflow-hidden rounded-full bg-muted"
+                      className="block h-2 min-w-24 overflow-hidden bg-muted"
                       aria-hidden
                     >
                       <span
-                        className="block h-full rounded-full"
+                        className="block h-full"
                         style={{ width: `${row.intensity * 100}%`, backgroundColor: color }}
                       />
                     </span>

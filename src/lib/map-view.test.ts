@@ -36,6 +36,9 @@ describe("nationalMapView", () => {
     expect(nationalMapView("election", "state")).toBe("election2024")
     expect(nationalMapView("cost-of-living", "state")).toBe("costOfLiving")
     expect(nationalMapView("thirty-married-homeowner", undefined)).toBe("thirtyMarriedHomeowner")
+    expect(nationalMapView("Midterms", undefined)).toBe("senate2026")
+    expect(nationalMapView("house-2026", "state")).toBe("house2026")
+    expect(nationalMapView("House", undefined)).toBe("house2026District")
   })
 
   const views: NationalMapView[] = [
@@ -45,6 +48,9 @@ describe("nationalMapView", () => {
     "native",
     "election2024County",
     "election2024",
+    "senate2026",
+    "house2026District",
+    "house2026",
     "religion",
     "antiImmig",
     "enforcement",

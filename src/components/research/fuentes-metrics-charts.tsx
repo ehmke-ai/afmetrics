@@ -47,12 +47,12 @@ export function PlatformFollowerBars() {
             <span className="shrink-0 font-semibold tabular-nums text-foreground">{bar.display}</span>
           </div>
           <div
-            className="mt-1.5 h-2 overflow-hidden rounded-full bg-muted"
+            className="mt-1.5 h-2 overflow-hidden bg-muted"
             role="img"
             aria-label={`${bar.label}: ${bar.display}`}
           >
             <div
-              className="h-full rounded-full bg-chart-1"
+              className="h-full bg-chart-1"
               style={{ width: `${(bar.value / barMax) * 100}%` }}
             />
           </div>
@@ -72,7 +72,7 @@ export function FollowerHistoryCharts() {
   return (
     <div className="flex flex-col gap-4">
       <div
-        className="inline-flex w-fit rounded-lg border border-border bg-muted/50 p-0.5"
+        className="inline-flex w-fit border border-border bg-muted/50 p-0.5"
         role="tablist"
         aria-label="Follower history platform"
       >
@@ -90,7 +90,7 @@ export function FollowerHistoryCharts() {
             variant="ghost"
             size="sm"
             className={cn(
-              "h-8 rounded-md px-3 text-xs font-medium",
+              "h-8 px-3 text-xs font-medium",
               chart === opt.value && "bg-background shadow-sm"
             )}
             onClick={() => setChart(opt.value)}

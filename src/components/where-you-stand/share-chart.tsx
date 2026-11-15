@@ -136,7 +136,7 @@ export function ShareChart({
                   className="inline-flex items-center gap-2 text-sm text-muted-foreground"
                 >
                   <i
-                    className="inline-block size-3.5 rounded-[3px] bg-(--swatch-light) dark:bg-(--swatch-dark)"
+                    className="inline-block size-3.5 bg-(--swatch-light) dark:bg-(--swatch-dark)"
                     style={
                       {
                         "--swatch-light": row.theme?.light,

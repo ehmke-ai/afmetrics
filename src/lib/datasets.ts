@@ -16,7 +16,7 @@ export type Dataset = {
   script: string | null
   /** Files the script writes (paths under the repo) */
   outputs: string[]
-  /** Short line under a map or chart, also drawn into PNG exports */
+  /** Short line under a map or chart */
   caption: string
   transformations: string[]
   caveats: string[]
@@ -36,6 +36,7 @@ export type DatasetId =
   | "generation-population"
   | "state-religion"
   | "state-election"
+  | "midterms-2026"
   | "immigration-sentiment"
   | "enforcement"
   | "family-formation"
@@ -243,6 +244,30 @@ export const DATASETS: Dataset[] = [
     transformations: ["Democratic and Republican shares of the statewide popular vote."],
     caveats: ["Maine and Nebraska split electoral votes by district; the figures are statewide."],
     updated: "2026-09-30",
+  },
+  {
+    id: "midterms-2026",
+    name: "2026 midterm elections: Senate results and House seats by state",
+    source: "AP race calls and state election office counts, as compiled by Wikipedia",
+    url: "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+    vintage: "November 3, 2026 general election (provisional)",
+    script: "scripts/build-midterms-2026.py",
+    outputs: ["src/data/midterms-2026.json", "public/geo/us-house-districts-2026-albers.json"],
+    caption: "Source: AP calls and state counts as compiled by Wikipedia (provisional)",
+    transformations: [
+      "Senate: each state's result infobox on the 2026 Senate elections page, with the margin taken between the Republican and the leading opponent.",
+      "House: seats won by party from the Per state table on the 2026 House elections page; states the table leaves blank are tallied from their district rows.",
+      "House districts: winners marked in each district row of the House elections page, keyed by Census GEOID; a row with no marked winner is uncalled.",
+      "District lines (scripts/build-house-districts-2026.js): Census TIGER 2026 120th Congressional Districts via TIGERweb, which carry the 2025–26 redraws in AL, CA, FL, LA, NC, OH, TN, TX, and UT. Missouri uses its 2022 (119th Congress) districts, since its 2025 map was suspended by referendum for the 2026 election. Districts are clipped to the state outlines of the national map.",
+      "The Wikipedia revision ids used are recorded in the output file.",
+    ],
+    caveats: [
+      "Uncertified: states certify through mid-December 2026, and counts and calls can change until then.",
+      "Alaska's Senate race awaits ranked-choice tabulation; Louisiana's House runoffs are pending.",
+      "The House view is seats won, not the House popular vote, which is not yet compiled by state.",
+      "DC has no Senate seat or voting House member.",
+    ],
+    updated: "2026-11-14",
   },
   {
     id: "immigration-sentiment",

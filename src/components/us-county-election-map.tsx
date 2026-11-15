@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState, type ReactNode } from "react"
+import { useMemo, type ReactNode } from "react"
 
 import {
   useCountyGeometry,
@@ -12,14 +12,15 @@ import {
   TooltipRows,
   type UsCountyRow,
 } from "@/components/maps/county-choropleth"
-import { ColorCard, GradientLegend } from "@/components/maps/legends"
+import { GradientLegend } from "@/components/maps/legends"
 import {
-  ANTI_IMMIG_COLOR,
+  DEM_BLUE,
   divergingGradient,
   divergingShade,
-  divergingStops,
-  PRO_IMMIG_COLOR,
-} from "@/components/us-county-map-export"
+  MID_PURPLE,
+  NO_DATA_FILL,
+  REP_RED,
+} from "@/components/maps/map-colors"
 import { useJson } from "@/lib/fetch-json"
 import { dataset } from "@/lib/datasets"
 
@@ -29,8 +30,8 @@ export type CountyResults = Record<string, CountyResult>
 
 const RESULTS_URL = "/data/county-election-2024.json"
 
-/** Margins at or beyond this many points take the deepest shade */
-const MARGIN_CAP = 60
+/** Margins at or beyond this many points are full red or blue; closer races fade toward purple */
+const MARGIN_CAP = 20
 
 const SUBTITLE =
   "Popular-vote margin between Donald Trump and Kamala Harris; deeper means a wider win."
@@ -42,9 +43,9 @@ function marginOf([trump, harris]: CountyResult): number {
 }
 
 function fillFor(result: CountyResult | undefined, harrisColor: string, trumpColor: string) {
-  if (!result) return "var(--border)"
+  if (!result) return NO_DATA_FILL
   const t = Math.min(1, Math.max(0, (marginOf(result) / MARGIN_CAP + 1) / 2))
-  return divergingShade(harrisColor, trumpColor, t)
+  return divergingShade(harrisColor, trumpColor, t, 0, MID_PURPLE)
 }
 
 export function UsCountyElectionMap({
@@ -70,8 +71,8 @@ export function UsCountyElectionMap({
   const geometry = useCountyGeometry(state)
   const file = useJson<CountyResults>(data ? null : RESULTS_URL)
   const results = data ?? file.data
-  const [harrisColor, setHarrisColor] = useState(PRO_IMMIG_COLOR)
-  const [trumpColor, setTrumpColor] = useState(ANTI_IMMIG_COLOR)
+  const harrisColor = DEM_BLUE
+  const trumpColor = REP_RED
 
   // Connecticut reports 2024 results by planning region, so draw those in place of its old counties
   const { counties: countyOutlines, ctRegions } = geometry
@@ -125,25 +126,17 @@ export function UsCountyElectionMap({
         legend={
           <GradientLegend
             name="2024 margin"
-            background={divergingGradient(harrisColor, trumpColor)}
+            background={divergingGradient(harrisColor, trumpColor, MID_PURPLE)}
             low={low}
             high={high}
           />
         }
         legendExtra={legendExtra}
-        exportLegend={[
-          { name: "2024 margin", stops: divergingStops(harrisColor, trumpColor), low, high },
-        ]}
         dataLoading={!results && !file.error}
         dataError={file.error}
         onRetryData={file.retry}
         statusLabel="election results"
       />
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        <ColorCard label="Harris color" color={harrisColor} onChange={setHarrisColor} />
-        <ColorCard label="Trump color" color={trumpColor} onChange={setTrumpColor} />
-      </div>
 
       <p className="text-xs text-muted-foreground">
         Share of all votes cast for president in each county in the 2024 general election;

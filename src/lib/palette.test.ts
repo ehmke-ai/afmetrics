@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { describe, expect, it } from "vitest"
 
-import { CATEGORICAL, NEUTRAL, NEUTRAL_DEEP, SEQUENTIAL } from "@/lib/palette"
+import { BONE, CATEGORICAL, NEUTRAL, NEUTRAL_DEEP } from "@/lib/palette"
 
 const css = readFileSync(join(__dirname, "../app/globals.css"), "utf8")
 
@@ -27,12 +27,13 @@ describe("globals.css mirrors lib/palette", () => {
     })
   })
 
-  it("has the neutrals and the sequential ramp", () => {
+  it("has the neutrals and bone", () => {
     expect(light["chart-neutral"]).toBe(NEUTRAL.light)
     expect(dark["chart-neutral"]).toBe(NEUTRAL.dark)
     expect(light["chart-neutral-deep"]).toBe(NEUTRAL_DEEP.light)
     expect(dark["chart-neutral-deep"]).toBe(NEUTRAL_DEEP.dark)
-    SEQUENTIAL.forEach((hex, i) => expect(light[`seq-${i}`]).toBe(hex))
+    expect(light["chart-bone"]).toBe(BONE.light)
+    expect(dark["chart-bone"]).toBe(BONE.dark)
   })
 
   it("points the semantic tokens at palette slots", () => {

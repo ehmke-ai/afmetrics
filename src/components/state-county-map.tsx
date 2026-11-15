@@ -151,7 +151,7 @@ export function StateCountyMap({
         </ComboboxContent>
       </Combobox>
 
-      <div className="rounded-lg border border-border bg-card/40 px-4 py-3">
+      <div className="border border-border bg-card/40 px-4 py-3">
         <div className="columns-2 gap-x-6 sm:columns-3 lg:columns-4">
           {countyGroups.map(([letter, counties]) => (
             <div key={letter} className="mb-3 break-inside-avoid">

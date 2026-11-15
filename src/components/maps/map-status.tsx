@@ -22,7 +22,7 @@ export function MapStatus({
     return (
       <div
         role="alert"
-        className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-md bg-background/80 text-sm text-muted-foreground"
+        className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-background/80 text-sm text-muted-foreground"
       >
         <p>Couldn&rsquo;t load the {label}.</p>
         {onRetry && (

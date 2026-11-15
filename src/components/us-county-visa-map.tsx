@@ -8,9 +8,9 @@ import {
   TooltipRows,
   type UsCountyRow,
 } from "@/components/maps/county-choropleth"
-import { ColorCard, GradientLegend } from "@/components/maps/legends"
+import { GradientLegend } from "@/components/maps/legends"
 import { Button } from "@/components/ui/button"
-import { shade, SHADE_RANGE, shadeGradient, shadeStops } from "@/components/us-county-map-export"
+import { MAP_RED, shade, SHADE_RANGE, shadeGradient } from "@/components/maps/map-colors"
 import {
   COUNTY_VISAS_URL,
   per100k,
@@ -24,7 +24,6 @@ import { useJson } from "@/lib/fetch-json"
 import { dataset } from "@/lib/datasets"
 import { rangeIntensity } from "@/lib/states"
 import { formatCount } from "@/lib/work-visas"
-import { VISA } from "@/lib/palette"
 
 /** [H-1B positions, H-2A workers, H-2B workers, resident population] */
 type Program = VisaProgram
@@ -34,9 +33,9 @@ const PROGRAMS: Record<
   Program,
   { index: 0 | 1 | 2; label: string; name: string; noun: string; color: string }
 > = {
-  h1b: { index: 0, label: "H-1B", name: "H-1B positions", noun: "positions", color: VISA.h1b.light },
-  h2a: { index: 1, label: "H-2A", name: "H-2A workers", noun: "workers", color: VISA.h2a.light },
-  h2b: { index: 2, label: "H-2B", name: "H-2B workers", noun: "workers", color: VISA.h2b.light },
+  h1b: { index: 0, label: "H-1B", name: "H-1B positions", noun: "positions", color: MAP_RED },
+  h2a: { index: 1, label: "H-2A", name: "H-2A workers", noun: "workers", color: MAP_RED },
+  h2b: { index: 2, label: "H-2B", name: "H-2B workers", noun: "workers", color: MAP_RED },
 }
 
 const SOURCE = dataset("county-visas").caption
@@ -52,7 +51,7 @@ function intensity(value: number, max: number): number {
 }
 
 function fillFor(value: number | null, max: number, color: string) {
-  if (value == null) return "var(--border)"
+  if (value == null) return "var(--map-nodata)"
   const t = intensity(value, max)
   const pct = Math.round(SHADE_RANGE[0] + t * (SHADE_RANGE[1] - SHADE_RANGE[0]))
   return shade(color, pct)
@@ -81,8 +80,8 @@ export function UsCountyVisaMap({
   const peaks = data?.peaks
   const [program, setProgram] = useState<Program>("h1b")
   const [scale, setScale] = useState<Scale>("positions")
-  const [color, setColor] = useState(PROGRAMS.h1b.color)
   const config = PROGRAMS[program]
+  const color = config.color
 
   const countyOutlines = geometry.counties
 
@@ -125,10 +124,7 @@ export function UsCountyVisaMap({
             size="sm"
             variant={program === key ? "default" : "secondary"}
             aria-pressed={program === key}
-            onClick={() => {
-              setProgram(key)
-              setColor(PROGRAMS[key].color)
-            }}
+            onClick={() => setProgram(key)}
           >
             {PROGRAMS[key].label}
           </Button>
@@ -188,14 +184,12 @@ export function UsCountyVisaMap({
         legend={
           <GradientLegend name={legendName} background={shadeGradient(color)} low={low} high={high} />
         }
-        exportLegend={[{ name: legendName, stops: shadeStops(color), low, high }]}
         dataLoading={!visas && !visasFile.error}
         dataError={visasFile.error}
         onRetryData={visasFile.retry}
         statusLabel="visa data"
       />
 
-      <ColorCard label="Color" color={color} onChange={setColor} />
       <p className="text-xs text-muted-foreground">
         Fiscal year 2025, from the Labor Department’s case files. H-1B counts positions on
         certified Labor Condition Applications. H-2A and H-2B count workers DOL certified,

@@ -12,12 +12,13 @@ import {
   TooltipRows,
   type UsCountyRow,
 } from "@/components/maps/county-choropleth"
-import { ColorCard, GradientLegend, SegmentedButtons } from "@/components/maps/legends"
+import { GradientLegend, SegmentedButtons } from "@/components/maps/legends"
 import {
   divergingGradient,
   divergingShade,
-  divergingStops,
-} from "@/components/us-county-map-export"
+  ECON_BAD_COLOR,
+  ECON_GOOD_COLOR,
+} from "@/components/maps/map-colors"
 import {
   COUNTY_COST_SOURCE,
   COUNTY_COST_URL,
@@ -29,16 +30,15 @@ import {
   type CountyCost,
 } from "@/lib/cost-of-living"
 import { useJson } from "@/lib/fetch-json"
-import { COST } from "@/lib/palette"
 
 export type CountyCosts = Record<string, CountyCost>
 
 export type CostMetric = "priceToIncome" | "rentToIncome" | "homeValue" | "rent" | "income"
 
 /** Affordable / low end of the scale */
-export const COST_LOW_COLOR = COST.low.light
+export const COST_LOW_COLOR = ECON_GOOD_COLOR
 /** Expensive / high end of the scale */
-export const COST_HIGH_COLOR = COST.high.light
+export const COST_HIGH_COLOR = ECON_BAD_COLOR
 
 type MetricConfig = {
   label: string
@@ -51,6 +51,8 @@ type MetricConfig = {
   range: [number, number]
   /** Scale on log values, for dollar figures spanning an order of magnitude */
   log?: boolean
+  /** Higher is better (income), so the scale runs red to green instead of green to red */
+  highIsGood?: boolean
 }
 
 const METRICS: Record<CostMetric, MetricConfig> = {
@@ -58,7 +60,7 @@ const METRICS: Record<CostMetric, MetricConfig> = {
     label: "Home price ÷ income",
     name: "Home price to income",
     subtitle:
-      "Median home value as a multiple of median household income; deeper orange means homes are harder to afford.",
+      "Median home value as a multiple of median household income; deeper red means homes are harder to afford.",
     value: ([income, home]) => priceToIncome(home, income),
     format: formatRatio,
     range: [2, 8],
@@ -67,7 +69,7 @@ const METRICS: Record<CostMetric, MetricConfig> = {
     label: "Rent ÷ income",
     name: "Rent to income",
     subtitle:
-      "A year of median gross rent as a share of median household income; deeper orange means rent takes more of a typical paycheck.",
+      "A year of median gross rent as a share of median household income; deeper red means rent takes more of a typical paycheck.",
     value: ([income, , rent]) => rentToIncome(rent, income),
     format: (v) => `${v.toFixed(1)}%`,
     range: [12, 36],
@@ -98,6 +100,7 @@ const METRICS: Record<CostMetric, MetricConfig> = {
     format: formatDollarsShort,
     range: [35_000, 140_000],
     log: true,
+    highIsGood: true,
   },
 }
 
@@ -116,7 +119,7 @@ function fillFor(
   highColor: string
 ) {
   const value = cost ? config.value(cost) : null
-  if (value == null) return "var(--border)"
+  if (value == null) return "var(--map-nodata)"
   return divergingShade(lowColor, highColor, intensity(config, value))
 }
 
@@ -144,9 +147,9 @@ export function UsCountyCostMap({
   const costsFile = useJson<CountyCosts>(data ? null : COUNTY_COST_URL)
   const costs = data ?? costsFile.data
   const [metric, setMetric] = useState<CostMetric>("priceToIncome")
-  const [lowColor, setLowColor] = useState(COST_LOW_COLOR)
-  const [highColor, setHighColor] = useState(COST_HIGH_COLOR)
   const config = METRICS[metric]
+  const lowColor = config.highIsGood ? COST_HIGH_COLOR : COST_LOW_COLOR
+  const highColor = config.highIsGood ? COST_LOW_COLOR : COST_HIGH_COLOR
 
   // The 2024 ACS reports Connecticut by planning region, so draw those in place of its old counties
   const { counties: countyOutlines, ctRegions } = geometry
@@ -207,17 +210,12 @@ export function UsCountyCostMap({
           />
         }
         legendExtra={legendExtra}
-        exportLegend={[{ name: config.name, stops: divergingStops(lowColor, highColor), low, high }]}
         dataLoading={!costs && !costsFile.error}
         dataError={costsFile.error}
         onRetryData={costsFile.retry}
         statusLabel="cost data"
       />
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        <ColorCard label="Low color" color={lowColor} onChange={setLowColor} />
-        <ColorCard label="High color" color={highColor} onChange={setHighColor} />
-      </div>
       <p className="text-xs text-muted-foreground">
         American Community Survey 2020–2024 5-year medians, the only ACS figures published for
         every county. Home price to income divides median owner-occupied home value by median

@@ -20,9 +20,9 @@ export function laborPct(cell: FieldLabor, key: "citizen" | "naturalized" | "non
 
 export function LaborBar({ share, highlight }: { share: number; highlight: boolean }) {
   return (
-    <span className="block h-2 overflow-hidden rounded-full bg-muted" aria-hidden>
+    <span className="block h-2 overflow-hidden bg-muted" aria-hidden>
       <span
-        className="block h-full rounded-full"
+        className="block h-full"
         style={{
           width: `${share}%`,
           background: highlight ? "var(--chart-1)" : "var(--muted-foreground)",
