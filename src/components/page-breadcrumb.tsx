@@ -14,6 +14,7 @@ import {
 import { getCountryBySlug } from "@/lib/demographics"
 import countyLabels from "@/data/county-labels.json"
 import { stateNavBySlug } from "@/lib/states"
+import { researchArticles } from "@/lib/research"
 import { EUROPE_HOME_TOPIC, europeTopics } from "@/lib/topics"
 
 type Crumb = { label: string; href?: string }
@@ -42,6 +43,13 @@ function crumbsForPathname(pathname: string): Crumb[] {
     const labels: Record<string, string> | undefined =
       countyLabels[slug as keyof typeof countyLabels]
     return [...stateCrumbs, { label: labels?.[countySegment] ?? countySegment }]
+  }
+
+  if (section === "research") {
+    const research: Crumb = { label: "Research", href: "/research" }
+    if (!slug) return [research]
+    const article = researchArticles.find((a) => a.slug === slug)
+    return [research, { label: article ? article.title : slug }]
   }
 
   if (section === "europe") {
