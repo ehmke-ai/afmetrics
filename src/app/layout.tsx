@@ -22,17 +22,16 @@ const geistMono = Geist_Mono({
 })
 
 // Serif headings + wordmark, matching the Ceptly design system.
+// Crimson Pro is a variable font: do not pass a weight list (breaks Vercel's Turbopack font bundler).
 const crimsonText = Crimson_Text({
   variable: "--font-crimson-text",
   subsets: ["latin"],
   weight: ["400", "600", "700"],
-  style: ["normal", "italic"],
 })
 
 const crimsonPro = Crimson_Pro({
   variable: "--font-crimson-pro",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
 })
 
 const siteDescription =
