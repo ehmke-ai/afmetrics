@@ -1,24 +1,22 @@
 "use client"
 
-import { useMemo, useState, type MouseEvent, type ReactNode } from "react"
-import { Download } from "lucide-react"
+import { useMemo, useState, type ReactNode } from "react"
 
-import { ColorChooser } from "@/components/color-chooser"
 import {
-  countyLinkHandlers,
-  CountyPaths,
   useCountyGeometry,
   withCtRegions,
   type CountyMapState,
 } from "@/components/county-map-geometry"
-import { MapStatus } from "@/components/maps/map-status"
-import { Button } from "@/components/ui/button"
-import type { UsCountyRow } from "@/components/us-county-map"
+import {
+  CountyChoropleth,
+  TooltipRows,
+  type UsCountyRow,
+} from "@/components/maps/county-choropleth"
+import { ColorCard, GradientLegend, SegmentedButtons } from "@/components/maps/legends"
 import {
   divergingGradient,
   divergingShade,
   divergingStops,
-  downloadMapPng,
 } from "@/components/us-county-map-export"
 import {
   COUNTY_COST_SOURCE,
@@ -145,245 +143,80 @@ export function UsCountyCostMap({
   const costsFile = useJson<CountyCosts>(data ? null : COUNTY_COST_URL)
   const costs = data ?? costsFile.data
   const [metric, setMetric] = useState<CostMetric>("priceToIncome")
-  const [hoveredFips, setHoveredFips] = useState<string | null>(null)
-  const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null)
   const [lowColor, setLowColor] = useState(COST_LOW_COLOR)
   const [highColor, setHighColor] = useState(COST_HIGH_COLOR)
-  const [exporting, setExporting] = useState(false)
   const config = METRICS[metric]
 
-  const labelByFips = useMemo(() => Object.fromEntries(rows), [rows])
-
-  const { width, height, counties: countyOutlines, ctRegions, regionLabels, stateBorders } = geometry
-  const loading = geometry.loading
-
   // The 2024 ACS reports Connecticut by planning region, so draw those in place of its old counties
+  const { counties: countyOutlines, ctRegions } = geometry
   const outlines = useMemo(
     () => (ctRegions.length ? withCtRegions(countyOutlines, ctRegions) : countyOutlines),
     [countyOutlines, ctRegions]
   )
-
   const shapes = useMemo(
     () =>
       outlines.map((o) => ({ ...o, fill: fillFor(costs?.[o.fips], config, lowColor, highColor) })),
     [outlines, costs, config, lowColor, highColor]
   )
 
-  const pathByFips = useMemo(
-    () => Object.fromEntries(outlines.map((o) => [o.fips, o.d])),
-    [outlines]
-  )
-
-  // One listener for the whole map: read the county off the path under the cursor
-  function handleMouseMove(e: MouseEvent<SVGSVGElement>) {
-    const target = e.target as Element
-    const fips = target.getAttribute("data-fips")
-    if (!fips || !costs?.[fips]) {
-      setHoveredFips(null)
-      setPointer(null)
-      return
-    }
-    const rect = e.currentTarget.getBoundingClientRect()
-    setHoveredFips(fips)
-    setPointer({
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100,
-    })
-  }
-
-  const hovered = hoveredFips ? costs?.[hoveredFips] : undefined
   const title = `${config.name} by county${state ? ` in ${state.state}` : ""}`
   const low = `${config.format(config.range[0])} or less`
   const high = `${config.format(config.range[1])} or more`
 
-  async function handleDownload() {
-    setExporting(true)
-    try {
-      await downloadMapPng({
-        title,
-        subtitle: config.subtitle,
-        legend: [{ name: config.name, stops: divergingStops(lowColor, highColor), low, high }],
-        noData: true,
-        source: COUNTY_COST_SOURCE,
-        mapWidth: width,
-        mapHeight: height,
-        shapes,
-        stateBorders,
-        fileName: `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}.png`,
-      })
-    } finally {
-      setExporting(false)
-    }
-  }
-
   return (
     <div className="space-y-5">
-      <div className="inline-flex flex-wrap gap-1" role="group" aria-label="Cost-of-living measure">
-        {METRIC_KEYS.map((key) => (
-          <Button
-            key={key}
-            type="button"
-            size="xs"
-            variant={metric === key ? "default" : "secondary"}
-            aria-pressed={metric === key}
-            onClick={() => setMetric(key)}
-          >
-            {METRICS[key].label}
-          </Button>
-        ))}
-      </div>
+      <SegmentedButtons
+        label="Cost-of-living measure"
+        options={METRIC_KEYS.map((key) => ({ key, label: METRICS[key].label }))}
+        value={metric}
+        onChange={setMetric}
+      />
 
-      {/* Title, map, legend, and source sit together so a screenshot of this block stands alone */}
-      <figure className="space-y-3 bg-background">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h3 className="text-base font-semibold text-balance text-foreground sm:text-lg">
-              {title}
-            </h3>
-            <p className="text-xs text-muted-foreground">{config.subtitle}</p>
-          </div>
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={handleDownload}
-            disabled={loading || !costs || exporting}
-          >
-            <Download aria-hidden />
-            {exporting ? "Saving…" : "PNG"}
-          </Button>
-        </div>
-
-        <div className="relative">
-          <MapStatus
-            loading={loading || (!costs && !costsFile.error)}
-            error={geometry.error ?? costsFile.error}
-            onRetry={() => {
-              geometry.retry()
-              costsFile.retry()
-            }}
-            label="cost data"
+      <CountyChoropleth
+        title={title}
+        subtitle={config.subtitle}
+        source={COUNTY_COST_SOURCE}
+        geometry={geometry}
+        shapes={shapes}
+        rows={rows}
+        states={states}
+        state={state}
+        onOpenCounty={onOpenCounty}
+        hasData={(fips) => !!costs?.[fips]}
+        tooltipWidth={13}
+        tooltip={(fips) => (
+          <TooltipRows
+            rows={METRIC_KEYS.map((key) => {
+              const value = METRICS[key].value(costs![fips])
+              return {
+                key,
+                label: METRICS[key].name,
+                value: value == null ? "—" : METRICS[key].format(value),
+                active: key === metric,
+              }
+            })}
           />
-          <svg
-            viewBox={`0 0 ${width} ${height}`}
-            className={`h-auto w-full touch-pan-y ${state ? "max-h-[75svh]" : ""}`}
-            role={onOpenCounty ? "group" : "img"}
-            aria-label={`Map: ${title}`}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={() => {
-              setHoveredFips(null)
-              setPointer(null)
-            }}
-            {...countyLinkHandlers(onOpenCounty)}
-          >
-            <CountyPaths shapes={shapes} links={onOpenCounty ? labelByFips : undefined} />
-            {stateBorders && (
-              <path
-                d={stateBorders}
-                fill="none"
-                stroke="var(--background)"
-                strokeWidth={1}
-                strokeLinejoin="round"
-                vectorEffect="non-scaling-stroke"
-                pointerEvents="none"
-              />
-            )}
-            {hoveredFips && pathByFips[hoveredFips] && (
-              <path
-                d={pathByFips[hoveredFips]}
-                fill="none"
-                stroke="color-mix(in oklch, var(--foreground) 55%, var(--background))"
-                strokeWidth={1.25}
-                strokeLinejoin="round"
-                vectorEffect="non-scaling-stroke"
-                pointerEvents="none"
-              />
-            )}
-          </svg>
-
-          {hoveredFips && hovered && pointer && (
-            <div
-              className="pointer-events-none absolute z-10 min-w-[13rem] rounded-none border border-border bg-popover px-3 py-2 text-sm shadow-md"
-              style={{
-                left: `min(${pointer.x}%, calc(100% - 14rem))`,
-                top: `max(${pointer.y - 2}%, 0.5rem)`,
-                transform: "translateY(-100%)",
-              }}
-            >
-              <div className="font-medium text-foreground">
-                {labelByFips[hoveredFips] ?? regionLabels[hoveredFips]}
-                {state ? "" : `, ${states[hoveredFips.slice(0, 2)]}`}
-              </div>
-              <ul className="mt-1.5 space-y-0.5 tabular-nums">
-                {METRIC_KEYS.map((key) => {
-                  const value = METRICS[key].value(hovered)
-                  return (
-                    <li key={key} className="flex items-center justify-between gap-3">
-                      <span
-                        className={key === metric ? "text-foreground" : "text-muted-foreground"}
-                      >
-                        {METRICS[key].name}
-                      </span>
-                      <span className="font-medium text-foreground">
-                        {value == null ? "—" : METRICS[key].format(value)}
-                      </span>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        <figcaption className="flex flex-wrap items-end gap-x-6 gap-y-3 text-xs">
-          <div className="w-48 space-y-1">
-            <div className="font-medium text-foreground">{config.name}</div>
-            <div
-              className="h-2.5 border border-border"
-              style={{ background: divergingGradient(lowColor, highColor) }}
-            />
-            <div className="flex justify-between gap-2 tabular-nums text-muted-foreground">
-              <span>{low}</span>
-              <span className="text-right">{high}</span>
-            </div>
-          </div>
-          <span className="inline-flex items-center gap-2 text-muted-foreground">
-            <i
-              className="inline-block size-3 rounded-[3px] border border-border"
-              style={{ background: "var(--border)" }}
-              aria-hidden
-            />
-            No data
-          </span>
-          {legendExtra}
-          <span className="ml-auto text-muted-foreground">{COUNTY_COST_SOURCE}</span>
-        </figcaption>
-      </figure>
+        )}
+        legend={
+          <GradientLegend
+            name={config.name}
+            background={divergingGradient(lowColor, highColor)}
+            low={low}
+            high={high}
+          />
+        }
+        legendExtra={legendExtra}
+        exportLegend={[{ name: config.name, stops: divergingStops(lowColor, highColor), low, high }]}
+        dataLoading={!costs && !costsFile.error}
+        dataError={costsFile.error}
+        onRetryData={costsFile.retry}
+        statusLabel="cost data"
+      />
 
       <div className="grid gap-3 sm:grid-cols-2">
-        {(
-          [
-            ["Low color", lowColor, setLowColor],
-            ["High color", highColor, setHighColor],
-          ] as const
-        ).map(([label, color, setColor]) => (
-          <div
-            key={label}
-            className="space-y-3 rounded-lg border border-border bg-card/40 px-4 py-3 text-sm"
-          >
-            <div className="flex items-center gap-2">
-              <i
-                className="inline-block size-3 shrink-0 rounded-[3px] border border-border"
-                style={{ background: color }}
-                aria-hidden
-              />
-              <span className="font-medium text-foreground">{label}</span>
-            </div>
-            <ColorChooser color={color} onChange={setColor} label={label} />
-          </div>
-        ))}
+        <ColorCard label="Low color" color={lowColor} onChange={setLowColor} />
+        <ColorCard label="High color" color={highColor} onChange={setHighColor} />
       </div>
-
       <p className="text-xs text-muted-foreground">
         American Community Survey 2020–2024 5-year medians, the only ACS figures published for
         every county. Home price to income divides median owner-occupied home value by median
