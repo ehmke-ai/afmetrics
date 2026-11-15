@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
 import { Crimson_Pro, Open_Sans } from "next/font/google"
 
-import { AppSidebar } from "@/components/app-sidebar"
 import { InlineScript } from "@/components/inline-script"
 import { PageBreadcrumb } from "@/components/page-breadcrumb"
+import { SiteFooter } from "@/components/site-footer"
+import { SiteNav } from "@/components/site-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { TooltipProvider } from "@/components/ui/tooltip"
 
 import "./globals.css"
@@ -60,23 +60,20 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <InlineScript html={`(function(){try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark")}catch(e){}})()`} />
+        <InlineScript
+          html={`(function(){try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark")}catch(e){}})()`}
+        />
       </head>
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body className="flex min-h-full flex-col bg-background text-foreground">
         <TooltipProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <header className="sticky top-0 z-10 flex h-12 shrink-0 items-center gap-2 border-b bg-background/80 px-3 backdrop-blur">
-                <SidebarTrigger />
-                <PageBreadcrumb />
-                <div className="ml-auto">
-                  <ThemeToggle />
-                </div>
-              </header>
-              {children}
-            </SidebarInset>
-          </SidebarProvider>
+          <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur">
+            <SiteNav actions={<ThemeToggle />} />
+          </header>
+          <div className="mx-auto w-full max-w-[1100px] px-4 pt-3 sm:px-6">
+            <PageBreadcrumb />
+          </div>
+          <div className="flex-1">{children}</div>
+          <SiteFooter />
         </TooltipProvider>
       </body>
     </html>

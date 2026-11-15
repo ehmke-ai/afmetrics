@@ -123,7 +123,7 @@ export default async function CountyPage({
   ].sort((a, b) => b.countyValue - a.countyValue)
 
   return (
-    <main className="mx-auto w-full max-w-[1100px] px-4 py-10 sm:px-6">
+    <main className="mx-auto w-full max-w-[1100px] px-4 pt-6 pb-10 sm:px-6">
       <PageHeader eyebrow={state.state} title={label} />
 
       <Card className="border-border bg-card shadow-none">

@@ -143,7 +143,7 @@ export default async function StatePage({
     : []
 
   return (
-    <main className="mx-auto w-full max-w-[1100px] px-4 py-10 sm:px-6">
+    <main className="mx-auto w-full max-w-[1100px] px-4 pt-6 pb-10 sm:px-6">
       <PageHeader
         eyebrow="United States"
         title={state.state}
@@ -329,7 +329,9 @@ export default async function StatePage({
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead>Year</TableHead>
+                <TableHead className="sticky left-0 z-[1] bg-card shadow-[1px_0_0_var(--border)]">
+                  Year
+                </TableHead>
                 {groups.map((g) => (
                   <TableHead key={g} className="text-right">
                     {POPULATION_GROUP_LABELS[g]}
@@ -341,7 +343,9 @@ export default async function StatePage({
             <TableBody>
               {state.populationHistory.map((row) => (
                 <TableRow key={row.year}>
-                  <TableCell className="font-medium tabular-nums">{row.year}</TableCell>
+                  <TableCell className="sticky left-0 z-[1] bg-card shadow-[1px_0_0_var(--border)] font-medium tabular-nums">
+                    {row.year}
+                  </TableCell>
                   {groups.map((g) => (
                     <TableCell key={g} className="text-right tabular-nums">
                       {row[g] == null ? "—" : `${row[g]}%`}

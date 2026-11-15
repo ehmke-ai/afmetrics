@@ -80,7 +80,8 @@ export function UsMap({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
+      {/* One scrolling row on phones, wrapping on wider screens */}
+      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:thin] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
         {(
           [
             ["visas", "Work visas"],
@@ -106,7 +107,7 @@ export function UsMap({
                   ? electionActive
                   : view === next
           return (
-            <Button key={label} asChild size="sm" variant={active ? "default" : "secondary"}>
+            <Button key={label} asChild size="sm" className="shrink-0" variant={active ? "default" : "secondary"}>
               <Link href={nationalMapHref(next)} scroll={false} aria-pressed={active}>
                 {label}
               </Link>

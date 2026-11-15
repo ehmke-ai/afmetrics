@@ -229,7 +229,11 @@ export function StatesDataTable({ rows }: { rows: StateTableRow[] }) {
             {headerGroup.headers.map((header) => (
               <TableHead
                 key={header.id}
-                className={header.column.id === "state" ? undefined : "text-right"}
+                className={
+                  header.column.id === "state"
+                    ? "sticky left-0 z-[1] bg-card shadow-[1px_0_0_var(--border)]"
+                    : "text-right whitespace-nowrap"
+                }
               >
                 {header.isPlaceholder
                   ? null
@@ -243,7 +247,15 @@ export function StatesDataTable({ rows }: { rows: StateTableRow[] }) {
         {table.getRowModel().rows.map((row) => (
           <TableRow key={row.id}>
             {row.getVisibleCells().map((cell) => (
-              <TableCell key={cell.id}>
+              <TableCell
+                key={cell.id}
+                // The state column stays put while the figures scroll sideways on narrow screens
+                className={
+                  cell.column.id === "state"
+                    ? "sticky left-0 z-[1] bg-card shadow-[1px_0_0_var(--border)] whitespace-nowrap"
+                    : undefined
+                }
+              >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>
             ))}

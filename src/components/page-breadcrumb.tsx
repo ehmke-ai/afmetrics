@@ -56,16 +56,14 @@ function crumbsForPathname(pathname: string): Crumb[] {
 export function PageBreadcrumb() {
   const pathname = usePathname()
   const crumbs = crumbsForPathname(pathname)
+  // The home page has nothing above it
+  if (crumbs.length === 0) return null
 
   return (
     <Breadcrumb className="min-w-0">
       <BreadcrumbList className="flex-nowrap overflow-hidden">
         <BreadcrumbItem>
-          {crumbs.length ? (
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-          ) : (
-            <BreadcrumbPage>Home</BreadcrumbPage>
-          )}
+          <BreadcrumbLink href="/">Home</BreadcrumbLink>
         </BreadcrumbItem>
         {crumbs.map((crumb, i) => {
           const isLast = i === crumbs.length - 1

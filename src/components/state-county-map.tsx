@@ -103,9 +103,10 @@ export function StateCountyMap({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
+      {/* One scrolling row on phones, wrapping on wider screens */}
+      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:thin] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
         {VIEWS.map(({ key, label }) => (
-          <Button key={key} asChild size="sm" variant={view === key ? "default" : "secondary"}>
+          <Button key={key} asChild size="sm" className="shrink-0" variant={view === key ? "default" : "secondary"}>
             <Link href={stateMapHref(pathname, key)} scroll={false} aria-pressed={view === key}>
               {label}
             </Link>

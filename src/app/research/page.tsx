@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function ResearchIndexPage() {
   return (
-    <main className="mx-auto w-full max-w-[1100px] px-4 py-10 sm:px-6">
+    <main className="mx-auto w-full max-w-[1100px] px-4 pt-6 pb-10 sm:px-6">
       <PageHeader
         eyebrow="AF Metrics"
         title="Research"
