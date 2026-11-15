@@ -20,7 +20,9 @@ npm run build
 
 | Path | What lives there |
 | --- | --- |
-| `src/app/` | Routes: `/` (US), `/states`, `/united-states/[state]/[county]`, `/work-visas`, `/you`, `/research/...` |
+| `src/app/` | Routes: `/` (US), `/states`, `/united-states/[state]/[county]`, `/work-visas`, `/you`, `/methodology`, `/research/...`, plus `sitemap.ts`, `robots.ts`, and OG images |
+| `src/components/maps/` | Shared map pieces: `CountyChoropleth`, legends, `MapStatus`, the state map |
+| `src/components/layout/` | `Section`, `StatTile`, `ChartCard`, `SourceNote` |
 | `src/components/` | Maps, charts, and tables. `ui/` holds the shadcn primitives |
 | `src/lib/` | Domain logic: data access, formatting, map view/query parsing |
 | `src/data/` | Generated JSON imported at build time (server and client bundles) |
@@ -46,7 +48,11 @@ node scripts/build-county-topos.js            # per-state county shapes -> publi
 node scripts/build-ct-regions-topo.js         # Connecticut planning regions -> public/geo/ct-planning-regions-*.json
 ```
 
-When you change a dataset, also update the matching source/vintage note shown on the page that uses it.
+When you change a dataset, update its entry in `src/lib/datasets.ts` (source, vintage, `updated` date). The methodology page, source notes, map captions, and the footer's "data last updated" date all read from it.
+
+## Colors
+
+Data colors live in `src/lib/palette.ts` (hex, for the color pickers and exports) and are mirrored as CSS tokens in `src/app/globals.css` (`--chart-1..8`, `--party-*`, `--cost-*`, `--visa-*`, `--religion-*`). `src/lib/palette.test.ts` fails if the two drift. Client code loads JSON from `public/` through `useJson` / `loadJson` in `src/lib/fetch-json.ts`, which fetches each file once per page load.
 
 ## Deploy
 
