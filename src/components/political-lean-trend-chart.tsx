@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
 
 import {
@@ -10,65 +9,33 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
   COLORS,
-  DEFAULT_POLITICAL_LEAN_COUNTRY,
-  getPoliticalLeanHistory,
-  politicalLeanHistoryCountries,
+  usPoliticalLeanHistory,
   type PoliticalLeanPoint,
 } from "@/lib/demographics"
 
 const chartConfig = {
-  leftWing: {
-    label: "Left wing",
-    color: COLORS.leftWing,
-  },
   leftOfCenter: {
-    label: "Left of center",
+    label: "Democratic",
     color: COLORS.leftOfCenter,
   },
   rightOfCenter: {
-    label: "Right of center",
+    label: "Republican",
     color: COLORS.rightOfCenter,
-  },
-  rightWing: {
-    label: "Right wing",
-    color: COLORS.rightWing,
   },
 } satisfies ChartConfig
 
-const ALL_SERIES = [
-  { key: "leftWing" as const, label: "Left wing" },
-  { key: "leftOfCenter" as const, label: "Left of center" },
-  { key: "rightOfCenter" as const, label: "Right of center" },
-  { key: "rightWing" as const, label: "Right wing" },
+const SERIES = [
+  { key: "leftOfCenter" as const, label: "Democratic" },
+  { key: "rightOfCenter" as const, label: "Republican" },
 ]
 
+/** Presidential popular vote by party; defaults to the national series */
 export function PoliticalLeanTrendChart({
-  country: fixedCountry,
-  hideSelector,
-  hideWings,
-  data,
+  data: chartData = usPoliticalLeanHistory,
 }: {
-  country?: string
-  hideSelector?: boolean
-  /** Omits the left wing / right wing bands, leaving just left/right of center (US two-party races) */
-  hideWings?: boolean
-  /** Overrides the country lookup, e.g. for US states */
   data?: PoliticalLeanPoint[]
 } = {}) {
-  const [country, setCountry] = useState(fixedCountry ?? DEFAULT_POLITICAL_LEAN_COUNTRY)
-  const activeCountry = fixedCountry ?? country
-  const chartData = data ?? getPoliticalLeanHistory(activeCountry)
-  const SERIES = hideWings
-    ? ALL_SERIES.filter((s) => s.key === "leftOfCenter" || s.key === "rightOfCenter")
-    : ALL_SERIES
   const leanValues = chartData.flatMap((d) => SERIES.map(({ key }) => d[key]))
   const minLean = leanValues.length ? Math.min(...leanValues) : 0
   const maxLean = leanValues.length ? Math.max(...leanValues) : 55
@@ -77,31 +44,6 @@ export function PoliticalLeanTrendChart({
 
   return (
     <div className="flex flex-col gap-4">
-      {!hideSelector && (
-        <div className="flex flex-wrap items-center gap-3">
-          <label htmlFor="political-lean-country" className="text-sm text-muted-foreground">
-            Country
-          </label>
-          <Select
-            value={country}
-            onValueChange={(value) => {
-              if (value) setCountry(value)
-            }}
-          >
-            <SelectTrigger id="political-lean-country" className="min-w-[11rem]">
-              <SelectValue placeholder="Select a country" />
-            </SelectTrigger>
-            <SelectContent>
-              {politicalLeanHistoryCountries.map((name) => (
-                <SelectItem key={name} value={name}>
-                  {name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
       <ChartContainer
         config={chartConfig}
         className="aspect-auto h-[min(360px,56vh)] w-full"
@@ -143,7 +85,7 @@ export function PoliticalLeanTrendChart({
                   return (
                     <div className="flex w-full items-center justify-between gap-4">
                       <span className="text-muted-foreground">{label}</span>
-                      <span className="font-mono font-medium tabular-nums text-foreground">
+                      <span className="font-medium tabular-nums text-foreground">
                         {value}%
                       </span>
                     </div>

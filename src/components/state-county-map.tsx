@@ -18,6 +18,7 @@ import { UsCountyElectionMap } from "@/components/us-county-election-map"
 import { UsCountyMap, type UsCountyRow } from "@/components/us-county-map"
 import { UsCountyReligionMap } from "@/components/us-county-religion-map"
 import { UsCountyVisaMap } from "@/components/us-county-visa-map"
+import type { StateCountyData } from "@/lib/county-data.server"
 import { stateMapHref, stateMapView } from "@/lib/map-view"
 import {
   countyLabel,
@@ -34,8 +35,6 @@ const VIEWS = [
   { key: "religion", label: "Religion" },
   { key: "cost", label: "Cost of living" },
 ] as const
-
-type View = (typeof VIEWS)[number]["key"]
 
 function countyHref(state: StateDemographics, county: CountyDemographics) {
   return `/united-states/${state.slug}/${countySlug(county.name)}`
@@ -61,6 +60,7 @@ export function StateCountyMap({
   counties: data,
   years,
   viewQuery,
+  data: countyData,
 }: {
   state: StateDemographics
   counties: CountyDemographics[]
@@ -68,6 +68,8 @@ export function StateCountyMap({
   years: number[]
   /** `view` query. Omitted means Work visas. */
   viewQuery?: string
+  /** The state's slice of each county data file, read on the server */
+  data?: StateCountyData | null
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -101,9 +103,10 @@ export function StateCountyMap({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
+      {/* One scrolling row on phones, wrapping on wider screens */}
+      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:thin] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
         {VIEWS.map(({ key, label }) => (
-          <Button key={key} asChild size="sm" variant={view === key ? "default" : "secondary"}>
+          <Button key={key} asChild size="sm" className="shrink-0" variant={view === key ? "default" : "secondary"}>
             <Link href={stateMapHref(pathname, key)} scroll={false} aria-pressed={view === key}>
               {label}
             </Link>
@@ -112,19 +115,19 @@ export function StateCountyMap({
       </div>
 
       <div className={view === "demographics" ? undefined : "hidden"}>
-        <UsCountyMap {...mapProps} years={years} />
+        <UsCountyMap {...mapProps} years={years} data={countyData?.history} />
       </div>
       <div className={view === "election2024" ? undefined : "hidden"}>
-        <UsCountyElectionMap {...mapProps} />
+        <UsCountyElectionMap {...mapProps} data={countyData?.election} />
       </div>
       <div className={view === "religion" ? undefined : "hidden"}>
-        <UsCountyReligionMap {...mapProps} />
+        <UsCountyReligionMap {...mapProps} data={countyData?.religion} />
       </div>
       <div className={view === "cost" ? undefined : "hidden"}>
-        <UsCountyCostMap {...mapProps} />
+        <UsCountyCostMap {...mapProps} data={countyData?.costs} />
       </div>
       <div className={view === "visas" ? undefined : "hidden"}>
-        <UsCountyVisaMap {...mapProps} />
+        <UsCountyVisaMap {...mapProps} data={countyData?.visas} />
       </div>
 
       <Combobox
@@ -148,7 +151,7 @@ export function StateCountyMap({
         </ComboboxContent>
       </Combobox>
 
-      <div className="rounded-lg border border-border bg-card/40 px-4 py-3">
+      <div className="border border-border bg-card/40 px-4 py-3">
         <div className="columns-2 gap-x-6 sm:columns-3 lg:columns-4">
           {countyGroups.map(([letter, counties]) => (
             <div key={letter} className="mb-3 break-inside-avoid">

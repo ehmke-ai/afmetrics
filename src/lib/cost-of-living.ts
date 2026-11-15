@@ -1,4 +1,5 @@
 import stateCostData from "@/data/state-cost.json"
+import { dataset } from "@/lib/datasets"
 
 /** Per-state (and national) cost-of-living figures, from scripts/build-cost-of-living.py */
 export type CostOfLiving = {
@@ -27,8 +28,7 @@ export type CountyCost = [number | null, number | null, number | null]
 
 export const COUNTY_COST_URL = "/data/county-cost.json"
 
-export const COUNTY_COST_SOURCE =
-  "Source: U.S. Census Bureau, ACS 2020–2024 5-year estimates (B19013, B25077, B25064)"
+export const COUNTY_COST_SOURCE = dataset("cost-of-living").caption
 
 export const RPP_SOURCE = "Source: BEA Regional Price Parities, 2024"
 
@@ -42,7 +42,7 @@ export function rentToIncome(rent: number | null, income: number | null): number
   return rent == null || !income ? null : ((rent * 12) / income) * 100
 }
 
-/** e.g. "$80.7K", "$1.2M" */
+/** e.g. "$81K", "$1.23M" */
 export function formatDollarsShort(value: number): string {
   if (value >= 1e6) return `$${(value / 1e6).toFixed(2)}M`
   if (value >= 1e3) return `$${Math.round(value / 1e3)}K`

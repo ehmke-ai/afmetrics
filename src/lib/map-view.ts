@@ -9,6 +9,9 @@ export type NationalMapView =
   | "native"
   | "election2024County"
   | "election2024"
+  | "senate2026"
+  | "house2026District"
+  | "house2026"
   | "religion"
   | "antiImmig"
   | "enforcement"
@@ -28,6 +31,12 @@ const SLUGS: Record<string, string> = {
   election: "election",
   election2024: "election",
   "election-2024": "election",
+  midterms: "senate-2026",
+  "midterms-2026": "senate-2026",
+  senate: "senate-2026",
+  "senate-2026": "senate-2026",
+  house: "house-2026",
+  "house-2026": "house-2026",
   religion: "religion",
   sentiment: "sentiment",
   antiimmig: "sentiment",
@@ -61,6 +70,10 @@ export function nationalMapView(view: string | undefined, level: string | undefi
       return "native"
     case "election":
       return state ? "election2024" : "election2024County"
+    case "senate-2026":
+      return "senate2026"
+    case "house-2026":
+      return state ? "house2026" : "house2026District"
     case "religion":
       return "religion"
     case "sentiment":
@@ -103,6 +116,12 @@ function nationalQuery(view: NationalMapView): MapQuery {
       return { view: "election", level: null }
     case "election2024":
       return { view: "election", level: "state" }
+    case "senate2026":
+      return { view: "senate-2026", level: null }
+    case "house2026District":
+      return { view: "house-2026", level: null }
+    case "house2026":
+      return { view: "house-2026", level: "state" }
     case "religion":
       return { view: "religion", level: null }
     case "antiImmig":

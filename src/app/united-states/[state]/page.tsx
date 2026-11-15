@@ -4,17 +4,12 @@ import Link from "next/link"
 
 import { PopulationStackChart } from "@/components/population-stack-chart"
 import { PoliticalLeanTrendChart } from "@/components/political-lean-trend-chart"
+import { ChartCard } from "@/components/layout/chart-card"
+import { SectionHeading } from "@/components/layout/section"
 import { StateCountyMap } from "@/components/state-county-map"
-import { PageHeader, Stat, Swatch } from "@/components/topic-page"
+import { PageHeader, Stat } from "@/components/topic-page"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Table,
   TableBody,
@@ -32,8 +27,9 @@ import {
   usCost,
 } from "@/lib/cost-of-living"
 import { COUNTY_HISTORY_YEARS } from "@/lib/county-history"
+import { stateCountyData } from "@/lib/county-data.server"
 import { queryValue } from "@/lib/map-view"
-import { COLORS, formatMedianAge, getCountryBySlug } from "@/lib/demographics"
+import { COLORS, formatMedianAge, US as us } from "@/lib/demographics"
 import {
   POPULATION_GROUP_LABELS,
   POPULATION_LABEL_THRESHOLD,
@@ -81,8 +77,8 @@ export default async function StatePage({
   const state = getStateBySlug(slug)
   if (!state) notFound()
 
-  const us = getCountryBySlug("united-states")
   const counties = getCounties(state)
+  const countyData = counties.length ? await stateCountyData(counties[0].fips.slice(0, 2)) : null
   const neighbors = (STATE_NEIGHBORS[state.abbr] ?? [])
     .map((abbr) => stateNavByAbbr[abbr])
     .filter(Boolean)
@@ -105,7 +101,7 @@ export default async function StatePage({
   const snapshotOther =
     Math.round(
       (population.other + foldedSnapshotGroups.reduce((sum, g) => sum + (population[g] ?? 0), 0)) *
-        10
+        10,
     ) / 10
 
   const cost = stateCost[state.abbr]
@@ -113,10 +109,30 @@ export default async function StatePage({
 
   const comparison = us
     ? [
-        { label: "Non-Hispanic White", state: `${nonHispanicWhite}%`, us: `${us.native}%`, color: COLORS.native },
-        { label: "Catholic", state: `${state.catholic}%`, us: `${us.catholic}%`, color: COLORS.catholic },
-        { label: "Protestant", state: `${state.protestant}%`, us: `${us.protestant}%`, color: COLORS.protestant },
-        { label: "Orthodox", state: `${state.orthodox}%`, us: `${us.orthodox}%`, color: COLORS.orthodox },
+        {
+          label: "Non-Hispanic White",
+          state: `${nonHispanicWhite}%`,
+          us: `${us.native}%`,
+          color: COLORS.native,
+        },
+        {
+          label: "Catholic",
+          state: `${state.catholic}%`,
+          us: `${us.catholic}%`,
+          color: COLORS.catholic,
+        },
+        {
+          label: "Protestant",
+          state: `${state.protestant}%`,
+          us: `${us.protestant}%`,
+          color: COLORS.protestant,
+        },
+        {
+          label: "Orthodox",
+          state: `${state.orthodox}%`,
+          us: `${us.orthodox}%`,
+          color: COLORS.orthodox,
+        },
         {
           label: "Non-Hispanic White median age",
           state: `${formatMedianAge(state.medianAge)} yrs`,
@@ -127,7 +143,7 @@ export default async function StatePage({
     : []
 
   return (
-    <main className="mx-auto w-full max-w-[1100px] px-4 py-10 sm:px-6">
+    <main className="mx-auto w-full max-w-[1100px] px-4 pt-6 pb-10 sm:px-6">
       <PageHeader
         eyebrow="United States"
         title={state.state}
@@ -163,7 +179,11 @@ export default async function StatePage({
               value={`${state.thirtyMarriedHomeowner}%`}
               color={COLORS.thirtyMarriedHomeowner}
             />
-            <Stat label="Price level (US = 100)" value={formatRpp(cost.rpp)} color={COLORS.costOfLiving} />
+            <Stat
+              label="Price level (US = 100)"
+              value={formatRpp(cost.rpp)}
+              color={COLORS.costOfLiving}
+            />
             <Stat
               label="Median home value"
               value={formatDollars(cost.medianHomeValue)}
@@ -175,15 +195,17 @@ export default async function StatePage({
 
       {counties.length > 0 && (
         <>
-          <header className="mt-12 mb-7">
-            <h2 className="section-title">Counties</h2>
-            <p className="section-sub">
-              Demographics, the 2024 election, religion, cost of living, and certified work visas across all {counties.length}{" "}
-              {state.state} {COUNTY_NOUN[state.abbr] ?? "counties"}. Switch views above the map,
-              hover a county to preview its figures, click to open its page — or browse the full
-              list below.
-            </p>
-          </header>
+          <SectionHeading
+            title="Counties"
+            description={
+              <>
+                Demographics, the 2024 election, religion, cost of living, and certified work visas
+                across all {counties.length} {state.state} {COUNTY_NOUN[state.abbr] ?? "counties"}.
+                Switch views above the map, hover a county to preview its figures, click to open its
+                page — or browse the full list below.
+              </>
+            }
+          />
 
           <Card className="border-border bg-card shadow-none">
             <CardContent>
@@ -193,6 +215,7 @@ export default async function StatePage({
                 counties={counties}
                 years={COUNTY_HISTORY_YEARS}
                 viewQuery={queryValue(query.view)}
+                data={countyData}
               />
             </CardContent>
           </Card>
@@ -201,14 +224,12 @@ export default async function StatePage({
 
       {us && (
         <>
-          <header className="mt-12 mb-7">
-            <h2 className="section-title">
-              Compared with the United States
-            </h2>
-            <p className="section-sub">
-              {state.state} next to the national figures used elsewhere on this site.
-            </p>
-          </header>
+          <SectionHeading
+            title="Compared with the United States"
+            description={
+              <>{state.state} next to the national figures used elsewhere on this site.</>
+            }
+          />
 
           <Card className="border-border bg-card shadow-none">
             <CardContent className="p-0">
@@ -242,12 +263,12 @@ export default async function StatePage({
         </>
       )}
 
-      <header className="mt-12 mb-7">
-        <h2 className="section-title">Cost of living</h2>
-        <p className="section-sub">
-          Prices, incomes, and housing costs in {state.state} next to the national figures.
-        </p>
-      </header>
+      <SectionHeading
+        title="Cost of living"
+        description={
+          <>Prices, incomes, and housing costs in {state.state} next to the national figures.</>
+        }
+      />
 
       <Card className="border-border bg-card shadow-none">
         <CardContent className="p-0">
@@ -279,16 +300,17 @@ export default async function StatePage({
         </CardContent>
       </Card>
 
-      <header className="mt-12 mb-7">
-        <h2 className="section-title">Population by ethnic group</h2>
-        <p className="section-sub">
-          Share of the population from {state.populationHistory[0].year} to{" "}
-          {state.populationHistory[state.populationHistory.length - 1].year}, from the Census
-          Bureau. Groups under{" "}
-          {POPULATION_LABEL_THRESHOLD}% today are combined into Other on the chart; the table
-          lists every group.
-        </p>
-      </header>
+      <SectionHeading
+        title="Population by ethnic group"
+        description={
+          <>
+            Share of the population from {state.populationHistory[0].year} to{" "}
+            {state.populationHistory[state.populationHistory.length - 1].year}, from the Census
+            Bureau. Groups under {POPULATION_LABEL_THRESHOLD}% today are combined into Other on the
+            chart; the table lists every group.
+          </>
+        }
+      />
 
       <Card className="border-border bg-card shadow-none">
         <CardHeader className="pb-2">
@@ -307,7 +329,9 @@ export default async function StatePage({
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead>Year</TableHead>
+                <TableHead className="sticky left-0 z-[1] bg-card shadow-[1px_0_0_var(--border)]">
+                  Year
+                </TableHead>
                 {groups.map((g) => (
                   <TableHead key={g} className="text-right">
                     {POPULATION_GROUP_LABELS[g]}
@@ -319,7 +343,9 @@ export default async function StatePage({
             <TableBody>
               {state.populationHistory.map((row) => (
                 <TableRow key={row.year}>
-                  <TableCell className="font-medium tabular-nums">{row.year}</TableCell>
+                  <TableCell className="sticky left-0 z-[1] bg-card shadow-[1px_0_0_var(--border)] font-medium tabular-nums">
+                    {row.year}
+                  </TableCell>
                   {groups.map((g) => (
                     <TableCell key={g} className="text-right tabular-nums">
                       {row[g] == null ? "—" : `${row[g]}%`}
@@ -333,23 +359,30 @@ export default async function StatePage({
         </CardContent>
       </Card>
 
-      <header className="mt-12 mb-7">
-        <h2 className="section-title">Political leanings over time</h2>
-        <p className="section-sub">
-          Presidential popular vote in {state.state}, Democratic vs. Republican, 1960 to 2024.
-        </p>
-      </header>
+      <SectionHeading
+        title="Political leanings over time"
+        description={
+          <>Presidential popular vote in {state.state}, Democratic vs. Republican, 1960 to 2024.</>
+        }
+      />
 
-      <Card className="border-border bg-card shadow-none">
-        <CardContent>
-          <PoliticalLeanTrendChart data={state.politicalLeanHistory} hideSelector hideWings />
-          <Separator className="my-4" />
-          <div className="flex flex-wrap gap-x-6 gap-y-3">
-            <Swatch color={COLORS.leftOfCenter} label="Democratic (left of center)" />
-            <Swatch color={COLORS.rightOfCenter} label="Republican (right of center)" />
-          </div>
-        </CardContent>
-      </Card>
+      <ChartCard
+        title="Presidential popular vote"
+        description={`${state.state}, 1960 to 2024`}
+        legend={[
+          { color: COLORS.leftOfCenter, label: "Democratic" },
+          { color: COLORS.rightOfCenter, label: "Republican" },
+        ]}
+        csv={{
+          rows: state.politicalLeanHistory.map((p) => ({
+            year: p.year,
+            democratic_pct: p.leftOfCenter,
+            republican_pct: p.rightOfCenter,
+          })),
+        }}
+      >
+        <PoliticalLeanTrendChart data={state.politicalLeanHistory} />
+      </ChartCard>
 
       <footer className="fine-print mt-12 border-t border-border pt-6">
         <h2 className="section-title mb-3">Sources</h2>
@@ -369,31 +402,30 @@ export default async function StatePage({
           ))}
         </ul>
         <p className="mt-6 max-w-3xl">
-          <strong className="font-semibold text-foreground">Notes:</strong> Figures are
-          rounded. Groups are built from Census Bureau race, Hispanic-origin, Asian-group, and
-          ancestry tables. Hispanic is of any race; every other group is non-Hispanic. European
-          is non-Hispanic White minus people reporting Arab ancestry (the Census counts Arab
-          Americans as White; ancestry is asked separately, so this subtraction is approximate).
-          African is Black or African American. Indian is Asian Indian, Pakistani, and
-          Bangladeshi; East Asian follows the Census East Asian grouping (Chinese, Taiwanese,
-          Japanese, Korean, Mongolian, Okinawan, Hmong). Both count people reporting a single
-          Asian group. Native American is American Indian and Alaska Native. Other covers
-          Southeast Asian (mainly Vietnamese and Filipino), other South and Central Asian, Pacific
-          Islander, and multiracial residents. From
-          2000 the broad groups use the Census population estimates, which assign &ldquo;some
-          other race&rdquo; responses to a specific race. Before 2000 the Census published
-          Hispanic origin only against non-Hispanic White, so African and Native American include
-          Hispanic Black and Hispanic American Indian residents, and Arab, Indian, and East Asian cannot be separated (shown as &mdash; and
-          included in Other). The census did not tabulate Hispanic origin at all in 1960;
-          Hispanic residents were classified as White, so a 1960 figure overstates non-Hispanic
-          White relative to 1970 onward, when Hispanic origin was asked of a 15% sample. The 2025
-          group splits use the 2024
-          American Community Survey, the latest available. Decade points on the political
-          chart use the nearest presidential election (1968, 1988, 2008, 2024); third-party
-          candidates, such as George Wallace in 1968, are omitted, so the lines need not sum to
-          100%. State GDP is shown in place of market capitalization, which is not published at
-          the state level. Price levels are BEA Regional Price Parities for 2024; incomes, home
-          values, and rents are ACS 2020–2024 5-year medians, so they trail current prices.
+          <strong className="font-semibold text-foreground">Notes:</strong> Figures are rounded.
+          Groups are built from Census Bureau race, Hispanic-origin, Asian-group, and ancestry
+          tables. Hispanic is of any race; every other group is non-Hispanic. European is
+          non-Hispanic White minus people reporting Arab ancestry (the Census counts Arab Americans
+          as White; ancestry is asked separately, so this subtraction is approximate). African is
+          Black or African American. Indian is Asian Indian, Pakistani, and Bangladeshi; East Asian
+          follows the Census East Asian grouping (Chinese, Taiwanese, Japanese, Korean, Mongolian,
+          Okinawan, Hmong). Both count people reporting a single Asian group. Native American is
+          American Indian and Alaska Native. Other covers Southeast Asian (mainly Vietnamese and
+          Filipino), other South and Central Asian, Pacific Islander, and multiracial residents.
+          From 2000 the broad groups use the Census population estimates, which assign &ldquo;some
+          other race&rdquo; responses to a specific race. Before 2000 the Census published Hispanic
+          origin only against non-Hispanic White, so African and Native American include Hispanic
+          Black and Hispanic American Indian residents, and Arab, Indian, and East Asian cannot be
+          separated (shown as &mdash; and included in Other). The census did not tabulate Hispanic
+          origin at all in 1960; Hispanic residents were classified as White, so a 1960 figure
+          overstates non-Hispanic White relative to 1970 onward, when Hispanic origin was asked of a
+          15% sample. The 2025 group splits use the 2024 American Community Survey, the latest
+          available. Decade points on the political chart use the nearest presidential election
+          (1968, 1988, 2008, 2024); third-party candidates, such as George Wallace in 1968, are
+          omitted, so the lines need not sum to 100%. State GDP is shown in place of market
+          capitalization, which is not published at the state level. Price levels are BEA Regional
+          Price Parities for 2024; incomes, home values, and rents are ACS 2020–2024 5-year medians,
+          so they trail current prices.
           {state.notes?.map((note) => ` ${note}.`)}
         </p>
       </footer>
@@ -412,13 +444,19 @@ export default async function StatePage({
           </div>
         )}
         <div className="flex flex-wrap justify-between gap-2 text-sm">
-          <Link href={`/united-states/${prev.slug}`} className="text-muted-foreground hover:underline">
+          <Link
+            href={`/united-states/${prev.slug}`}
+            className="text-muted-foreground hover:underline"
+          >
             ← {prev.state}
           </Link>
           <Link href="/states" className="text-muted-foreground hover:underline">
             All states
           </Link>
-          <Link href={`/united-states/${next.slug}`} className="text-muted-foreground hover:underline">
+          <Link
+            href={`/united-states/${next.slug}`}
+            className="text-muted-foreground hover:underline"
+          >
             {next.state} →
           </Link>
         </div>

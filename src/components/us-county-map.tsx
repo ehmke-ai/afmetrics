@@ -1,24 +1,26 @@
 "use client"
 
-import { useEffect, useMemo, useState, type MouseEvent } from "react"
-import { Download } from "lucide-react"
+import { useMemo, useState } from "react"
 
-import { ColorChooser } from "@/components/color-chooser"
 import {
-  countyLinkHandlers,
-  CountyPaths,
   useCountyGeometry,
   withCtRegions,
   type CountyMapState,
 } from "@/components/county-map-geometry"
+import {
+  CountyChoropleth,
+  TooltipRows,
+  type UsCountyRow,
+} from "@/components/maps/county-choropleth"
+import { GradientLegend } from "@/components/maps/legends"
 import { POPULATION_COLORS } from "@/components/population-stack-chart"
 import { Button } from "@/components/ui/button"
 import {
-  downloadMapPng,
+  MAP_RED,
+  MAP_WHITE,
   shade,
   shadeGradient,
-  shadeStops,
-} from "@/components/us-county-map-export"
+} from "@/components/maps/map-colors"
 import { YearSlider } from "@/components/year-slider"
 import {
   COUNTY_HISTORY_URL,
@@ -29,20 +31,22 @@ import {
   type CountyValues,
   type GroupKey,
 } from "@/lib/county-history"
+import { useJson } from "@/lib/fetch-json"
+import { CATEGORICAL } from "@/lib/palette"
 
 /** [fips, display label] — the figures themselves come from county-history.json */
-export type UsCountyRow = [string, string]
+export type { UsCountyRow }
 
 /** `id` is a stable React key, since sides can be removed from the middle */
 type Side = { id: number; groups: GroupKey[]; color: string }
 
 const DEFAULT_SIDES: Side[] = [
-  { id: 0, groups: ["european"], color: "#F1C7A8" },
-  { id: 1, groups: ["hispanic", "african", "indian", "eastAsian", "arab", "nativeAmerican", "other"], color: "#593001" },
+  { id: 0, groups: ["european"], color: CATEGORICAL[0].light },
+  { id: 1, groups: ["hispanic", "african", "indian", "eastAsian", "arab", "nativeAmerican", "other"], color: CATEGORICAL[1].light },
 ]
 
-// Starting colors for newly added sides; each can then be changed with the custom picker
-export const NEW_SIDE_COLORS =["#ff0000", "#a52a2a", "#0000ff", "#ffa500", "#008000", "#800080", "#000000"]
+// Colors for added sides: the remaining categorical slots, in order. Colors are fixed.
+export const NEW_SIDE_COLORS = CATEGORICAL.slice(2).map((c) => c.light)
 
 // Groups are exclusive and every side needs one, so there can be at most one side per group
 const MAX_SIDES = GROUPS.length
@@ -76,22 +80,24 @@ function fillFor(
   maxLead: number,
   sides: Side[]
 ) {
-  if (!leader) return "var(--border)"
+  if (!leader) return "var(--map-nodata)"
   const t = maxLead > 0 ? Math.min(1, leader.lead / maxLead) : 0
   if (sides.length === 2) {
     const signed = leader.index === 0 ? -t : t
-    return blend(sides[0].color, sides[1].color, 0.5 + signed / 2)
+    return blend(sideColor(sides, 0), sideColor(sides, 1), 0.5 + signed / 2)
   }
   return shade(sides[leader.index].color, Math.round(15 + t * 85))
+}
+
+/** Two sides are white and red, the map colors; more each keep their own color */
+function sideColor(sides: Side[], index: number) {
+  if (sides.length === 2) return index === 0 ? MAP_WHITE : MAP_RED
+  return sides[index].color
 }
 
 /** `t` of the way from `from` (0) to `to` (1) */
 export function blend(from: string, to: string, t: number) {
   return `color-mix(in oklch, ${from}, ${to} ${Math.round(t * 100)}%)`
-}
-
-export function blendStops(from: string, to: string) {
-  return [0, 0.25, 0.5, 0.75, 1].map((t) => blend(from, to, t))
 }
 
 function sideLabel(side: Side): string {
@@ -121,6 +127,7 @@ export function UsCountyMap({
   years,
   state,
   onOpenCounty,
+  data,
 }: {
   counties: UsCountyRow[]
   /** State FIPS -> USPS abbreviation, for the tooltip heading */
@@ -131,17 +138,16 @@ export function UsCountyMap({
   state?: CountyMapState
   /** Opens a county's page; with it, the counties in `counties` are clickable links */
   onOpenCounty?: (fips: string) => void
+  /** This state's slice of the data file, read on the server; skips the national download */
+  data?: CountyHistory
 }) {
   const latestYear = years[years.length - 1]
   const geometry = useCountyGeometry(state)
-  const [history, setHistory] = useState<CountyHistory | null>(null)
+  const historyFile = useJson<CountyHistory>(data ? null : COUNTY_HISTORY_URL)
+  const history = data ?? historyFile.data
   const [year, setYear] = useState(latestYear)
-  const [hoveredFips, setHoveredFips] = useState<string | null>(null)
-  const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null)
   const [sides, setSides] = useState<Side[]>(DEFAULT_SIDES)
-  const [exporting, setExporting] = useState(false)
 
-  const labelByFips = useMemo(() => Object.fromEntries(rows), [rows])
   const stateFips = state ? rows[0]?.[0].slice(0, 2) : undefined
 
   const yearValues = useMemo(() => history?.[year] ?? {}, [history, year])
@@ -182,10 +188,6 @@ export function UsCountyMap({
     })
   }
 
-  function setSideColor(sideIndex: number, color: string) {
-    setSides((prev) => prev.map((side, i) => (i === sideIndex ? { ...side, color } : side)))
-  }
-
   // A new side starts with an unassigned group if there is one, otherwise the last group of
   // the side holding the most, and the first starting color no side is using yet.
   function addSide() {
@@ -214,21 +216,7 @@ export function UsCountyMap({
     setSides((prev) => (prev.length > 2 ? prev.filter((_, i) => i !== sideIndex) : prev))
   }
 
-  useEffect(() => {
-    let cancelled = false
-    fetch(COUNTY_HISTORY_URL)
-      .then((r) => r.json() as Promise<CountyHistory>)
-      .then((countyHistory) => {
-        if (!cancelled) setHistory(countyHistory)
-      })
-      .catch(() => {})
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  const { width, height, counties: countyOutlines, ctRegions, regionLabels, stateBorders } = geometry
-  const loading = geometry.loading
+  const { counties: countyOutlines, ctRegions } = geometry
 
   // Connecticut replaced its counties with planning regions in 2022. For years whose data is
   // keyed by region (2025), draw the regions in place of CT's old counties.
@@ -247,29 +235,6 @@ export function UsCountyMap({
     [outlines, yearValues, sides, maxLead]
   )
 
-  const pathByFips = useMemo(
-    () => Object.fromEntries(outlines.map((o) => [o.fips, o.d])),
-    [outlines]
-  )
-
-  // One listener for the whole map: read the county off the path under the cursor
-  function handleMouseMove(e: MouseEvent<SVGSVGElement>) {
-    const target = e.target as Element
-    const fips = target.getAttribute("data-fips")
-    if (!fips || !yearValues[fips]) {
-      setHoveredFips(null)
-      setPointer(null)
-      return
-    }
-    const rect = e.currentTarget.getBoundingClientRect()
-    setHoveredFips(fips)
-    setPointer({
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100,
-    })
-  }
-
-  const hoveredValues = hoveredFips ? yearValues[hoveredFips] : undefined
   // Mirrors addSide: there must be a group free, or a side with one to spare
   const canAddSide =
     sides.length < MAX_SIDES &&
@@ -284,194 +249,66 @@ export function UsCountyMap({
   const subtitle = `Each county is colored by its ${sides.length > 2 ? "largest" : "larger"} side, as a share of population; deeper means a wider lead.`
   const source = `Source: U.S. Census Bureau${YEAR_SOURCES[year] ? ` (${YEAR_SOURCES[year]})` : ""}`
 
-  async function handleDownload() {
-    setExporting(true)
-    try {
-      await downloadMapPng({
-        title,
-        subtitle,
-        legend: diverging
-          ? [
-              {
-                name: "Lead",
-                stops: blendStops(sides[0].color, sides[1].color),
-                low: `${sideTitle(sides[0], sides)} ${leadLabel}`,
-                high: `${sideTitle(sides[1], sides)} ${leadLabel}`,
-              },
-            ]
-          : sides.map((side) => {
-              const name = sideTitle(side, sides)
-              return {
-                name: `Most ${name}`,
-                groups: name !== sideLabel(side) ? sideLabel(side) : undefined,
-                stops: shadeStops(side.color),
-                low: "Close",
-                high: leadLabel,
-              }
-            }),
-        source,
-        mapWidth: width,
-        mapHeight: height,
-        shapes,
-        stateBorders,
-        fileName: `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}.png`,
-      })
-    } finally {
-      setExporting(false)
-    }
-  }
+  const legend = diverging ? (
+    <GradientLegend
+        className="w-64"
+        name="Lead"
+        background={`linear-gradient(in oklch to right, ${sideColor(sides, 0)}, ${sideColor(sides, 1)})`}
+        low={`${sideTitle(sides[0], sides)} ${leadLabel}`}
+        high={`${sideTitle(sides[1], sides)} ${leadLabel}`}
+      />
+  ) : (
+    sides.map((side) => {
+      const name = sideTitle(side, sides)
+      return (
+        <GradientLegend
+          key={side.id}
+          name={
+            <>
+              Most {name}
+              {name !== sideLabel(side) && (
+                <div className="font-normal text-muted-foreground">{sideLabel(side)}</div>
+              )}
+            </>
+          }
+          className="w-40"
+          background={shadeGradient(side.color)}
+          low="Close"
+          high={leadLabel}
+        />
+      )
+    })
+  )
 
   return (
     <div className="space-y-5">
-      {/* Title, map, legend, and source sit together so a screenshot of this block stands alone */}
-      <figure className="space-y-3 bg-background">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h3 className="text-base font-semibold text-balance text-foreground sm:text-lg">
-              {title}
-            </h3>
-            <p className="text-xs text-muted-foreground">{subtitle}</p>
-          </div>
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={handleDownload}
-            disabled={loading || !history || exporting}
-          >
-            <Download aria-hidden />
-            {exporting ? "Saving…" : "PNG"}
-          </Button>
-        </div>
-
-        <div className="relative">
-          {loading && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center text-sm text-muted-foreground">
-              Loading map…
-            </div>
-          )}
-          <svg
-            viewBox={`0 0 ${width} ${height}`}
-            className={`h-auto w-full touch-pan-y ${state ? "max-h-[75svh]" : ""}`}
-            role={onOpenCounty ? "group" : "img"}
-            aria-label={`Map: ${title}`}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={() => {
-              setHoveredFips(null)
-              setPointer(null)
-            }}
-            {...countyLinkHandlers(onOpenCounty)}
-          >
-            <CountyPaths shapes={shapes} links={onOpenCounty ? labelByFips : undefined} />
-            {stateBorders && (
-              <path
-                d={stateBorders}
-                fill="none"
-                stroke="var(--background)"
-                strokeWidth={1}
-                strokeLinejoin="round"
-                vectorEffect="non-scaling-stroke"
-                pointerEvents="none"
-              />
-            )}
-            {hoveredFips && pathByFips[hoveredFips] && (
-              <path
-                d={pathByFips[hoveredFips]}
-                fill="none"
-                stroke="color-mix(in oklch, var(--foreground) 55%, var(--background))"
-                strokeWidth={1.25}
-                strokeLinejoin="round"
-                vectorEffect="non-scaling-stroke"
-                pointerEvents="none"
-              />
-            )}
-          </svg>
-
-          {hoveredFips && hoveredValues && pointer && (
-            <div
-              className="pointer-events-none absolute z-10 min-w-[11rem] rounded-none border border-border bg-popover px-3 py-2 text-sm shadow-md"
-              style={{
-                left: `min(${pointer.x}%, calc(100% - 12rem))`,
-                top: `max(${pointer.y - 2}%, 0.5rem)`,
-                transform: "translateY(-100%)",
-              }}
-            >
-              <div className="font-medium text-foreground">
-                {labelByFips[hoveredFips] ?? regionLabels[hoveredFips]}
-                {!state && `, ${states[hoveredFips.slice(0, 2)]}`}
-              </div>
-              <ul className="mt-1.5 space-y-0.5 tabular-nums">
-                {foldedBreakdown(hoveredValues).map(
-                  ({ key, label, value }) => (
-                    <li key={key} className="flex items-center justify-between gap-3">
-                      <span className="flex items-center gap-1.5 text-muted-foreground">
-                        <i
-                          className="inline-block size-2 rounded-full"
-                          style={{
-                            background: POPULATION_COLORS[key]?.light ?? "var(--muted-foreground)",
-                          }}
-                          aria-hidden
-                        />
-                        {label}
-                      </span>
-                      <span className="font-medium text-foreground">{value}%</span>
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        <figcaption className="flex flex-wrap items-end gap-x-6 gap-y-3 text-xs">
-          {diverging ? (
-            <div className="w-64 space-y-1">
-              <div className="font-medium text-foreground">Lead</div>
-              <div
-                className="h-2.5 border border-border"
-                style={{ background: `linear-gradient(in oklch to right, ${sides[0].color}, ${sides[1].color})` }}
-              />
-              <div className="flex justify-between gap-2 tabular-nums text-muted-foreground">
-                <span>{sideTitle(sides[0], sides)} {leadLabel}</span>
-                <span className="text-right">{sideTitle(sides[1], sides)} {leadLabel}</span>
-              </div>
-            </div>
-          ) : (
-            sides.map((side) => {
-              const name = sideTitle(side, sides)
-              return (
-                <div key={side.id} className="w-40 space-y-1">
-                  <div className="font-medium text-foreground">Most {name}</div>
-                  {name !== sideLabel(side) && (
-                    <div className="text-muted-foreground">{sideLabel(side)}</div>
-                  )}
-                  <div
-                    className="h-2.5 border border-border"
-                    style={{
-                      background: shadeGradient(side.color),
-                    }}
-                  />
-                  <div className="flex justify-between tabular-nums text-muted-foreground">
-                    <span>Close</span>
-                    <span>{leadLabel}</span>
-                  </div>
-                </div>
-              )
-            })
-          )}
-          <span className="inline-flex items-center gap-2 text-muted-foreground">
-            <i
-              className="inline-block size-3 rounded-[3px] border border-border"
-              style={{ background: "var(--border)" }}
-              aria-hidden
-            />
-            No data
-          </span>
-          <span className="ml-auto text-muted-foreground">
-            {source}
-          </span>
-        </figcaption>
-      </figure>
+      <CountyChoropleth
+        title={title}
+        subtitle={subtitle}
+        source={source}
+        geometry={geometry}
+        shapes={shapes}
+        rows={rows}
+        states={states}
+        state={state}
+        onOpenCounty={onOpenCounty}
+        hasData={(fips) => !!yearValues[fips]}
+        tooltip={(fips) => (
+          <TooltipRows
+            rows={foldedBreakdown(yearValues[fips]).map(({ key, label, value }) => ({
+              key,
+              label,
+              value: `${value}%`,
+              color: POPULATION_COLORS[key]?.light ?? "var(--muted-foreground)",
+            }))}
+          />
+        )}
+        legend={legend}
+        dataLoading={!history && !historyFile.error}
+        dataError={historyFile.error}
+        onRetryData={historyFile.retry}
+        statusLabel="county data"
+      />
 
       <YearSlider years={years} year={year} onChange={setYear} disabled={!history} />
 
@@ -479,12 +316,12 @@ export function UsCountyMap({
         {sides.map((side, sideIndex) => (
           <div
             key={side.id}
-            className="space-y-3 rounded-lg border border-border bg-card/40 px-4 py-3 text-sm"
+            className="space-y-3 border border-border bg-card/40 px-4 py-3 text-sm"
           >
             <div className="flex items-center gap-2">
               <i
-                className="inline-block size-3 shrink-0 rounded-[3px] border border-border"
-                style={{ background: side.color }}
+                className="inline-block size-3 shrink-0 border border-border"
+                style={{ background: sideColor(sides, sideIndex) }}
                 aria-hidden
               />
               <span className="font-medium text-foreground">
@@ -525,11 +362,6 @@ export function UsCountyMap({
               })}
             </div>
 
-            <ColorChooser
-              color={side.color}
-              onChange={(color) => setSideColor(sideIndex, color)}
-              label={`Side ${sideIndex + 1} color`}
-            />
           </div>
         ))}
 
@@ -537,7 +369,7 @@ export function UsCountyMap({
           <button
             type="button"
             onClick={addSide}
-            className="flex min-h-24 items-center justify-center rounded-lg border border-dashed border-border text-sm text-muted-foreground transition-colors hover:border-ring hover:text-foreground"
+            className="flex min-h-24 items-center justify-center border border-dashed border-border text-sm text-muted-foreground transition-colors hover:border-ring hover:text-foreground"
           >
             + Add side
           </button>

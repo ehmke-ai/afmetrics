@@ -59,7 +59,7 @@ export function VisaIssuanceChart() {
               formatter={(value, name) => (
                 <div className="flex w-full items-center justify-between gap-4">
                   <span className="text-muted-foreground">{name}</span>
-                  <span className="font-mono font-medium tabular-nums text-foreground">
+                  <span className="font-medium tabular-nums text-foreground">
                     {formatCount(Number(value))}
                   </span>
                 </div>

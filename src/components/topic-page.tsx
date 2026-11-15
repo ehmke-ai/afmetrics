@@ -1,5 +1,6 @@
 import Link from "next/link"
 
+import { DownloadCsvButton } from "@/components/download-csv-button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -10,13 +11,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { countryHref } from "@/lib/demographics"
 
 export function Swatch({ color, label }: { color: string; label: string }) {
   return (
     <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
       <i
-        className="inline-block size-3.5 rounded-[3px]"
+        className="inline-block size-3.5"
         style={{ background: color }}
         aria-hidden
       />
@@ -72,22 +72,21 @@ export function TopicPage({
   children: React.ReactNode
 }) {
   return (
-    <main className="mx-auto w-full max-w-[1100px] px-4 py-10 sm:px-6">
+    <main className="mx-auto w-full max-w-[1100px] px-4 pt-6 pb-10 sm:px-6">
       <PageHeader eyebrow={eyebrow} title={title} description={description} />
 
       {children}
 
       <footer className="fine-print mt-6 max-w-3xl">
         <strong className="font-semibold text-foreground">Notes:</strong> {notes} Values are
-        rounded for comparison; years and definitions differ by country.
+        rounded.
       </footer>
     </main>
   )
 }
 
 export type RankingRow = {
-  country: string
-  /** Defaults to the country's profile page */
+  name: string
   href?: string
   value: string
   // Bar fill, 0–1.
@@ -99,12 +98,15 @@ export type RankingRow = {
 export function RankingTable({
   rows,
   valueLabel,
-  nameLabel = "Country",
+  nameLabel = "Name",
   intensityLabel = "Intensity",
   color,
   badgeClassName,
   className = "mt-7",
+  csvTitle,
 }: {
+  /** Adds a Download CSV button; the file is named after this */
+  csvTitle?: string
   rows: RankingRow[]
   valueLabel: string
   nameLabel?: string
@@ -115,24 +117,37 @@ export function RankingTable({
 }) {
   return (
     <Card className={`${className} min-w-0 border-border bg-card shadow-none`}>
+      {csvTitle && (
+        <div className="flex justify-end border-b px-3 py-2">
+          <DownloadCsvButton
+            title={csvTitle}
+            rows={rows.map((row, i) => ({
+              rank: row.rank ?? i + 1,
+              [nameLabel]: row.name,
+              [valueLabel]: row.value,
+            }))}
+          />
+        </div>
+      )}
       <CardContent className="p-0">
         <ul className="md:hidden">
           {rows.map((row, i) => (
-            <li key={row.country} className="border-b px-3 py-2.5 last:border-b-0">
+            <li key={row.name} className="border-b px-3 py-2.5 last:border-b-0">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-2">
                   <Badge
                     variant="secondary"
-                    className={`min-w-7 shrink-0 justify-center rounded-full ${badgeClassName}`}
+                    className={`min-w-7 shrink-0 justify-center ${badgeClassName}`}
                   >
                     {row.rank ?? i + 1}
                   </Badge>
-                  <Link
-                    href={row.href ?? countryHref(row.country)}
-                    className="min-w-0 font-medium hover:underline"
-                  >
-                    {row.country}
-                  </Link>
+                  {row.href ? (
+                    <Link href={row.href} className="min-w-0 font-medium hover:underline">
+                      {row.name}
+                    </Link>
+                  ) : (
+                    <span className="min-w-0 font-medium">{row.name}</span>
+                  )}
                 </div>
                 <span
                   className="max-w-[55%] min-w-0 text-right text-[13px] leading-snug font-medium"
@@ -141,12 +156,9 @@ export function RankingTable({
                   {row.value}
                 </span>
               </div>
-              <span
-                className="mt-2 block h-2 overflow-hidden rounded-full bg-muted"
-                aria-hidden
-              >
+              <span className="mt-2 block h-2 overflow-hidden bg-muted" aria-hidden>
                 <span
-                  className="block h-full rounded-full"
+                  className="block h-full"
                   style={{ width: `${row.intensity * 100}%`, backgroundColor: color }}
                 />
               </span>
@@ -165,30 +177,34 @@ export function RankingTable({
             </TableHeader>
             <TableBody>
               {rows.map((row, i) => (
-                <TableRow key={row.country}>
+                <TableRow key={row.name}>
                   <TableCell>
                     <Badge
                       variant="secondary"
-                      className={`min-w-7 justify-center rounded-full ${badgeClassName}`}
+                      className={`min-w-7 justify-center ${badgeClassName}`}
                     >
                       {row.rank ?? i + 1}
                     </Badge>
                   </TableCell>
                   <TableCell className="font-medium">
-                    <Link href={row.href ?? countryHref(row.country)} className="hover:underline">
-                      {row.country}
-                    </Link>
+                    {row.href ? (
+                      <Link href={row.href} className="hover:underline">
+                        {row.name}
+                      </Link>
+                    ) : (
+                      row.name
+                    )}
                   </TableCell>
                   <TableCell className="text-right font-medium tabular-nums" style={{ color }}>
                     {row.value}
                   </TableCell>
                   <TableCell>
                     <span
-                      className="block h-2 min-w-24 overflow-hidden rounded-full bg-muted"
+                      className="block h-2 min-w-24 overflow-hidden bg-muted"
                       aria-hidden
                     >
                       <span
-                        className="block h-full rounded-full"
+                        className="block h-full"
                         style={{ width: `${row.intensity * 100}%`, backgroundColor: color }}
                       />
                     </span>

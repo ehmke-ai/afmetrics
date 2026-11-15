@@ -1,15 +1,10 @@
+import { SectionHeading } from "@/components/layout/section"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 
 import { POPULATION_COLORS } from "@/components/population-stack-chart"
 import { PageHeader, Stat } from "@/components/topic-page"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Table,
   TableBody,
@@ -25,7 +20,7 @@ import {
   stateCost,
   usCost,
 } from "@/lib/cost-of-living"
-import { COLORS, getCountryBySlug } from "@/lib/demographics"
+import { COLORS, US as us } from "@/lib/demographics"
 import {
   countyEthnicBreakdown,
   countyLabel,
@@ -43,7 +38,7 @@ import {
 
 export function generateStaticParams() {
   return statesData.flatMap((s) =>
-    getCounties(s).map((c) => ({ state: s.slug, county: countySlug(c.name) }))
+    getCounties(s).map((c) => ({ state: s.slug, county: countySlug(c.name) })),
   )
 }
 
@@ -73,7 +68,6 @@ export default async function CountyPage({
   const data = getCountyBySlug(state, county)
   if (!data) notFound()
 
-  const us = getCountryBySlug("united-states")
   const label = countyLabel(data)
   const statePopulation = latestPopulation(state)
   const breakdown = foldedCountyBreakdown(state, data)
@@ -88,7 +82,7 @@ export default async function CountyPage({
       label: "Non-Hispanic White",
       countyValue: data.nonHispanicWhitePct,
       state: `${Math.round((statePopulation.european + (statePopulation.arab ?? 0)) * 10) / 10}%`,
-      us: us ? `${us.native}%` : "—",
+      us: `${us.native}%`,
       color: COLORS.native,
     },
     {
@@ -96,40 +90,40 @@ export default async function CountyPage({
       countyValue: data.hispanicPct,
       state: `${statePopulation.hispanic}%`,
       us: "—",
-      color: POPULATION_COLORS.hispanic?.light,
+      color: POPULATION_COLORS.hispanic?.dark,
     },
     {
       label: "Black or African American",
       countyValue: data.blackPct,
       state: `${statePopulation.african}%`,
       us: "—",
-      color: POPULATION_COLORS.african?.light,
+      color: POPULATION_COLORS.african?.dark,
     },
     {
       label: "American Indian and Alaska Native",
       countyValue: data.aianPct,
       state: `${statePopulation.nativeAmerican}%`,
       us: "—",
-      color: POPULATION_COLORS.nativeAmerican?.light,
+      color: POPULATION_COLORS.nativeAmerican?.dark,
     },
     {
       label: "Indian",
       countyValue: countyEthnic.indian,
       state: `${statePopulation.indian ?? "—"}${statePopulation.indian == null ? "" : "%"}`,
       us: "—",
-      color: POPULATION_COLORS.indian?.light,
+      color: POPULATION_COLORS.indian?.dark,
     },
     {
       label: "East Asian",
       countyValue: countyEthnic.eastAsian,
       state: `${statePopulation.eastAsian ?? "—"}${statePopulation.eastAsian == null ? "" : "%"}`,
       us: "—",
-      color: POPULATION_COLORS.eastAsian?.light,
+      color: POPULATION_COLORS.eastAsian?.dark,
     },
   ].sort((a, b) => b.countyValue - a.countyValue)
 
   return (
-    <main className="mx-auto w-full max-w-[1100px] px-4 py-10 sm:px-6">
+    <main className="mx-auto w-full max-w-[1100px] px-4 pt-6 pb-10 sm:px-6">
       <PageHeader eyebrow={state.state} title={label} />
 
       <Card className="border-border bg-card shadow-none">
@@ -146,20 +140,22 @@ export default async function CountyPage({
                 key={g.key}
                 label={g.label}
                 value={`${g.value}%`}
-                color={POPULATION_COLORS[g.key]?.light}
+                color={POPULATION_COLORS[g.key]?.dark}
               />
             ))}
           </dl>
         </CardContent>
       </Card>
 
-      <header className="mt-12 mb-7">
-        <h2 className="section-title">Compared with {state.state} and the United States</h2>
-        <p className="section-sub">
-          {label} next to the state and national figures used elsewhere on this
-          site. A dash means the figure isn&rsquo;t published at that level of geography.
-        </p>
-      </header>
+      <SectionHeading
+        title="Compared with {state.state} and the United States"
+        description={
+          <>
+            {label} next to the state and national figures used elsewhere on this site. A dash means
+            the figure isn&rsquo;t published at that level of geography.
+          </>
+        }
+      />
 
       <Card className="border-border bg-card shadow-none">
         <CardContent className="p-0">
@@ -197,13 +193,15 @@ export default async function CountyPage({
 
       {costRows.length > 0 && (
         <>
-          <header className="mt-12 mb-7">
-            <h2 className="section-title">Cost of living</h2>
-            <p className="section-sub">
-              Incomes and housing costs in {label} next to {state.state} and the nation. Price
-              levels are published for states, not counties.
-            </p>
-          </header>
+          <SectionHeading
+            title="Cost of living"
+            description={
+              <>
+                Incomes and housing costs in {label} next to {state.state} and the nation. Price
+                levels are published for states, not counties.
+              </>
+            }
+          />
 
           <Card className="border-border bg-card shadow-none">
             <CardContent className="p-0">
@@ -259,13 +257,13 @@ export default async function CountyPage({
           ))}
         </ul>
         <p className="mt-6 max-w-3xl">
-          <strong className="font-semibold text-foreground">Notes:</strong> Figures are
-          rounded and come from county-level ACS tables, which don&rsquo;t publish religion,
-          median age, or the Arab-ancestry, Indian, and East Asian splits used at the state
-          level. Asian here is split into Indian and East Asian using the state&rsquo;s own
-          latest ratio between those two groups, since no county-level ancestry breakdown is
-          published; the state and national comparison columns use the same broad groups as
-          the rest of this site, so figures may not line up exactly with the raw ACS tables.
+          <strong className="font-semibold text-foreground">Notes:</strong> Figures are rounded and
+          come from county-level ACS tables, which don&rsquo;t publish religion, median age, or the
+          Arab-ancestry, Indian, and East Asian splits used at the state level. Asian here is split
+          into Indian and East Asian using the state&rsquo;s own latest ratio between those two
+          groups, since no county-level ancestry breakdown is published; the state and national
+          comparison columns use the same broad groups as the rest of this site, so figures may not
+          line up exactly with the raw ACS tables.
         </p>
       </footer>
     </main>

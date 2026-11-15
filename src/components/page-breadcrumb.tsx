@@ -11,11 +11,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { getCountryBySlug } from "@/lib/demographics"
 import countyLabels from "@/data/county-labels.json"
 import { stateNavBySlug } from "@/lib/states"
 import { researchArticles } from "@/lib/research"
-import { EUROPE_HOME_TOPIC, europeTopics } from "@/lib/topics"
 
 type Crumb = { label: string; href?: string }
 
@@ -31,6 +29,8 @@ function crumbsForPathname(pathname: string): Crumb[] {
   if (section === "you" && !slug) return [{ label: "Where you stand" }]
 
   if (section === "states" && !slug) return [{ label: "All states" }]
+
+  if (section === "methodology" && !slug) return [{ label: "Methodology" }]
 
   if (section === "united-states" && slug) {
     const state = stateNavBySlug[slug]
@@ -52,35 +52,20 @@ function crumbsForPathname(pathname: string): Crumb[] {
     return [research, { label: article ? article.title : slug }]
   }
 
-  if (section === "europe") {
-    const europe: Crumb = { label: "Europe", href: "/europe" }
-    if (!slug) return [europe]
-    if (slug === "topics" && segments[2]) {
-      const topic = europeTopics.find(
-        (t) => t.slug === segments[2] && t.slug !== EUROPE_HOME_TOPIC
-      )
-      return [europe, { label: topic ? topic.label : segments[2] }]
-    }
-    const country = getCountryBySlug(slug)
-    return [europe, { label: country ? country.country : slug }]
-  }
-
   return [{ label: pathname }]
 }
 
 export function PageBreadcrumb() {
   const pathname = usePathname()
   const crumbs = crumbsForPathname(pathname)
+  // The home page has nothing above it
+  if (crumbs.length === 0) return null
 
   return (
     <Breadcrumb className="min-w-0">
       <BreadcrumbList className="flex-nowrap overflow-hidden">
         <BreadcrumbItem>
-          {crumbs.length ? (
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-          ) : (
-            <BreadcrumbPage>Home</BreadcrumbPage>
-          )}
+          <BreadcrumbLink href="/">Home</BreadcrumbLink>
         </BreadcrumbItem>
         {crumbs.map((crumb, i) => {
           const isLast = i === crumbs.length - 1

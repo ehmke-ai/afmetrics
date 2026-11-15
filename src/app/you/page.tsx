@@ -4,7 +4,7 @@ import { Suspense } from "react"
 
 import { PageHeader } from "@/components/topic-page"
 import { WhereYouStand } from "@/components/where-you-stand"
-import { FIELD_CITIZENSHIP_YEAR, whereYouStandSources } from "@/lib/where-you-stand"
+import { whereYouStandSources } from "@/lib/where-you-stand"
 
 export const metadata: Metadata = {
   title: "Where you stand",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function WhereYouStandPage() {
   return (
-    <main className="mx-auto w-full max-w-[1100px] px-4 py-10 sm:px-6">
+    <main className="mx-auto w-full max-w-[1100px] px-4 pt-6 pb-10 sm:px-6">
       <PageHeader
         eyebrow="United States"
         title="Where you stand"

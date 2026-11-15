@@ -1,12 +1,13 @@
 "use client"
 
 import { geoCentroid, geoConicEqualArea, geoPath, type GeoPermissibleObjects } from "d3-geo"
-import { memo, useEffect, useState, type KeyboardEvent, type MouseEvent } from "react"
+import { memo, useMemo, type KeyboardEvent, type MouseEvent } from "react"
 import { feature, mesh } from "topojson-client"
 import type { Feature, FeatureCollection, Geometry } from "geojson"
 import type { GeometryCollection, Topology } from "topojson-specification"
 
 import { CT_FIPS } from "@/lib/county-history"
+import { useJson } from "@/lib/fetch-json"
 import { countyGeoUrl } from "@/lib/states"
 
 type CountyFeature = Feature<Geometry, { name: string }> & { id?: string | number }
@@ -31,6 +32,9 @@ export type CountyGeometry = {
   /** Lines between states on the US map */
   stateBorders?: string
   loading: boolean
+  /** The county shapes failed to load */
+  error: Error | null
+  retry: () => void
 }
 
 // us-atlas's pre-projected albers coordinates, shared with UsMap's state map so every US view
@@ -58,15 +62,22 @@ function labelsOf(features: CountyFeature[]) {
   return Object.fromEntries(features.map((f) => [String(f.id), f.properties.name]))
 }
 
-async function loadUs(): Promise<Omit<CountyGeometry, "loading">> {
-  const [topology, ctTopology] = await Promise.all([
-    fetch("/geo/us-counties-albers-10m.json").then((r) => r.json() as Promise<UsTopology>),
-    fetch("/geo/ct-planning-regions-albers.json")
-      .then((r) => r.json() as Promise<FeaturesTopology>)
-      .catch(() => null),
-  ])
+type Outlines = Omit<CountyGeometry, "loading" | "error" | "retry">
+
+export const US_STATES_URL = "/geo/us-states-albers-10m.json"
+const US_COUNTIES_URL = "/geo/us-counties-albers-10m.json"
+const CT_REGIONS_ALBERS_URL = "/geo/ct-planning-regions-albers.json"
+const CT_REGIONS_URL = "/geo/ct-planning-regions-10m.json"
+
+// Projected outlines keyed by the parsed topologies (counties, then Connecticut's regions or
+// NO_CT), so every map sharing a cached topology projects it once.
+const usOutlines = new WeakMap<object, WeakMap<object, Outlines>>()
+const stateOutlines = new WeakMap<object, WeakMap<object, Outlines>>()
+const NO_CT: FeaturesTopology = { type: "Topology", objects: {}, arcs: [] }
+
+function projectUs(topology: UsTopology, ctTopology: FeaturesTopology | null): Outlines {
   const path = geoPath()
-  const regions = ctTopology ? toFeatures(ctTopology, "regions") : []
+  const regions = ctTopology?.objects.regions ? toFeatures(ctTopology, "regions") : []
   return {
     width: US_WIDTH,
     height: US_HEIGHT,
@@ -77,17 +88,9 @@ async function loadUs(): Promise<Omit<CountyGeometry, "loading">> {
   }
 }
 
-async function loadState(abbr: string): Promise<Omit<CountyGeometry, "loading">> {
-  const [topology, ctTopology] = await Promise.all([
-    fetch(countyGeoUrl({ abbr })).then((r) => r.json() as Promise<FeaturesTopology>),
-    abbr === "CT"
-      ? fetch("/geo/ct-planning-regions-10m.json")
-          .then((r) => r.json() as Promise<FeaturesTopology>)
-          .catch(() => null)
-      : null,
-  ])
+function projectState(topology: FeaturesTopology, ctTopology: FeaturesTopology | null): Outlines {
   const features = toFeatures(topology, "counties")
-  const regions = ctTopology ? toFeatures(ctTopology, "counties") : []
+  const regions = ctTopology?.objects.counties ? toFeatures(ctTopology, "counties") : []
   const collection: FeatureCollection = { type: "FeatureCollection", features }
 
   // Center the cone on the state so it sits upright instead of sheared like on a US-wide map,
@@ -119,7 +122,21 @@ async function loadState(abbr: string): Promise<Omit<CountyGeometry, "loading">>
   }
 }
 
-const EMPTY: Omit<CountyGeometry, "loading"> = {
+/** `build()`'s result for this pair of topologies, built at most once */
+function cached(
+  cache: WeakMap<object, WeakMap<object, Outlines>>,
+  topology: object,
+  ct: object,
+  build: () => Outlines
+): Outlines {
+  let byCt = cache.get(topology)
+  if (!byCt) cache.set(topology, (byCt = new WeakMap()))
+  let outlines = byCt.get(ct)
+  if (!outlines) byCt.set(ct, (outlines = build()))
+  return outlines
+}
+
+const EMPTY: Outlines = {
   width: US_WIDTH,
   height: US_HEIGHT,
   counties: [],
@@ -129,28 +146,56 @@ const EMPTY: Omit<CountyGeometry, "loading"> = {
 
 /** County outlines for the whole US, or for one state when `state` is given */
 export function useCountyGeometry(state?: CountyMapState): CountyGeometry {
-  const [geometry, setGeometry] = useState(EMPTY)
-  const [loading, setLoading] = useState(true)
   const abbr = state?.abbr
+  const counties = useJson<FeaturesTopology>(abbr ? countyGeoUrl({ abbr }) : US_COUNTIES_URL)
+  // Connecticut's regions are optional: if they fail to load, the old counties are drawn.
+  const ct = useJson<FeaturesTopology>(
+    abbr ? (abbr === "CT" ? CT_REGIONS_URL : null) : CT_REGIONS_ALBERS_URL
+  )
+  const ctSettled = !ct.loading
+  const topology = counties.data
 
-  useEffect(() => {
-    let cancelled = false
-    ;(abbr ? loadState(abbr) : loadUs())
-      .then((g) => {
-        if (!cancelled) setGeometry(g)
-      })
-      .catch(() => {
-        if (!cancelled) setGeometry(EMPTY)
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
-      })
-    return () => {
-      cancelled = true
+  const outlines = useMemo(() => {
+    if (!topology || !ctSettled) return EMPTY
+    const ctKey = ct.data ?? NO_CT
+    return abbr
+      ? cached(stateOutlines, topology, ctKey, () => projectState(topology, ct.data))
+      : cached(usOutlines, topology, ctKey, () => projectUs(topology as UsTopology, ct.data))
+  }, [abbr, topology, ct.data, ctSettled])
+
+  return {
+    ...outlines,
+    loading: counties.loading || (!counties.error && !ctSettled),
+    error: counties.error,
+    retry: counties.retry,
+  }
+}
+
+type StateFeature = Feature<Geometry, { name: string }> & { id?: string | number }
+const stateFeatureCache = new WeakMap<object, StateFeature[]>()
+
+/** US state shapes (pre-projected Albers USA, 960×600), shared by every state-level map */
+export function useStateFeatures(): {
+  features: StateFeature[]
+  loading: boolean
+  error: Error | null
+  retry: () => void
+} {
+  const { data, loading, error, retry } = useJson<Topology<{ states: GeometryCollection }>>(
+    US_STATES_URL
+  )
+  const features = useMemo(() => {
+    if (!data) return []
+    let cachedFeatures = stateFeatureCache.get(data)
+    if (!cachedFeatures) {
+      cachedFeatures = (
+        feature(data, data.objects.states) as FeatureCollection<Geometry, { name: string }>
+      ).features as StateFeature[]
+      stateFeatureCache.set(data, cachedFeatures)
     }
-  }, [abbr])
-
-  return { ...geometry, loading }
+    return cachedFeatures
+  }, [data])
+  return { features, loading, error, retry }
 }
 
 /** `outlines` with Connecticut's old counties swapped for its planning regions */

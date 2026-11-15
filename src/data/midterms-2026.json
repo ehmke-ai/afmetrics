@@ -1,0 +1,4068 @@
+{
+ "asOf": "2026-11-14",
+ "sources": {
+  "senate": "https://en.wikipedia.org/w/index.php?title=2026_United_States_Senate_elections&oldid=1385750791",
+  "house": "https://en.wikipedia.org/w/index.php?title=2026_United_States_House_of_Representatives_elections&oldid=1385754070"
+ },
+ "senate": {
+  "AK": {
+   "status": "uncalled",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Dan S. Sullivan",
+     "party": "R",
+     "votes": null,
+     "pct": null
+    },
+    {
+     "name": "Mary Peltola",
+     "party": "D",
+     "votes": null,
+     "pct": null
+    }
+   ]
+  },
+  "AL": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Barry Moore",
+     "party": "R",
+     "votes": 917347,
+     "pct": 54.7
+    },
+    {
+     "name": "Everett Wess",
+     "party": "D",
+     "votes": 759336,
+     "pct": 45.3
+    }
+   ]
+  },
+  "AR": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Tom Cotton",
+     "party": "R",
+     "votes": 480627,
+     "pct": 54.3
+    },
+    {
+     "name": "Hallie Shoffner",
+     "party": "D",
+     "votes": 375647,
+     "pct": 42.4
+    }
+   ]
+  },
+  "CO": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "John Hickenlooper",
+     "party": "D",
+     "votes": 1600935,
+     "pct": 60.4
+    },
+    {
+     "name": "Mark Baisley",
+     "party": "R",
+     "votes": 930787,
+     "pct": 35.1
+    }
+   ]
+  },
+  "DE": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Chris Coons",
+     "party": "D",
+     "votes": 240587,
+     "pct": 63.4
+    },
+    {
+     "name": "Michael Katz",
+     "party": "R",
+     "votes": 137837,
+     "pct": 36.3
+    }
+   ]
+  },
+  "FL": {
+   "status": "called",
+   "special": true,
+   "candidates": [
+    {
+     "name": "Ashley Moody",
+     "party": "R",
+     "votes": 4210242,
+     "pct": 50.9
+    },
+    {
+     "name": "Angie Nixon",
+     "party": "D",
+     "votes": 3972095,
+     "pct": 48.0
+    }
+   ]
+  },
+  "GA": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Jon Ossoff",
+     "party": "D",
+     "votes": 2466422,
+     "pct": 59.0
+    },
+    {
+     "name": "Mike Collins",
+     "party": "R",
+     "votes": 1712444,
+     "pct": 41.0
+    }
+   ]
+  },
+  "IA": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Josh Turek",
+     "party": "D",
+     "votes": 686641,
+     "pct": 50.5
+    },
+    {
+     "name": "Ashley Hinson",
+     "party": "R",
+     "votes": 630808,
+     "pct": 46.4
+    }
+   ]
+  },
+  "ID": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Jim Risch",
+     "party": "R",
+     "votes": 401788,
+     "pct": 56.5
+    },
+    {
+     "name": "Todd Achilles",
+     "party": "I",
+     "votes": 238352,
+     "pct": 33.5
+    },
+    {
+     "name": "Natalie Fleming",
+     "party": "I",
+     "votes": 70609,
+     "pct": 7.0
+    }
+   ]
+  },
+  "IL": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Juliana Stratton",
+     "party": "D",
+     "votes": 2499776,
+     "pct": 61.3
+    },
+    {
+     "name": "Don Tracy",
+     "party": "R",
+     "votes": 1510621,
+     "pct": 37.1
+    }
+   ]
+  },
+  "KS": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Adam Hamilton",
+     "party": "D",
+     "votes": 561143,
+     "pct": 51.0
+    },
+    {
+     "name": "Roger Marshall",
+     "party": "R",
+     "votes": 505558,
+     "pct": 46.0
+    }
+   ]
+  },
+  "KY": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Andy Barr",
+     "party": "R",
+     "votes": 784869,
+     "pct": 55.0
+    },
+    {
+     "name": "Charles Booker",
+     "party": "D",
+     "votes": 612357,
+     "pct": 42.9
+    }
+   ]
+  },
+  "LA": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Julia Letlow",
+     "party": "R",
+     "votes": 745963,
+     "pct": 50.9
+    },
+    {
+     "name": "Jamie Davis",
+     "party": "D",
+     "votes": 720106,
+     "pct": 49.1
+    }
+   ]
+  },
+  "MA": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Ed Markey",
+     "party": "D",
+     "votes": 1650772,
+     "pct": 63.4
+    },
+    {
+     "name": "John Deaton",
+     "party": "R",
+     "votes": 837152,
+     "pct": 32.1
+    }
+   ]
+  },
+  "ME": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Troy Jackson",
+     "party": "D",
+     "votes": 375516,
+     "pct": 53.1
+    },
+    {
+     "name": "Susan Collins",
+     "party": "R",
+     "votes": 330994,
+     "pct": 46.8
+    }
+   ]
+  },
+  "MI": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Abdul El-Sayed",
+     "party": "D",
+     "votes": 2520388,
+     "pct": 52.5
+    },
+    {
+     "name": "Mike Rogers",
+     "party": "R",
+     "votes": 2180541,
+     "pct": 45.5
+    }
+   ]
+  },
+  "MN": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Peggy Flanagan",
+     "party": "D",
+     "votes": 1520871,
+     "pct": 53.7
+    },
+    {
+     "name": "Michele Tafoya",
+     "party": "R",
+     "votes": 1233467,
+     "pct": 43.6
+    }
+   ]
+  },
+  "MS": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Scott Colom",
+     "party": "D",
+     "votes": 473336,
+     "pct": 49.2
+    },
+    {
+     "name": "Cindy Hyde-Smith",
+     "party": "R",
+     "votes": 468667,
+     "pct": 48.7
+    }
+   ]
+  },
+  "MT": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Kurt Alme",
+     "party": "R",
+     "votes": 232916,
+     "pct": 48.3
+    },
+    {
+     "name": "Seth Bodnar",
+     "party": "I",
+     "votes": 181674,
+     "pct": 37.7
+    },
+    {
+     "name": "Alani Bankhead",
+     "party": "D",
+     "votes": 58555,
+     "pct": 12.1
+    }
+   ]
+  },
+  "NC": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Roy Cooper",
+     "party": "D",
+     "votes": 2467972,
+     "pct": 58.7
+    },
+    {
+     "name": "Michael Whatley",
+     "party": "R",
+     "votes": 1643114,
+     "pct": 39.1
+    }
+   ]
+  },
+  "NE": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Pete Ricketts",
+     "party": "R",
+     "votes": 381127,
+     "pct": 50.0
+    },
+    {
+     "name": "Dan Osborn",
+     "party": "I",
+     "votes": 336261,
+     "pct": 44.1
+    }
+   ]
+  },
+  "NH": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Chris Pappas",
+     "party": "D",
+     "votes": 355720,
+     "pct": 55.9
+    },
+    {
+     "name": "John E. Sununu",
+     "party": "R",
+     "votes": 268340,
+     "pct": 42.2
+    }
+   ]
+  },
+  "NJ": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Cory Booker",
+     "party": "D",
+     "votes": 1819769,
+     "pct": 62.3
+    },
+    {
+     "name": "Justin Murphy",
+     "party": "R",
+     "votes": 1023549,
+     "pct": 35.1
+    }
+   ]
+  },
+  "NM": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Ben Ray Luján",
+     "party": "D",
+     "votes": 458756,
+     "pct": 63.3
+    },
+    {
+     "name": "Larry Marker",
+     "party": "R",
+     "votes": 266434,
+     "pct": 36.7
+    }
+   ]
+  },
+  "OH": {
+   "status": "called",
+   "special": true,
+   "candidates": [
+    {
+     "name": "Sherrod Brown",
+     "party": "D",
+     "votes": 2301042,
+     "pct": 50.0
+    },
+    {
+     "name": "Jon Husted",
+     "party": "R",
+     "votes": 2077748,
+     "pct": 45.2
+    }
+   ]
+  },
+  "OK": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Kevin Hern",
+     "party": "R",
+     "votes": 639510,
+     "pct": 57.2
+    },
+    {
+     "name": "N'Kiyla Jasmine Thomas",
+     "party": "D",
+     "votes": 439109,
+     "pct": 39.3
+    }
+   ]
+  },
+  "OR": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Jeff Merkley",
+     "party": "D",
+     "votes": 1081831,
+     "pct": 58.1
+    },
+    {
+     "name": "David Brock Smith",
+     "party": "R",
+     "votes": 719976,
+     "pct": 38.7
+    }
+   ]
+  },
+  "RI": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Jack Reed",
+     "party": "D",
+     "votes": 240069,
+     "pct": 66.8
+    },
+    {
+     "name": "Raymond McKay",
+     "party": "R",
+     "votes": 105346,
+     "pct": 29.3
+    }
+   ]
+  },
+  "SC": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Annie Andrews",
+     "party": "D",
+     "votes": 1044001,
+     "pct": 51.1
+    },
+    {
+     "name": "Darline Graham",
+     "party": "R",
+     "votes": 952191,
+     "pct": 46.6
+    }
+   ]
+  },
+  "SD": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Mike Rounds",
+     "party": "R",
+     "votes": 184590,
+     "pct": 60.5
+    },
+    {
+     "name": "Brian Bengs",
+     "party": "I",
+     "votes": 120513,
+     "pct": 39.5
+    }
+   ]
+  },
+  "TN": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Bill Hagerty",
+     "party": "R",
+     "votes": 1138457,
+     "pct": 55.1
+    },
+    {
+     "name": "Marquita Bradshaw",
+     "party": "D",
+     "votes": 886974,
+     "pct": 42.9
+    }
+   ]
+  },
+  "TX": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "James Talarico",
+     "party": "D",
+     "votes": 5446309,
+     "pct": 55.1
+    },
+    {
+     "name": "Ken Paxton",
+     "party": "R",
+     "votes": 4250166,
+     "pct": 43.0
+    }
+   ]
+  },
+  "VA": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Mark Warner",
+     "party": "D",
+     "votes": 2188657,
+     "pct": 61.2
+    },
+    {
+     "name": "Bert Mizusawa",
+     "party": "R",
+     "votes": 1378325,
+     "pct": 38.5
+    }
+   ]
+  },
+  "WV": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Shelley Moore Capito",
+     "party": "R",
+     "votes": 266067,
+     "pct": 58.3
+    },
+    {
+     "name": "Rachel Fetty Anderson",
+     "party": "D",
+     "votes": 172922,
+     "pct": 37.9
+    }
+   ]
+  },
+  "WY": {
+   "status": "called",
+   "special": false,
+   "candidates": [
+    {
+     "name": "Harriet Hageman",
+     "party": "R",
+     "votes": 122174,
+     "pct": 64.9
+    },
+    {
+     "name": "James W. Byrd",
+     "party": "D",
+     "votes": 65105,
+     "pct": 34.6
+    }
+   ]
+  }
+ },
+ "house": {
+  "AK": {
+   "seats": 1,
+   "dem": 0,
+   "rep": 0,
+   "other": 0,
+   "uncalled": 1
+  },
+  "AL": {
+   "seats": 7,
+   "dem": 2,
+   "rep": 5,
+   "other": 0,
+   "uncalled": 0
+  },
+  "AR": {
+   "seats": 4,
+   "dem": 0,
+   "rep": 4,
+   "other": 0,
+   "uncalled": 0
+  },
+  "AZ": {
+   "seats": 9,
+   "dem": 5,
+   "rep": 4,
+   "other": 0,
+   "uncalled": 0
+  },
+  "CA": {
+   "seats": 52,
+   "dem": 48,
+   "rep": 4,
+   "other": 0,
+   "uncalled": 0
+  },
+  "CO": {
+   "seats": 8,
+   "dem": 7,
+   "rep": 1,
+   "other": 0,
+   "uncalled": 0
+  },
+  "CT": {
+   "seats": 5,
+   "dem": 5,
+   "rep": 0,
+   "other": 0,
+   "uncalled": 0
+  },
+  "DE": {
+   "seats": 1,
+   "dem": 1,
+   "rep": 0,
+   "other": 0,
+   "uncalled": 0
+  },
+  "FL": {
+   "seats": 28,
+   "dem": 8,
+   "rep": 20,
+   "other": 0,
+   "uncalled": 0
+  },
+  "GA": {
+   "seats": 14,
+   "dem": 5,
+   "rep": 9,
+   "other": 0,
+   "uncalled": 0
+  },
+  "HI": {
+   "seats": 2,
+   "dem": 2,
+   "rep": 0,
+   "other": 0,
+   "uncalled": 0
+  },
+  "IA": {
+   "seats": 4,
+   "dem": 3,
+   "rep": 1,
+   "other": 0,
+   "uncalled": 0
+  },
+  "ID": {
+   "seats": 2,
+   "dem": 0,
+   "rep": 2,
+   "other": 0,
+   "uncalled": 0
+  },
+  "IL": {
+   "seats": 17,
+   "dem": 14,
+   "rep": 3,
+   "other": 0,
+   "uncalled": 0
+  },
+  "IN": {
+   "seats": 9,
+   "dem": 3,
+   "rep": 6,
+   "other": 0,
+   "uncalled": 0
+  },
+  "KS": {
+   "seats": 4,
+   "dem": 1,
+   "rep": 3,
+   "other": 0,
+   "uncalled": 0
+  },
+  "KY": {
+   "seats": 6,
+   "dem": 2,
+   "rep": 4,
+   "other": 0,
+   "uncalled": 0
+  },
+  "LA": {
+   "seats": 6,
+   "dem": 1,
+   "rep": 3,
+   "other": 0,
+   "uncalled": 2
+  },
+  "MA": {
+   "seats": 9,
+   "dem": 9,
+   "rep": 0,
+   "other": 0,
+   "uncalled": 0
+  },
+  "MD": {
+   "seats": 8,
+   "dem": 7,
+   "rep": 1,
+   "other": 0,
+   "uncalled": 0
+  },
+  "ME": {
+   "seats": 2,
+   "dem": 1,
+   "rep": 1,
+   "other": 0,
+   "uncalled": 0
+  },
+  "MI": {
+   "seats": 13,
+   "dem": 9,
+   "rep": 4,
+   "other": 0,
+   "uncalled": 0
+  },
+  "MN": {
+   "seats": 8,
+   "dem": 4,
+   "rep": 3,
+   "other": 0,
+   "uncalled": 1
+  },
+  "MO": {
+   "seats": 8,
+   "dem": 3,
+   "rep": 5,
+   "other": 0,
+   "uncalled": 0
+  },
+  "MS": {
+   "seats": 4,
+   "dem": 1,
+   "rep": 3,
+   "other": 0,
+   "uncalled": 0
+  },
+  "MT": {
+   "seats": 2,
+   "dem": 1,
+   "rep": 1,
+   "other": 0,
+   "uncalled": 0
+  },
+  "NC": {
+   "seats": 14,
+   "dem": 11,
+   "rep": 3,
+   "other": 0,
+   "uncalled": 0
+  },
+  "ND": {
+   "seats": 1,
+   "dem": 0,
+   "rep": 1,
+   "other": 0,
+   "uncalled": 0
+  },
+  "NE": {
+   "seats": 3,
+   "dem": 1,
+   "rep": 2,
+   "other": 0,
+   "uncalled": 0
+  },
+  "NH": {
+   "seats": 2,
+   "dem": 2,
+   "rep": 0,
+   "other": 0,
+   "uncalled": 0
+  },
+  "NJ": {
+   "seats": 12,
+   "dem": 11,
+   "rep": 1,
+   "other": 0,
+   "uncalled": 0
+  },
+  "NM": {
+   "seats": 3,
+   "dem": 3,
+   "rep": 0,
+   "other": 0,
+   "uncalled": 0
+  },
+  "NV": {
+   "seats": 4,
+   "dem": 4,
+   "rep": 0,
+   "other": 0,
+   "uncalled": 0
+  },
+  "NY": {
+   "seats": 26,
+   "dem": 20,
+   "rep": 6,
+   "other": 0,
+   "uncalled": 0
+  },
+  "OH": {
+   "seats": 15,
+   "dem": 8,
+   "rep": 7,
+   "other": 0,
+   "uncalled": 0
+  },
+  "OK": {
+   "seats": 5,
+   "dem": 0,
+   "rep": 5,
+   "other": 0,
+   "uncalled": 0
+  },
+  "OR": {
+   "seats": 6,
+   "dem": 5,
+   "rep": 1,
+   "other": 0,
+   "uncalled": 0
+  },
+  "PA": {
+   "seats": 17,
+   "dem": 11,
+   "rep": 6,
+   "other": 0,
+   "uncalled": 0
+  },
+  "RI": {
+   "seats": 2,
+   "dem": 2,
+   "rep": 0,
+   "other": 0,
+   "uncalled": 0
+  },
+  "SC": {
+   "seats": 7,
+   "dem": 2,
+   "rep": 5,
+   "other": 0,
+   "uncalled": 0
+  },
+  "SD": {
+   "seats": 1,
+   "dem": 0,
+   "rep": 1,
+   "other": 0,
+   "uncalled": 0
+  },
+  "TN": {
+   "seats": 9,
+   "dem": 1,
+   "rep": 8,
+   "other": 0,
+   "uncalled": 0
+  },
+  "TX": {
+   "seats": 38,
+   "dem": 14,
+   "rep": 24,
+   "other": 0,
+   "uncalled": 0
+  },
+  "UT": {
+   "seats": 4,
+   "dem": 1,
+   "rep": 3,
+   "other": 0,
+   "uncalled": 0
+  },
+  "VA": {
+   "seats": 11,
+   "dem": 8,
+   "rep": 3,
+   "other": 0,
+   "uncalled": 0
+  },
+  "VT": {
+   "seats": 1,
+   "dem": 1,
+   "rep": 0,
+   "other": 0,
+   "uncalled": 0
+  },
+  "WA": {
+   "seats": 10,
+   "dem": 8,
+   "rep": 2,
+   "other": 0,
+   "uncalled": 0
+  },
+  "WI": {
+   "seats": 8,
+   "dem": 4,
+   "rep": 4,
+   "other": 0,
+   "uncalled": 0
+  },
+  "WV": {
+   "seats": 2,
+   "dem": 0,
+   "rep": 2,
+   "other": 0,
+   "uncalled": 0
+  },
+  "WY": {
+   "seats": 1,
+   "dem": 0,
+   "rep": 1,
+   "other": 0,
+   "uncalled": 0
+  }
+ },
+ "districts": {
+  "0101": {
+   "party": "R",
+   "winner": "Jerry Carl",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "0102": {
+   "party": "D",
+   "winner": "Shomari Figures",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0103": {
+   "party": "R",
+   "winner": "Mike Rogers",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0104": {
+   "party": "R",
+   "winner": "Robert Aderholt",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0105": {
+   "party": "R",
+   "winner": "Dale Strong",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0106": {
+   "party": "R",
+   "winner": "Gary Palmer",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0107": {
+   "party": "D",
+   "winner": "Terri Sewell",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0200": {
+   "party": null,
+   "winner": null,
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0401": {
+   "party": "D",
+   "winner": "Amish Shah",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0402": {
+   "party": "R",
+   "winner": "Eli Crane",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0403": {
+   "party": "D",
+   "winner": "Yassamin Ansari",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0404": {
+   "party": "D",
+   "winner": "Greg Stanton",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0405": {
+   "party": "R",
+   "winner": "Mark Lamb",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0406": {
+   "party": "D",
+   "winner": "JoAnna Mendoza",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0407": {
+   "party": "D",
+   "winner": "Adelita Grijalva",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0408": {
+   "party": "R",
+   "winner": "Abraham Hamadeh",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0409": {
+   "party": "R",
+   "winner": "Paul Gosar",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0501": {
+   "party": "R",
+   "winner": "Rick Crawford",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0502": {
+   "party": "R",
+   "winner": "French Hill",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0503": {
+   "party": "R",
+   "winner": "Steve Womack",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0504": {
+   "party": "R",
+   "winner": "Bruce Westerman",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0601": {
+   "party": "D",
+   "winner": "Mike McGuire",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0602": {
+   "party": "D",
+   "winner": "Jared Huffman",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0603": {
+   "party": "D",
+   "winner": "Ami Bera",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0604": {
+   "party": "D",
+   "winner": "Eric Jones",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0605": {
+   "party": "R",
+   "winner": "Tom McClintock",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0606": {
+   "party": "D",
+   "winner": "Richard Pan",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "0607": {
+   "party": "D",
+   "winner": "Doris Matsui",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0608": {
+   "party": "D",
+   "winner": "John Garamendi",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0609": {
+   "party": "D",
+   "winner": "Josh Harder",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0610": {
+   "party": "D",
+   "winner": "Mark DeSaulnier",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0611": {
+   "party": "D",
+   "winner": "Scott Wiener",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0612": {
+   "party": "D",
+   "winner": "Lateefah Simon",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0613": {
+   "party": "D",
+   "winner": "Adam Gray",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0614": {
+   "party": "D",
+   "winner": "Aisha Wahab",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0615": {
+   "party": "D",
+   "winner": "Kevin Mullin",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0616": {
+   "party": "D",
+   "winner": "Sam Liccardo",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0617": {
+   "party": "D",
+   "winner": "Ro Khanna",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0618": {
+   "party": "D",
+   "winner": "Zoe Lofgren",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0619": {
+   "party": "D",
+   "winner": "Jimmy Panetta",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0620": {
+   "party": "R",
+   "winner": "Vince Fong",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0621": {
+   "party": "D",
+   "winner": "Jim Costa",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0622": {
+   "party": "D",
+   "winner": "Randy Villegas",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0623": {
+   "party": null,
+   "winner": null,
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0624": {
+   "party": "D",
+   "winner": "Salud Carbajal",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0625": {
+   "party": "D",
+   "winner": "Raul Ruiz",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0626": {
+   "party": "D",
+   "winner": "Jacqui Irwin",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0627": {
+   "party": "D",
+   "winner": "George T. Whitesides",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0628": {
+   "party": "D",
+   "winner": "Judy Chu",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0629": {
+   "party": "D",
+   "winner": "Luz Rivas",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0630": {
+   "party": "D",
+   "winner": "Laura Friedman",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0631": {
+   "party": "D",
+   "winner": "Gil Cisneros",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0632": {
+   "party": "D",
+   "winner": "Brad Sherman",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0633": {
+   "party": "D",
+   "winner": "Pete Aguilar",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0634": {
+   "party": "D",
+   "winner": "Angela Gonzales-Torres",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0635": {
+   "party": "D",
+   "winner": "Norma Torres",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0636": {
+   "party": "D",
+   "winner": "Ted Lieu",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0637": {
+   "party": "D",
+   "winner": "Sydney Kamlager-Dove",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0638": {
+   "party": "D",
+   "winner": "Hilda Solis",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "0639": {
+   "party": "D",
+   "winner": "Mark Takano",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0640": {
+   "party": "R",
+   "winner": "Ken Calvert",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0641": {
+   "party": "D",
+   "winner": "Linda Sánchez",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0642": {
+   "party": "D",
+   "winner": "Robert Garcia",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0643": {
+   "party": "D",
+   "winner": "Maxine Waters",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0644": {
+   "party": "D",
+   "winner": "Nanette Barragán",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0645": {
+   "party": "D",
+   "winner": "Derek Tran",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0646": {
+   "party": "D",
+   "winner": "Lou Correa",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0647": {
+   "party": "D",
+   "winner": "Dave Min",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0648": {
+   "party": "D",
+   "winner": "Marni von Wilpert",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0649": {
+   "party": "D",
+   "winner": "Mike Levin",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0650": {
+   "party": "D",
+   "winner": "Scott Peters",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0651": {
+   "party": "D",
+   "winner": "Sara Jacobs",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0652": {
+   "party": "D",
+   "winner": "Juan Vargas",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0801": {
+   "party": "D",
+   "winner": "Melat Kiros",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0802": {
+   "party": "D",
+   "winner": "Joe Neguse",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0803": {
+   "party": "R",
+   "winner": "Jeff Hurd",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0804": {
+   "party": "D",
+   "winner": "Eileen Laubacher",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0805": {
+   "party": "D",
+   "winner": "Jessica Killin",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0806": {
+   "party": "D",
+   "winner": "Jason Crow",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0807": {
+   "party": "D",
+   "winner": "Brittany Pettersen",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0808": {
+   "party": "D",
+   "winner": "Manny Rutinel",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "0901": {
+   "party": "D",
+   "winner": "Luke Bronin",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0902": {
+   "party": "D",
+   "winner": "Joe Courtney",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0903": {
+   "party": "D",
+   "winner": "Rosa DeLauro",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0904": {
+   "party": "D",
+   "winner": "Jim Himes",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "0905": {
+   "party": "D",
+   "winner": "Jahana Hayes",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1000": {
+   "party": "D",
+   "winner": "Sarah McBride",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1201": {
+   "party": "R",
+   "winner": "Jimmy Patronis",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1202": {
+   "party": "R",
+   "winner": "Austin Rogers",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1203": {
+   "party": "R",
+   "winner": "Kat Cammack",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1204": {
+   "party": "R",
+   "winner": "Aaron Bean",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1205": {
+   "party": "R",
+   "winner": "John Rutherford",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1206": {
+   "party": "R",
+   "winner": "Randy Fine",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1207": {
+   "party": "R",
+   "winner": "Ryan Elijah",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1208": {
+   "party": "R",
+   "winner": "Mike Haridopolos",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1209": {
+   "party": "D",
+   "winner": "Darren Soto",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1210": {
+   "party": "D",
+   "winner": "Maxwell Frost",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1211": {
+   "party": "R",
+   "winner": "Joe Strada",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1212": {
+   "party": "R",
+   "winner": "Gus Bilirakis",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1213": {
+   "party": "R",
+   "winner": "Anna Paulina Luna",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1214": {
+   "party": "D",
+   "winner": "Kathy Castor",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1215": {
+   "party": "R",
+   "winner": "Laurel Lee",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1216": {
+   "party": "R",
+   "winner": "Sydney Gruters",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1217": {
+   "party": "R",
+   "winner": "Greg Steube",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1218": {
+   "party": "R",
+   "winner": "Scott Franklin",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1219": {
+   "party": "R",
+   "winner": "Jim Schwartzel",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1220": {
+   "party": "D",
+   "winner": "Debbie Wasserman Schultz",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "1221": {
+   "party": "R",
+   "winner": "Brian Mast",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1222": {
+   "party": "D",
+   "winner": "Pia Dandiya",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "1223": {
+   "party": "D",
+   "winner": "Lois Frankel",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1224": {
+   "party": "D",
+   "winner": "Oliver Gilbert",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1225": {
+   "party": "D",
+   "winner": "Jared Moskowitz",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1226": {
+   "party": "R",
+   "winner": "Mario Díaz-Balart",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1227": {
+   "party": "R",
+   "winner": "María Elvira Salazar",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1228": {
+   "party": "R",
+   "winner": "Carlos A. Giménez",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1301": {
+   "party": "R",
+   "winner": "Jim Kingston",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1302": {
+   "party": "D",
+   "winner": "Sanford Bishop",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1303": {
+   "party": "R",
+   "winner": "Brian Jack",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1304": {
+   "party": "D",
+   "winner": "Hank Johnson",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1305": {
+   "party": "D",
+   "winner": "Nikema Williams",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1306": {
+   "party": "D",
+   "winner": "Lucy McBath",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1307": {
+   "party": "R",
+   "winner": "Rich McCormick",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1308": {
+   "party": "R",
+   "winner": "Austin Scott",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1309": {
+   "party": "R",
+   "winner": "Andrew Clyde",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1310": {
+   "party": "R",
+   "winner": "Houston Gaines",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1311": {
+   "party": "R",
+   "winner": "John Cowan",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1312": {
+   "party": "R",
+   "winner": "Rick Allen",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1313": {
+   "party": "D",
+   "winner": "Jasmine Clark",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1314": {
+   "party": "R",
+   "winner": "Clay Fuller",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1501": {
+   "party": "D",
+   "winner": "Ed Case",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1502": {
+   "party": "D",
+   "winner": "Jill Tokuda",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1601": {
+   "party": "R",
+   "winner": "Russ Fulcher",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1602": {
+   "party": "R",
+   "winner": "Mike Simpson",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1701": {
+   "party": "D",
+   "winner": "Jonathan Jackson",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1702": {
+   "party": "D",
+   "winner": "Donna Miller",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1703": {
+   "party": "D",
+   "winner": "Delia Ramirez",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1704": {
+   "party": "D",
+   "winner": "Patty García",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1705": {
+   "party": "D",
+   "winner": "Mike Quigley",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1706": {
+   "party": "D",
+   "winner": "Sean Casten",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1707": {
+   "party": "D",
+   "winner": "La Shawn Ford",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1708": {
+   "party": "D",
+   "winner": "Melissa Bean",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1709": {
+   "party": "D",
+   "winner": "Daniel Biss",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1710": {
+   "party": "D",
+   "winner": "Brad Schneider",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1711": {
+   "party": "D",
+   "winner": "Bill Foster",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1712": {
+   "party": "R",
+   "winner": "Mike Bost",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1713": {
+   "party": "D",
+   "winner": "Nikki Budzinski",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1714": {
+   "party": "D",
+   "winner": "Lauren Underwood",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1715": {
+   "party": "R",
+   "winner": "Mary Miller",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1716": {
+   "party": "R",
+   "winner": "Darin LaHood",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1717": {
+   "party": "D",
+   "winner": "Eric Sorensen",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1801": {
+   "party": "D",
+   "winner": "Frank J. Mrvan",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1802": {
+   "party": "R",
+   "winner": "Rudy Yakym",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1803": {
+   "party": "R",
+   "winner": "Marlin Stutzman",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1804": {
+   "party": "R",
+   "winner": "Jim Baird",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1805": {
+   "party": "D",
+   "winner": "J. D. Ford",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1806": {
+   "party": "R",
+   "winner": "Jefferson Shreve",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1807": {
+   "party": "D",
+   "winner": "André Carson",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "1808": {
+   "party": "R",
+   "winner": "Mark Messmer",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1809": {
+   "party": "R",
+   "winner": "Erin Houchin",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1901": {
+   "party": "D",
+   "winner": "Christina Bohannan",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1902": {
+   "party": "D",
+   "winner": "Lindsay James",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1903": {
+   "party": "D",
+   "winner": "Sarah Trone Garriott",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "1904": {
+   "party": "R",
+   "winner": "Chris McGowan",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2001": {
+   "party": "R",
+   "winner": "Tracey Mann",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2002": {
+   "party": "R",
+   "winner": "Derek Schmidt",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2003": {
+   "party": "D",
+   "winner": "Sharice Davids",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2004": {
+   "party": "R",
+   "winner": "Ron Estes",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2101": {
+   "party": "R",
+   "winner": "James Comer",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2102": {
+   "party": "R",
+   "winner": "Brett Guthrie",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2103": {
+   "party": "D",
+   "winner": "Morgan McGarvey",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2104": {
+   "party": "R",
+   "winner": "Ed Gallrein",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2105": {
+   "party": "R",
+   "winner": "Hal Rogers",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2106": {
+   "party": "D",
+   "winner": "Zach Dembo",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2201": {
+   "party": "R",
+   "winner": "Steve Scalise",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2202": {
+   "party": "D",
+   "winner": "Troy Carter",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2203": {
+   "party": "R",
+   "winner": "Clay Higgins",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2204": {
+   "party": "R",
+   "winner": "Mike Johnson",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2205": {
+   "party": null,
+   "winner": null,
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": [
+    {
+     "name": "Patricia Moore",
+     "party": "D"
+    },
+    {
+     "name": "Gabe Firment",
+     "party": "R"
+    }
+   ]
+  },
+  "2206": {
+   "party": null,
+   "winner": null,
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": [
+    {
+     "name": "Chauna Banks",
+     "party": "D"
+    },
+    {
+     "name": "Blake Miguez",
+     "party": "R"
+    }
+   ]
+  },
+  "2301": {
+   "party": "D",
+   "winner": "Chellie Pingree",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2302": {
+   "party": "R",
+   "winner": "Paul LePage",
+   "flip": true,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2401": {
+   "party": "R",
+   "winner": "Andy Harris",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2402": {
+   "party": "D",
+   "winner": "Johnny Olszewski",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2403": {
+   "party": "D",
+   "winner": "Sarah Elfreth",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2404": {
+   "party": "D",
+   "winner": "Glenn Ivey",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2405": {
+   "party": "D",
+   "winner": "Adrian Boafo",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2406": {
+   "party": "D",
+   "winner": "April McClain Delaney",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2407": {
+   "party": "D",
+   "winner": "Kweisi Mfume",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2408": {
+   "party": "D",
+   "winner": "Jamie Raskin",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2501": {
+   "party": "D",
+   "winner": "Richard Neal",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2502": {
+   "party": "D",
+   "winner": "Jim McGovern",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2503": {
+   "party": "D",
+   "winner": "Lori Trahan",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2504": {
+   "party": "D",
+   "winner": "Jake Auchincloss",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2505": {
+   "party": "D",
+   "winner": "Katherine Clark",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2506": {
+   "party": "D",
+   "winner": "Dan Koh",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2507": {
+   "party": "D",
+   "winner": "Ayanna Pressley",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2508": {
+   "party": "D",
+   "winner": "Stephen Lynch",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2509": {
+   "party": "D",
+   "winner": "Bill Keating",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2601": {
+   "party": "R",
+   "winner": "Jack Bergman",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2602": {
+   "party": "R",
+   "winner": "John Moolenaar",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2603": {
+   "party": "D",
+   "winner": "Hillary Scholten",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2604": {
+   "party": "D",
+   "winner": "Sean McCann",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2605": {
+   "party": "R",
+   "winner": "Tim Walberg",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2606": {
+   "party": "D",
+   "winner": "Debbie Dingell",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2607": {
+   "party": "D",
+   "winner": "William Lawrence",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2608": {
+   "party": "D",
+   "winner": "Kristen McDonald Rivet",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2609": {
+   "party": "R",
+   "winner": "Lisa McClain",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2610": {
+   "party": "D",
+   "winner": "Christina Hines",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2611": {
+   "party": "D",
+   "winner": "Jeremy Moss",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2612": {
+   "party": "D",
+   "winner": "Rashida Tlaib",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2613": {
+   "party": "D",
+   "winner": "Donavan McKinney",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2701": {
+   "party": null,
+   "winner": null,
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2702": {
+   "party": "D",
+   "winner": "Matt Little",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "2703": {
+   "party": "D",
+   "winner": "Kelly Morrison",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "2704": {
+   "party": "D",
+   "winner": "Betty McCollum",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "2705": {
+   "party": "D",
+   "winner": "Ilhan Omar",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "2706": {
+   "party": "R",
+   "winner": "Tom Emmer",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2707": {
+   "party": "R",
+   "winner": "Michelle Fischbach",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2708": {
+   "party": "R",
+   "winner": "Pete Stauber",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2801": {
+   "party": "R",
+   "winner": "Trent Kelly",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2802": {
+   "party": "D",
+   "winner": "Bennie Thompson",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2803": {
+   "party": "R",
+   "winner": "Michael Guest",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2804": {
+   "party": "R",
+   "winner": "Mike Ezell",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2901": {
+   "party": "D",
+   "winner": "Wesley Bell",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2902": {
+   "party": "D",
+   "winner": "Fred Wellman",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2903": {
+   "party": "R",
+   "winner": "Bob Onder",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2904": {
+   "party": "R",
+   "winner": "Mark Alford",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2905": {
+   "party": "D",
+   "winner": "Emanuel Cleaver",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "2906": {
+   "party": "R",
+   "winner": "Chris Stigall",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2907": {
+   "party": "R",
+   "winner": "Eric Burlison",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "2908": {
+   "party": "R",
+   "winner": "Jason Smith",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3001": {
+   "party": "D",
+   "winner": "Sam Forstag",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3002": {
+   "party": "R",
+   "winner": "Troy Downing",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3101": {
+   "party": "R",
+   "winner": "Mike Flood",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3102": {
+   "party": "D",
+   "winner": "Denise Powell",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3103": {
+   "party": "R",
+   "winner": "Adrian Smith",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3201": {
+   "party": "D",
+   "winner": "Dina Titus",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3202": {
+   "party": "D",
+   "winner": "Teresa Benitez-Thompson",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3203": {
+   "party": "D",
+   "winner": "Susie Lee",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3204": {
+   "party": "D",
+   "winner": "Steven Horsford",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3301": {
+   "party": "D",
+   "winner": "Stefany Shaheen",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3302": {
+   "party": "D",
+   "winner": "Maggie Goodlander",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3401": {
+   "party": "D",
+   "winner": "Donald Norcross",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3402": {
+   "party": "D",
+   "winner": "Zack Mullock",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3403": {
+   "party": "D",
+   "winner": "Herb Conaway",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3404": {
+   "party": "R",
+   "winner": "Chris Smith",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3405": {
+   "party": "D",
+   "winner": "Josh Gottheimer",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3406": {
+   "party": "D",
+   "winner": "Frank Pallone",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3407": {
+   "party": "D",
+   "winner": "Rebecca Bennett",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3408": {
+   "party": "D",
+   "winner": "Rob Menendez",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3409": {
+   "party": "D",
+   "winner": "Nellie Pou",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3410": {
+   "party": "D",
+   "winner": "LaMonica McIver",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3411": {
+   "party": "D",
+   "winner": "Analilia Mejia",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3412": {
+   "party": "D",
+   "winner": "Adam Hamawy",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3501": {
+   "party": "D",
+   "winner": "Melanie Stansbury",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3502": {
+   "party": "D",
+   "winner": "Gabe Vasquez",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3503": {
+   "party": "D",
+   "winner": "Teresa Leger Fernández",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3601": {
+   "party": "R",
+   "winner": "Nick LaLota",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3602": {
+   "party": "R",
+   "winner": "Andrew Garbarino",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3603": {
+   "party": "D",
+   "winner": "Tom Suozzi",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3604": {
+   "party": "D",
+   "winner": "Laura Gillen",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3605": {
+   "party": "D",
+   "winner": "Gregory Meeks",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3606": {
+   "party": "D",
+   "winner": "Grace Meng",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3607": {
+   "party": "D",
+   "winner": "Claire Valdez",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3608": {
+   "party": "D",
+   "winner": "Hakeem Jeffries",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3609": {
+   "party": "D",
+   "winner": "Yvette Clarke",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3610": {
+   "party": "D",
+   "winner": "Brad Lander",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3611": {
+   "party": "R",
+   "winner": "Nicole Malliotakis",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3612": {
+   "party": "D",
+   "winner": "Micah Lasher",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3613": {
+   "party": "D",
+   "winner": "Darializa Avila Chevalier",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3614": {
+   "party": "D",
+   "winner": "Alexandria Ocasio-Cortez",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3615": {
+   "party": "D",
+   "winner": "Ritchie Torres",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3616": {
+   "party": "D",
+   "winner": "George Latimer",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3617": {
+   "party": "D",
+   "winner": "Cait Conley",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3618": {
+   "party": "D",
+   "winner": "Pat Ryan",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3619": {
+   "party": "D",
+   "winner": "Josh Riley",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3620": {
+   "party": "D",
+   "winner": "Paul Tonko",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3621": {
+   "party": "R",
+   "winner": "Anthony Constantino",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3622": {
+   "party": "D",
+   "winner": "John Mannion",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3623": {
+   "party": "R",
+   "winner": "Nick Langworthy",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3624": {
+   "party": "R",
+   "winner": "Claudia Tenney",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3625": {
+   "party": "D",
+   "winner": "Joseph Morelle",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3626": {
+   "party": "D",
+   "winner": "Tim Kennedy",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3701": {
+   "party": "D",
+   "winner": "Don Davis",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3702": {
+   "party": "D",
+   "winner": "Deborah Ross",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3703": {
+   "party": "D",
+   "winner": "Raymond Smith Jr.",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3704": {
+   "party": "D",
+   "winner": "Valerie Foushee",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3705": {
+   "party": null,
+   "winner": null,
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3706": {
+   "party": "D",
+   "winner": "Cyril Jefferson",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3707": {
+   "party": null,
+   "winner": null,
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3708": {
+   "party": "R",
+   "winner": "Mark Harris",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3709": {
+   "party": "D",
+   "winner": "Richard Ojeda",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3710": {
+   "party": "R",
+   "winner": "Pat Harrigan",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3711": {
+   "party": "D",
+   "winner": "Jamie Ager",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3712": {
+   "party": "D",
+   "winner": "Alma Adams",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3713": {
+   "party": "D",
+   "winner": "Paul Barringer",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3714": {
+   "party": "D",
+   "winner": "LaKesha Womack",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3800": {
+   "party": "R",
+   "winner": "Julie Fedorchak",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3901": {
+   "party": "D",
+   "winner": "Greg Landsman",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3902": {
+   "party": "R",
+   "winner": "David Taylor",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3903": {
+   "party": "D",
+   "winner": "Joyce Beatty",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3904": {
+   "party": "R",
+   "winner": "Jim Jordan",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3905": {
+   "party": "R",
+   "winner": "Bob Latta",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3906": {
+   "party": "R",
+   "winner": "Michael Rulli",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3907": {
+   "party": "D",
+   "winner": "Brian Poindexter",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3908": {
+   "party": "R",
+   "winner": "Warren Davidson",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3909": {
+   "party": "D",
+   "winner": "Marcy Kaptur",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3910": {
+   "party": "D",
+   "winner": "Kristina Knickerbocker",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3911": {
+   "party": "D",
+   "winner": "Shontel Brown",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3912": {
+   "party": "R",
+   "winner": "Troy Balderson",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3913": {
+   "party": "D",
+   "winner": "Emilia Sykes",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "3914": {
+   "party": "R",
+   "winner": "David Joyce",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "3915": {
+   "party": "D",
+   "winner": "Don Leonard",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4001": {
+   "party": "R",
+   "winner": "Mark Tedford",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4002": {
+   "party": "R",
+   "winner": "Josh Brecheen",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4003": {
+   "party": null,
+   "winner": null,
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4004": {
+   "party": "R",
+   "winner": "Tom Cole",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4005": {
+   "party": "R",
+   "winner": "Stephanie Bice",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4101": {
+   "party": "D",
+   "winner": "Suzanne Bonamici",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4102": {
+   "party": "R",
+   "winner": "Cliff Bentz",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4103": {
+   "party": "D",
+   "winner": "Maxine Dexter",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4104": {
+   "party": "D",
+   "winner": "Val Hoyle",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4105": {
+   "party": "D",
+   "winner": "Janelle Bynum",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4106": {
+   "party": "D",
+   "winner": "Andrea Salinas",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4201": {
+   "party": "D",
+   "winner": "Bob Harvie",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4202": {
+   "party": "D",
+   "winner": "Brendan Boyle",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4203": {
+   "party": "D",
+   "winner": "Chris Rabb",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4204": {
+   "party": "D",
+   "winner": "Madeleine Dean",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4205": {
+   "party": "D",
+   "winner": "Mary Gay Scanlon",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4206": {
+   "party": "D",
+   "winner": "Chrissy Houlahan",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4207": {
+   "party": "D",
+   "winner": "Bob Brooks",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4208": {
+   "party": "D",
+   "winner": "Paige Cognetti",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4209": {
+   "party": "R",
+   "winner": "Dan Meuser",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4210": {
+   "party": "D",
+   "winner": "Janelle Stelson",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4211": {
+   "party": "R",
+   "winner": "Lloyd Smucker",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4212": {
+   "party": "D",
+   "winner": "Summer Lee",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4213": {
+   "party": "R",
+   "winner": "John Joyce",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4214": {
+   "party": "R",
+   "winner": "Guy Reschenthaler",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4215": {
+   "party": "R",
+   "winner": "Glenn Thompson",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4216": {
+   "party": "R",
+   "winner": "Mike Kelly",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4217": {
+   "party": "D",
+   "winner": "Chris Deluzio",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4401": {
+   "party": "D",
+   "winner": "Gabe Amo",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4402": {
+   "party": "D",
+   "winner": "Seth Magaziner",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4501": {
+   "party": "D",
+   "winner": "Nancy Lacore",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4502": {
+   "party": "R",
+   "winner": "Joe Wilson",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4503": {
+   "party": "R",
+   "winner": "Sheri Biggs",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4504": {
+   "party": "R",
+   "winner": "William Timmons",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4505": {
+   "party": "R",
+   "winner": "Wes Climer",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4506": {
+   "party": "D",
+   "winner": "Jim Clyburn",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4507": {
+   "party": "R",
+   "winner": "Russell Fry",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4600": {
+   "party": "R",
+   "winner": "Marty Jackley",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4701": {
+   "party": "R",
+   "winner": "Diana Harshbarger",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4702": {
+   "party": "R",
+   "winner": "Tim Burchett",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4703": {
+   "party": "R",
+   "winner": "Chuck Fleischmann",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4704": {
+   "party": null,
+   "winner": null,
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4705": {
+   "party": "R",
+   "winner": "Charlie Hatcher",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4706": {
+   "party": "R",
+   "winner": "Johnny Garrett",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4707": {
+   "party": "R",
+   "winner": "Matt Van Epps",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4708": {
+   "party": "R",
+   "winner": "David Kustoff",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4709": {
+   "party": "R",
+   "winner": "Brent Taylor",
+   "flip": true,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4801": {
+   "party": "R",
+   "winner": "Nathaniel Moran",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4802": {
+   "party": "R",
+   "winner": "Steve Toth",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4803": {
+   "party": "R",
+   "winner": "Keith Self",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4804": {
+   "party": "R",
+   "winner": "Pat Fallon",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4805": {
+   "party": "R",
+   "winner": "Lance Gooden",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4806": {
+   "party": "R",
+   "winner": "Jake Ellzey",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4807": {
+   "party": "D",
+   "winner": "Lizzie Fletcher",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4808": {
+   "party": "R",
+   "winner": "Jessica Steinmann",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4809": {
+   "party": "D",
+   "winner": "Leticia Gutierrez",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "4810": {
+   "party": "R",
+   "winner": "Chris Gober",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4811": {
+   "party": "R",
+   "winner": "August Pfluger",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4812": {
+   "party": "R",
+   "winner": "Craig Goldman",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4813": {
+   "party": "R",
+   "winner": "Ronny Jackson",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4814": {
+   "party": "R",
+   "winner": "Randy Weber",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4815": {
+   "party": "D",
+   "winner": "Bobby Pulido",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4816": {
+   "party": "D",
+   "winner": "Veronica Escobar",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4817": {
+   "party": "R",
+   "winner": "Pete Sessions",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4818": {
+   "party": "D",
+   "winner": "Christian Menefee",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4819": {
+   "party": "R",
+   "winner": "Tom Sell",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4820": {
+   "party": "D",
+   "winner": "Joaquin Castro",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4821": {
+   "party": "R",
+   "winner": "Mark Teixeira",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4822": {
+   "party": "R",
+   "winner": "Trever Nehls",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4823": {
+   "party": "D",
+   "winner": "Katy Padilla Stout",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "4824": {
+   "party": "R",
+   "winner": "Beth Van Duyne",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4825": {
+   "party": "R",
+   "winner": "Roger Williams",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4826": {
+   "party": "R",
+   "winner": "Brandon Gill",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4827": {
+   "party": "R",
+   "winner": "Michael Cloud",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4828": {
+   "party": "D",
+   "winner": "Henry Cuellar",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4829": {
+   "party": "D",
+   "winner": "Sylvia Garcia",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4830": {
+   "party": "D",
+   "winner": "Frederick Haynes III",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "4831": {
+   "party": "R",
+   "winner": "John Carter",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4832": {
+   "party": "R",
+   "winner": "Jace Yarbrough",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "4833": {
+   "party": "D",
+   "winner": "Colin Allred",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4834": {
+   "party": "D",
+   "winner": "Vicente Gonzalez",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4835": {
+   "party": "D",
+   "winner": "Johnny Garcia",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "4836": {
+   "party": "R",
+   "winner": "Brian Babin",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4837": {
+   "party": "D",
+   "winner": "Greg Casar",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "4838": {
+   "party": "R",
+   "winner": "Jon Bonck",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4901": {
+   "party": "D",
+   "winner": "Ben McAdams",
+   "flip": false,
+   "incumbentParty": null,
+   "runoff": []
+  },
+  "4902": {
+   "party": "R",
+   "winner": "Blake Moore",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4903": {
+   "party": "R",
+   "winner": "Celeste Maloy",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "4904": {
+   "party": "R",
+   "winner": "Mike Kennedy",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5000": {
+   "party": "D",
+   "winner": "Becca Balint",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5101": {
+   "party": "D",
+   "winner": "Shannon Taylor",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5102": {
+   "party": "D",
+   "winner": "Elaine Luria",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5103": {
+   "party": "D",
+   "winner": "Bobby Scott",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5104": {
+   "party": "D",
+   "winner": "Jennifer McClellan",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5105": {
+   "party": "R",
+   "winner": "John McGuire",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5106": {
+   "party": "R",
+   "winner": "Ben Cline",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5107": {
+   "party": "D",
+   "winner": "Eugene Vindman",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5108": {
+   "party": "D",
+   "winner": "Don Beyer",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5109": {
+   "party": "R",
+   "winner": "Morgan Griffith",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5110": {
+   "party": "D",
+   "winner": "Suhas Subramanyam",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5111": {
+   "party": "D",
+   "winner": "James Walkinshaw",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5301": {
+   "party": "D",
+   "winner": "Suzan DelBene",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5302": {
+   "party": "D",
+   "winner": "Rick Larsen",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5303": {
+   "party": "D",
+   "winner": "Marie Gluesenkamp Perez",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5304": {
+   "party": "R",
+   "winner": "Amanda McKinney",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5305": {
+   "party": "R",
+   "winner": "Michael Baumgartner",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5306": {
+   "party": "D",
+   "winner": "Emily Randall",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5307": {
+   "party": "D",
+   "winner": "Pramila Jayapal",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5308": {
+   "party": "D",
+   "winner": "Kim Schrier",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5309": {
+   "party": "D",
+   "winner": "Adam Smith",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5310": {
+   "party": "D",
+   "winner": "Marilyn Strickland",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5401": {
+   "party": "R",
+   "winner": "Carol Miller",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5402": {
+   "party": "R",
+   "winner": "Riley Moore",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5501": {
+   "party": "D",
+   "winner": "Mitchell Berman",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5502": {
+   "party": "D",
+   "winner": "Mark Pocan",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5503": {
+   "party": "D",
+   "winner": "Rebecca Cooke",
+   "flip": true,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5504": {
+   "party": "D",
+   "winner": "Gwen Moore",
+   "flip": false,
+   "incumbentParty": "D",
+   "runoff": []
+  },
+  "5505": {
+   "party": "R",
+   "winner": "Scott Fitzgerald",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5506": {
+   "party": "R",
+   "winner": "Glenn Grothman",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5507": {
+   "party": "R",
+   "winner": "Michael Alfonso",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5508": {
+   "party": "R",
+   "winner": "Tony Wied",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  },
+  "5600": {
+   "party": "R",
+   "winner": "Chuck Gray",
+   "flip": false,
+   "incumbentParty": "R",
+   "runoff": []
+  }
+ }
+}

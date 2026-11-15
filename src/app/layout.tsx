@@ -1,41 +1,26 @@
 import type { Metadata } from "next"
-import { Crimson_Pro, Crimson_Text, Geist_Mono, Open_Sans } from "next/font/google"
+import { Archivo, Roboto_Mono } from "next/font/google"
 
-import { AppSidebar } from "@/components/app-sidebar"
-import { InlineScript } from "@/components/inline-script"
 import { PageBreadcrumb } from "@/components/page-breadcrumb"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SiteFooter } from "@/components/site-footer"
+import { SiteNav } from "@/components/site-nav"
 import { TooltipProvider } from "@/components/ui/tooltip"
 
 import "./globals.css"
 
-const openSans = Open_Sans({
-  variable: "--font-open-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Both are variable fonts: do not pass a weight list (breaks Vercel's Turbopack font bundler)
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
 })
 
-// Serif headings + wordmark, matching the Ceptly design system.
-// Crimson Pro is a variable font: do not pass a weight list (breaks Vercel's Turbopack font bundler).
-const crimsonText = Crimson_Text({
-  variable: "--font-crimson-text",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-})
-
-const crimsonPro = Crimson_Pro({
-  variable: "--font-crimson-pro",
+const robotoMono = Roboto_Mono({
+  variable: "--font-roboto-mono",
   subsets: ["latin"],
 })
 
 const siteDescription =
-  "US demographics by state and county: non-Hispanic White share over time, religion, 2024 election results, immigration enforcement, and family formation, with Europe for comparison."
+  "US demographics by state and county: non-Hispanic White share over time, religion, 2024 election results, immigration enforcement, and family formation."
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://afmetrics.com"),
@@ -67,27 +52,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${openSans.variable} ${geistMono.variable} ${crimsonText.variable} ${crimsonPro.variable} h-full antialiased`}
-      suppressHydrationWarning
+      // Always dark. The light tokens in globals.css exist only for the PDF export.
+      className={`dark ${archivo.variable} ${robotoMono.variable} h-full antialiased`}
     >
-      <head>
-        <InlineScript html={`(function(){try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark")}catch(e){}})()`} />
-      </head>
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body className="flex min-h-full flex-col bg-background text-foreground">
         <TooltipProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <header className="sticky top-0 z-10 flex h-12 shrink-0 items-center gap-2 border-b bg-background/80 px-3 backdrop-blur">
-                <SidebarTrigger />
-                <PageBreadcrumb />
-                <div className="ml-auto">
-                  <ThemeToggle />
-                </div>
-              </header>
-              {children}
-            </SidebarInset>
-          </SidebarProvider>
+          <header className="sticky top-0 z-20 border-t-[3px] border-b border-t-primary border-b-border bg-background/90 backdrop-blur">
+            <SiteNav />
+          </header>
+          <div className="mx-auto w-full max-w-[1100px] px-4 pt-4 sm:px-6">
+            <PageBreadcrumb />
+          </div>
+          <div className="flex-1">{children}</div>
+          <SiteFooter />
         </TooltipProvider>
       </body>
     </html>
