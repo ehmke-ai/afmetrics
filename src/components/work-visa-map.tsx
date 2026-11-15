@@ -2,13 +2,13 @@
 
 import { geoPath, type GeoPermissibleObjects } from "d3-geo"
 import Link from "next/link"
-import { useEffect, useMemo, useState, type MouseEvent } from "react"
-import { feature } from "topojson-client"
-import type { Feature, FeatureCollection, Geometry, Polygon } from "geojson"
-import type { GeometryCollection, Topology } from "topojson-specification"
+import { useMemo, useState, type MouseEvent } from "react"
+import type { Feature, Geometry, Polygon } from "geojson"
 import { Download } from "lucide-react"
 
 import { ColorChooser } from "@/components/color-chooser"
+import { useStateFeatures } from "@/components/county-map-geometry"
+import { MapStatus } from "@/components/maps/map-status"
 import { Button } from "@/components/ui/button"
 import {
   downloadMapPng,
@@ -156,14 +156,13 @@ function fillFor(t: number, color: string, hovered = false, selected = false) {
 }
 
 export function WorkVisaMap() {
-  const [features, setFeatures] = useState<StateFeature[]>([])
+  const { features, loading, error: shapesError, retry: retryShapes } = useStateFeatures()
   const [program, setProgram] = useState<WorkVisaProgram>("h1b")
   const [scale, setScale] = useState<Scale>("positions")
   const [color, setColor] = useState(PROGRAMS.h1b.color)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null)
-  const [loading, setLoading] = useState(true)
   const [exporting, setExporting] = useState(false)
 
   const config = PROGRAMS[program]
@@ -184,29 +183,6 @@ export function WorkVisaMap() {
       y: ((e.clientY - rect.top) / rect.height) * 100,
     })
   }
-
-  useEffect(() => {
-    let cancelled = false
-    fetch("/geo/us-states-albers-10m.json")
-      .then((r) => r.json())
-      .then((topology: Topology<{ states: GeometryCollection }>) => {
-        if (cancelled) return
-        const states = feature(
-          topology,
-          topology.objects.states
-        ) as FeatureCollection<Geometry, { name: string }>
-        setFeatures(states.features as StateFeature[])
-      })
-      .catch(() => {
-        if (!cancelled) setFeatures([])
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [])
 
   const path = useMemo(() => geoPath(null), [])
 
@@ -350,11 +326,7 @@ export function WorkVisaMap() {
 
         <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-start">
           <div className="relative">
-            {loading && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center text-sm text-muted-foreground">
-                Loading map…
-              </div>
-            )}
+            <MapStatus loading={loading} error={shapesError} onRetry={retryShapes} />
             <svg
               viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
               className="h-auto w-full touch-pan-y"

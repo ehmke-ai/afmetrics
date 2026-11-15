@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState, type MouseEvent, type ReactNode } from "react"
+import { useMemo, useState, type MouseEvent, type ReactNode } from "react"
 import { Download } from "lucide-react"
 
 import { ColorChooser } from "@/components/color-chooser"
@@ -11,6 +11,7 @@ import {
   withCtRegions,
   type CountyMapState,
 } from "@/components/county-map-geometry"
+import { MapStatus } from "@/components/maps/map-status"
 import { Button } from "@/components/ui/button"
 import type { UsCountyRow } from "@/components/us-county-map"
 import {
@@ -29,8 +30,9 @@ import {
   rentToIncome,
   type CountyCost,
 } from "@/lib/cost-of-living"
+import { useJson } from "@/lib/fetch-json"
 
-type CountyCosts = Record<string, CountyCost>
+export type CountyCosts = Record<string, CountyCost>
 
 export type CostMetric = "priceToIncome" | "rentToIncome" | "homeValue" | "rent" | "income"
 
@@ -125,6 +127,7 @@ export function UsCountyCostMap({
   legendExtra,
   state,
   onOpenCounty,
+  data,
 }: {
   counties: UsCountyRow[]
   /** State FIPS -> USPS abbreviation, for the tooltip heading */
@@ -135,9 +138,12 @@ export function UsCountyCostMap({
   state?: CountyMapState
   /** Opens a county's page; with it, the counties in `counties` are clickable links */
   onOpenCounty?: (fips: string) => void
+  /** This state's slice of the data file, read on the server; skips the national download */
+  data?: CountyCosts
 }) {
   const geometry = useCountyGeometry(state)
-  const [costs, setCosts] = useState<CountyCosts | null>(null)
+  const costsFile = useJson<CountyCosts>(data ? null : COUNTY_COST_URL)
+  const costs = data ?? costsFile.data
   const [metric, setMetric] = useState<CostMetric>("priceToIncome")
   const [hoveredFips, setHoveredFips] = useState<string | null>(null)
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null)
@@ -147,19 +153,6 @@ export function UsCountyCostMap({
   const config = METRICS[metric]
 
   const labelByFips = useMemo(() => Object.fromEntries(rows), [rows])
-
-  useEffect(() => {
-    let cancelled = false
-    fetch(COUNTY_COST_URL)
-      .then((r) => r.json() as Promise<CountyCosts>)
-      .then((data) => {
-        if (!cancelled) setCosts(data)
-      })
-      .catch(() => {})
-    return () => {
-      cancelled = true
-    }
-  }, [])
 
   const { width, height, counties: countyOutlines, ctRegions, regionLabels, stateBorders } = geometry
   const loading = geometry.loading
@@ -262,11 +255,15 @@ export function UsCountyCostMap({
         </div>
 
         <div className="relative">
-          {loading && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center text-sm text-muted-foreground">
-              Loading map…
-            </div>
-          )}
+          <MapStatus
+            loading={loading || (!costs && !costsFile.error)}
+            error={geometry.error ?? costsFile.error}
+            onRetry={() => {
+              geometry.retry()
+              costsFile.retry()
+            }}
+            label="cost data"
+          />
           <svg
             viewBox={`0 0 ${width} ${height}`}
             className={`h-auto w-full touch-pan-y ${state ? "max-h-[75svh]" : ""}`}

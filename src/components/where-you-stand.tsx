@@ -7,6 +7,7 @@ import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, typ
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
 
 import { downloadResults } from "@/lib/export-results"
+import { useJson, type JsonResult } from "@/lib/fetch-json"
 
 import { POPULATION_COLORS } from "@/components/population-stack-chart"
 import { Button } from "@/components/ui/button"
@@ -424,7 +425,7 @@ function Results(props: {
   const fields = useJson<FieldFile>(FIELD_URL)
   const history = useJson<CountyHistory>(HISTORY_URL)
   const schoolFile = useJson<SchoolFile>(props.schoolId ? SCHOOL_URL : null)
-  const failed = fields.error || history.error
+  const failed = Boolean(fields.error || history.error)
   const loading = !failed && (!fields.data || !history.data)
   const schoolLoading = Boolean(props.schoolId) && !schoolFile.error && !schoolFile.data
   const canExport = !loading && !failed && !schoolLoading && !schoolFile.error
@@ -517,7 +518,20 @@ function Results(props: {
         <p className="text-sm text-muted-foreground">{summary}</p>
       </div>
       {failed && (
-        <p className="text-sm text-muted-foreground">The county figures did not load.</p>
+        <div role="alert" className="flex items-center gap-3 text-sm text-muted-foreground">
+          The county figures did not load.
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              fields.retry()
+              history.retry()
+            }}
+          >
+            Try again
+          </Button>
+        </div>
       )}
       {loading && <p className="text-sm text-muted-foreground">Loading county figures…</p>}
       {props.schoolId && props.schoolLabel && (
@@ -895,10 +909,17 @@ function SchoolCard({
   schoolLabel: string
   fieldId: WorkFieldId
   fieldLabel: string
-  file: { data: SchoolFile | null; error: boolean }
+  file: JsonResult<SchoolFile>
 }) {
   if (file.error) {
-    return <p className="text-sm text-muted-foreground">The school figures did not load.</p>
+    return (
+      <div role="alert" className="flex items-center gap-3 text-sm text-muted-foreground">
+        The school figures did not load.
+        <Button type="button" size="sm" variant="outline" onClick={file.retry}>
+          Try again
+        </Button>
+      </div>
+    )
   }
   if (!file.data) {
     return <p className="text-sm text-muted-foreground">Loading school figures…</p>
@@ -1251,26 +1272,3 @@ function wealthSentence(
   return `${place}${subject} ${verb} ${formatPct(wealthShare)} of U.S. household wealth.`
 }
 
-function useJson<T>(url: string | null): { data: T | null; error: boolean } {
-  const [data, setData] = useState<T | null>(null)
-  const [error, setError] = useState(false)
-  useEffect(() => {
-    if (!url) return
-    let cancelled = false
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) throw new Error(String(response.status))
-        return response.json() as Promise<T>
-      })
-      .then((json) => {
-        if (!cancelled) setData(json)
-      })
-      .catch(() => {
-        if (!cancelled) setError(true)
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [url])
-  return { data, error }
-}

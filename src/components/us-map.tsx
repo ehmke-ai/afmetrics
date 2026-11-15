@@ -2,14 +2,14 @@
 
 import { geoPath, type GeoPermissibleObjects } from "d3-geo"
 import Link from "next/link"
-import { useEffect, useMemo, useState, type MouseEvent, type ReactNode } from "react"
-import { feature } from "topojson-client"
-import type { Feature, FeatureCollection, Geometry, Polygon } from "geojson"
-import type { GeometryCollection, Topology } from "topojson-specification"
+import { useMemo, useState, type MouseEvent, type ReactNode } from "react"
+import type { Feature, Geometry, Polygon } from "geojson"
 
 import { Download } from "lucide-react"
 
 import { ColorChooser } from "@/components/color-chooser"
+import { useStateFeatures } from "@/components/county-map-geometry"
+import { MapStatus } from "@/components/maps/map-status"
 import { Button } from "@/components/ui/button"
 import {
   COST_HIGH_COLOR,
@@ -347,7 +347,7 @@ export function UsMap({
   /** `level` query. `state` shows the state map for Cost of living and 2024 election. */
   levelQuery?: string
 }) {
-  const [features, setFeatures] = useState<StateFeature[]>([])
+  const { features, loading, error: shapesError, retry: retryShapes } = useStateFeatures()
   const level = mapLevel(levelQuery)
   const view = nationalMapView(viewQuery, levelQuery)
   // Which level the 2024 election and cost tabs show; remembered when switching away and back
@@ -372,7 +372,6 @@ export function UsMap({
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null)
-  const [loading, setLoading] = useState(true)
   const [colors, setColors] = useState<Record<MapMetric, string>>(DEFAULT_COLORS)
   const [lowColors, setLowColors] = useState(DEFAULT_LOW_COLORS)
   const [exporting, setExporting] = useState(false)
@@ -390,29 +389,6 @@ export function UsMap({
       y: ((e.clientY - rect.top) / rect.height) * 100,
     })
   }
-
-  useEffect(() => {
-    let cancelled = false
-    fetch("/geo/us-states-albers-10m.json")
-      .then((r) => r.json())
-      .then((topology: Topology<{ states: GeometryCollection }>) => {
-        if (cancelled) return
-        const states = feature(
-          topology,
-          topology.objects.states
-        ) as FeatureCollection<Geometry, { name: string }>
-        setFeatures(states.features as StateFeature[])
-      })
-      .catch(() => {
-        if (!cancelled) setFeatures([])
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [])
 
   // Coordinates are pre-projected (Albers USA), so no projection is applied here.
   const path = useMemo(() => geoPath(null), [])
@@ -628,11 +604,7 @@ export function UsMap({
 
         <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-start">
           <div className="relative">
-            {loading && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center text-sm text-muted-foreground">
-                Loading map…
-              </div>
-            )}
+            <MapStatus loading={loading} error={shapesError} onRetry={retryShapes} />
             <svg
               viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
               className="h-auto w-full touch-pan-y"

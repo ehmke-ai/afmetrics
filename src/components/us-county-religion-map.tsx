@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState, type MouseEvent } from "react"
+import { useMemo, useState, type MouseEvent } from "react"
 import { Download } from "lucide-react"
 
 import { ColorChooser } from "@/components/color-chooser"
@@ -10,6 +10,7 @@ import {
   useCountyGeometry,
   type CountyMapState,
 } from "@/components/county-map-geometry"
+import { MapStatus } from "@/components/maps/map-status"
 import { Button } from "@/components/ui/button"
 import type { UsCountyRow } from "@/components/us-county-map"
 import {
@@ -19,12 +20,13 @@ import {
   shadeGradient,
   shadeStops,
 } from "@/components/us-county-map-export"
+import { useJson } from "@/lib/fetch-json"
 import { YearSlider } from "@/components/year-slider"
 
 /** % of population in each tradition, in CATEGORIES order (less Unclaimed), from scripts/build-county-religion.py */
 type CountyShares = number[]
 /** Census year -> FIPS -> shares */
-type CountyReligion = Record<string, Record<string, CountyShares>>
+export type CountyReligion = Record<string, Record<string, CountyShares>>
 
 const DATA_URL = "/data/county-religion.json"
 
@@ -83,6 +85,7 @@ export function UsCountyReligionMap({
   states,
   state,
   onOpenCounty,
+  data,
 }: {
   counties: UsCountyRow[]
   /** State FIPS -> USPS abbreviation, for the tooltip heading */
@@ -91,9 +94,12 @@ export function UsCountyReligionMap({
   state?: CountyMapState
   /** Opens a county's page; with it, the counties in `counties` are clickable links */
   onOpenCounty?: (fips: string) => void
+  /** This state's slice of the data file, read on the server; skips the national download */
+  data?: CountyReligion
 }) {
   const geometry = useCountyGeometry(state)
-  const [religion, setReligion] = useState<CountyReligion | null>(null)
+  const religionFile = useJson<CountyReligion>(data ? null : DATA_URL)
+  const religion = data ?? religionFile.data
   const [hoveredFips, setHoveredFips] = useState<string | null>(null)
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null)
   const [colors, setColors] = useState<string[]>(() => CATEGORIES.map((c) => c.color))
@@ -107,19 +113,6 @@ export function UsCountyReligionMap({
   // Start on the latest year once the data arrives
   const shownYear = year ?? years[years.length - 1] ?? 2020
   const yearShares = useMemo(() => religion?.[shownYear] ?? {}, [religion, shownYear])
-
-  useEffect(() => {
-    let cancelled = false
-    fetch(DATA_URL)
-      .then((r) => r.json() as Promise<CountyReligion>)
-      .then((countyReligion) => {
-        if (!cancelled) setReligion(countyReligion)
-      })
-      .catch(() => {})
-    return () => {
-      cancelled = true
-    }
-  }, [])
 
   // Every study reports Connecticut by its old counties, which the county outlines draw
   const { width, height, counties: outlines, stateBorders, loading } = geometry
@@ -228,11 +221,15 @@ export function UsCountyReligionMap({
         </div>
 
         <div className="relative">
-          {loading && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center text-sm text-muted-foreground">
-              Loading map…
-            </div>
-          )}
+          <MapStatus
+            loading={loading || (!religion && !religionFile.error)}
+            error={geometry.error ?? religionFile.error}
+            onRetry={() => {
+              geometry.retry()
+              religionFile.retry()
+            }}
+            label="religion data"
+          />
           <svg
             viewBox={`0 0 ${width} ${height}`}
             className={`h-auto w-full touch-pan-y ${state ? "max-h-[75svh]" : ""}`}

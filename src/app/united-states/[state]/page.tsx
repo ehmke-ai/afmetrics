@@ -32,6 +32,7 @@ import {
   usCost,
 } from "@/lib/cost-of-living"
 import { COUNTY_HISTORY_YEARS } from "@/lib/county-history"
+import { stateCountyData } from "@/lib/county-data.server"
 import { queryValue } from "@/lib/map-view"
 import { COLORS, formatMedianAge, US as us } from "@/lib/demographics"
 import {
@@ -82,6 +83,7 @@ export default async function StatePage({
   if (!state) notFound()
 
   const counties = getCounties(state)
+  const countyData = counties.length ? await stateCountyData(counties[0].fips.slice(0, 2)) : null
   const neighbors = (STATE_NEIGHBORS[state.abbr] ?? [])
     .map((abbr) => stateNavByAbbr[abbr])
     .filter(Boolean)
@@ -192,6 +194,7 @@ export default async function StatePage({
                 counties={counties}
                 years={COUNTY_HISTORY_YEARS}
                 viewQuery={queryValue(query.view)}
+                data={countyData}
               />
             </CardContent>
           </Card>

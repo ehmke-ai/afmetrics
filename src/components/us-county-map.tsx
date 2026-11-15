@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState, type MouseEvent } from "react"
+import { useMemo, useState, type MouseEvent } from "react"
 import { Download } from "lucide-react"
 
 import { ColorChooser } from "@/components/color-chooser"
@@ -11,6 +11,7 @@ import {
   withCtRegions,
   type CountyMapState,
 } from "@/components/county-map-geometry"
+import { MapStatus } from "@/components/maps/map-status"
 import { POPULATION_COLORS } from "@/components/population-stack-chart"
 import { Button } from "@/components/ui/button"
 import {
@@ -29,6 +30,7 @@ import {
   type CountyValues,
   type GroupKey,
 } from "@/lib/county-history"
+import { useJson } from "@/lib/fetch-json"
 
 /** [fips, display label] — the figures themselves come from county-history.json */
 export type UsCountyRow = [string, string]
@@ -121,6 +123,7 @@ export function UsCountyMap({
   years,
   state,
   onOpenCounty,
+  data,
 }: {
   counties: UsCountyRow[]
   /** State FIPS -> USPS abbreviation, for the tooltip heading */
@@ -131,10 +134,13 @@ export function UsCountyMap({
   state?: CountyMapState
   /** Opens a county's page; with it, the counties in `counties` are clickable links */
   onOpenCounty?: (fips: string) => void
+  /** This state's slice of the data file, read on the server; skips the national download */
+  data?: CountyHistory
 }) {
   const latestYear = years[years.length - 1]
   const geometry = useCountyGeometry(state)
-  const [history, setHistory] = useState<CountyHistory | null>(null)
+  const historyFile = useJson<CountyHistory>(data ? null : COUNTY_HISTORY_URL)
+  const history = data ?? historyFile.data
   const [year, setYear] = useState(latestYear)
   const [hoveredFips, setHoveredFips] = useState<string | null>(null)
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null)
@@ -213,19 +219,6 @@ export function UsCountyMap({
   function removeSide(sideIndex: number) {
     setSides((prev) => (prev.length > 2 ? prev.filter((_, i) => i !== sideIndex) : prev))
   }
-
-  useEffect(() => {
-    let cancelled = false
-    fetch(COUNTY_HISTORY_URL)
-      .then((r) => r.json() as Promise<CountyHistory>)
-      .then((countyHistory) => {
-        if (!cancelled) setHistory(countyHistory)
-      })
-      .catch(() => {})
-    return () => {
-      cancelled = true
-    }
-  }, [])
 
   const { width, height, counties: countyOutlines, ctRegions, regionLabels, stateBorders } = geometry
   const loading = geometry.loading
@@ -345,11 +338,15 @@ export function UsCountyMap({
         </div>
 
         <div className="relative">
-          {loading && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center text-sm text-muted-foreground">
-              Loading map…
-            </div>
-          )}
+          <MapStatus
+            loading={loading || (!history && !historyFile.error)}
+            error={geometry.error ?? historyFile.error}
+            onRetry={() => {
+              geometry.retry()
+              historyFile.retry()
+            }}
+            label="county data"
+          />
           <svg
             viewBox={`0 0 ${width} ${height}`}
             className={`h-auto w-full touch-pan-y ${state ? "max-h-[75svh]" : ""}`}

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState, type MouseEvent } from "react"
+import { useMemo, useState, type MouseEvent } from "react"
 import { Download } from "lucide-react"
 
 import { ColorChooser } from "@/components/color-chooser"
@@ -10,6 +10,7 @@ import {
   useCountyGeometry,
   type CountyMapState,
 } from "@/components/county-map-geometry"
+import { MapStatus } from "@/components/maps/map-status"
 import { Button } from "@/components/ui/button"
 import type { UsCountyRow } from "@/components/us-county-map"
 import {
@@ -21,15 +22,20 @@ import {
 } from "@/components/us-county-map-export"
 import { rangeIntensity } from "@/lib/states"
 import { formatCount } from "@/lib/work-visas"
+import {
+  COUNTY_VISAS_URL,
+  per100k,
+  visaPeak,
+  type CountyVisas,
+  type VisaPeaks,
+  type VisaProgram,
+  type VisaScale,
+} from "@/lib/county-visas"
+import { useJson } from "@/lib/fetch-json"
 
 /** [H-1B positions, H-2A workers, H-2B workers, resident population] */
-type CountyVisa = [number, number, number, number | null]
-type CountyVisas = Record<string, CountyVisa>
-
-type Program = "h1b" | "h2a" | "h2b"
-type Scale = "positions" | "rate"
-
-const DATA_URL = "/data/county-visas.json"
+type Program = VisaProgram
+type Scale = VisaScale
 
 const PROGRAMS: Record<
   Program,
@@ -45,10 +51,6 @@ const SOURCE =
 
 function formatRate(value: number): string {
   return value >= 100 ? value.toFixed(0) : value.toFixed(1)
-}
-
-function per100k(count: number, population: number): number {
-  return (count / population) * 100_000
 }
 
 /** Log scale from 1 to the national maximum, so a few huge counties do not wash out the rest. */
@@ -69,6 +71,7 @@ export function UsCountyVisaMap({
   states,
   state,
   onOpenCounty,
+  data,
 }: {
   counties: UsCountyRow[]
   /** State FIPS -> USPS abbreviation, for the tooltip heading */
@@ -77,9 +80,13 @@ export function UsCountyVisaMap({
   state?: CountyMapState
   /** Opens a county's page; with it, the counties in `counties` are clickable links */
   onOpenCounty?: (fips: string) => void
+  /** This state's counties, read on the server, with the national peaks for the color scale */
+  data?: { visas: CountyVisas; peaks: VisaPeaks }
 }) {
   const geometry = useCountyGeometry(state)
-  const [visas, setVisas] = useState<CountyVisas | null>(null)
+  const visasFile = useJson<CountyVisas>(data ? null : COUNTY_VISAS_URL)
+  const visas = data?.visas ?? visasFile.data
+  const peaks = data?.peaks
   const [program, setProgram] = useState<Program>("h1b")
   const [scale, setScale] = useState<Scale>("positions")
   const [color, setColor] = useState(PROGRAMS.h1b.color)
@@ -90,34 +97,13 @@ export function UsCountyVisaMap({
 
   const labelByFips = useMemo(() => Object.fromEntries(rows), [rows])
 
-  useEffect(() => {
-    let cancelled = false
-    fetch(DATA_URL)
-      .then((r) => r.json() as Promise<CountyVisas>)
-      .then((data) => {
-        if (!cancelled) setVisas(data)
-      })
-      .catch(() => {})
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
   const { width, height, counties: countyOutlines, regionLabels, stateBorders } = geometry
   const loading = geometry.loading
 
   const max = useMemo(() => {
-    if (!visas) return 1
-    let peak = 1
-    for (const row of Object.values(visas)) {
-      const count = row[config.index]
-      const population = row[3]
-      const value =
-        scale === "rate" ? (population ? per100k(count, population) : 0) : count
-      if (value > peak) peak = value
-    }
-    return peak
-  }, [visas, config.index, scale])
+    if (peaks) return peaks[`${program}:${scale}`]
+    return visas ? visaPeak(visas, config.index, scale) : 1
+  }, [peaks, visas, program, config.index, scale])
 
   const shapes = useMemo(
     () =>
@@ -241,11 +227,15 @@ export function UsCountyVisaMap({
         </div>
 
         <div className="relative">
-          {loading && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center text-sm text-muted-foreground">
-              Loading map…
-            </div>
-          )}
+          <MapStatus
+            loading={loading || (!visas && !visasFile.error)}
+            error={geometry.error ?? visasFile.error}
+            onRetry={() => {
+              geometry.retry()
+              visasFile.retry()
+            }}
+            label="visa data"
+          />
           <svg
             viewBox={`0 0 ${width} ${height}`}
             className={`h-auto w-full touch-pan-y ${state ? "max-h-[75svh]" : ""}`}

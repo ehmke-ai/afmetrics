@@ -18,6 +18,7 @@ import { UsCountyElectionMap } from "@/components/us-county-election-map"
 import { UsCountyMap, type UsCountyRow } from "@/components/us-county-map"
 import { UsCountyReligionMap } from "@/components/us-county-religion-map"
 import { UsCountyVisaMap } from "@/components/us-county-visa-map"
+import type { StateCountyData } from "@/lib/county-data.server"
 import { stateMapHref, stateMapView } from "@/lib/map-view"
 import {
   countyLabel,
@@ -59,6 +60,7 @@ export function StateCountyMap({
   counties: data,
   years,
   viewQuery,
+  data: countyData,
 }: {
   state: StateDemographics
   counties: CountyDemographics[]
@@ -66,6 +68,8 @@ export function StateCountyMap({
   years: number[]
   /** `view` query. Omitted means Work visas. */
   viewQuery?: string
+  /** The state's slice of each county data file, read on the server */
+  data?: StateCountyData | null
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -110,19 +114,19 @@ export function StateCountyMap({
       </div>
 
       <div className={view === "demographics" ? undefined : "hidden"}>
-        <UsCountyMap {...mapProps} years={years} />
+        <UsCountyMap {...mapProps} years={years} data={countyData?.history} />
       </div>
       <div className={view === "election2024" ? undefined : "hidden"}>
-        <UsCountyElectionMap {...mapProps} />
+        <UsCountyElectionMap {...mapProps} data={countyData?.election} />
       </div>
       <div className={view === "religion" ? undefined : "hidden"}>
-        <UsCountyReligionMap {...mapProps} />
+        <UsCountyReligionMap {...mapProps} data={countyData?.religion} />
       </div>
       <div className={view === "cost" ? undefined : "hidden"}>
-        <UsCountyCostMap {...mapProps} />
+        <UsCountyCostMap {...mapProps} data={countyData?.costs} />
       </div>
       <div className={view === "visas" ? undefined : "hidden"}>
-        <UsCountyVisaMap {...mapProps} />
+        <UsCountyVisaMap {...mapProps} data={countyData?.visas} />
       </div>
 
       <Combobox
